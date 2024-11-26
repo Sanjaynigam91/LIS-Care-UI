@@ -1,0 +1,117 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div class="container mt-3">
+    <div class="row" [formGroup]="lisPageForm">
+        <div  class="col-md-2">
+            <label>Criteria</label>
+            <select class="form-control" formControlName="ddlCriteria">
+              <option value="">~Please Choose~</option>
+              <option *ngFor="let item of lisCareCriteriaModel" [value]="item.criteria">{{item.criteria}}</option>
+           </select> 
+          </div>
+        <div class="col-md-3">
+          <label>Page Entity</label>
+          <select class="form-control"  formControlName="ddlPageEntity">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of lisPageEntityModel" [value]="item.pageEntity">{{item.pageEntity}}</option>
+         </select>
+        </div>
+        <div  class="col-md-3">
+          <label>Page Name</label>
+          <input class="form-control" type="pageName" name="pageName" placeholder="Search by page name" formControlName="pageName">
+        </div>
+      <div class="col-md-4">
+          <div class="div-button">
+            <button mat-flat-button class="search-button"(click)="onSearch()" ><mat-icon>search</mat-icon>Search Page</button>
+            <button mat-flat-button class="add-button" (click)="OpenAddPagePopUp()">
+              <mat-icon>add</mat-icon> Add New Page</button> 
+          </div>
+      </div>
+    </div>  
+     <br/>
+     <div class="row" [formGroup]="searchForm">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-3"></div>
+      <div class="col-md-3"></div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <input class="form-control" formControlName="filterTerm" placeholder="Search..." />
+        </div>
+     </div>
+     </div>
+<br/>
+    <div *ngIf="ishasDataList" calss="row">
+        <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Sr.No.</th>
+                <th (click)="sortTable('pageName')">Page Name
+                  <span *ngIf="sortColumn === 'pageName'">
+                    <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+                    <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+                  </span>
+                </th>
+                <th (click)="sortTable('pageEntity')">Page Entity
+                  <span *ngIf="sortColumn === 'pageEntity'">
+                    <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+                    <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+                  </span>
+                </th>
+                <th (click)="sortTable('criteria')">Criteria
+                  <span *ngIf="sortColumn === 'criteria'">
+                    <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+                    <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+                  </span>
+                </th>
+                <th (click)="sortTable('status')">Status
+                  <span *ngIf="sortColumn === 'status'">
+                    <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+                    <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+                  </span>
+                </th>
+                <th (click)="sortTable('partnerId')">PartnerId
+                  <span *ngIf="sortColumn === 'partnerId'">
+                    <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+                    <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+                  </span>
+                </th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of lisPageResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.pageName }}</td>
+                <td>{{ item.pageEntity }}</td>
+                <td>{{ item.criteria }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.partnerId }}</td>
+                <td>  
+                  <button class="edit-button" matTooltip="edit page" (click)="ViewPageDetails(item.navigationId)">
+                  <mat-icon class="edit-icon">edit</mat-icon>
+                </button>
+                <button class="delete-button" matTooltip="delete page">
+                  <mat-icon class="delete-icon" (click)="openConfirmationDialog(item.navigationId)">delete</mat-icon>
+                </button>
+              </td>
+              </tr>
+            </tbody>
+          </table> 
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>   
+    <div *ngIf="isNoDataList" calss="row">
+      <div class="form-group form-control NoRecord-Found">
+        No Records Found!
+      </div>
+    </div>
+
+</div>
+<!-- <app-loader></app-loader> -->
+
+
+
+
+
+

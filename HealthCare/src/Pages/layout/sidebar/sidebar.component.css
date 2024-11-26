@@ -1,0 +1,27 @@
+/* styles.css or component-specific stylesheet */
+.mat-menu-item {
+    padding: 12px 24px;
+  }
+  
+  .mat-menu {
+    background: #17f3e1;
+    color: #000;
+    
+  }
+  /* styles.css or your component's CSS file */
+
+.mat-menu-panel {
+  background-color: #17f3e1; /* Change this to your desired color */
+}
+
+.mat-menu-panel .mat-menu-content {
+  background-color: #17f3e1; /* Change this to your desired submenu color */
+  color: black;
+}
+
+/* Parent Menu Text Color */
+.mat-menu-panel {
+  color: #ffffff; /* Replace with your desired color */
+}
+
+  

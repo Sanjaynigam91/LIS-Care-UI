@@ -1,0 +1,56 @@
+<div class="signup-card">
+    <div class="card-title">
+        <h1>Create Account</h1>
+        <span>Already have an account? <a routerLink="/login">Sign In</a></span>
+    </div>
+    <form class="form-group" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+       <table>
+        <tr>
+              <td>
+                <div class="form-group">
+                    <input class="form-control" name="firstName" type="text"  formControlName="firstName" placeholder="First Name">
+                  </div>
+               </td>
+               <td></td>
+            <td> 
+                <div class="form-group">
+                <input class="form-control" type="text" name="lastName" placeholder="Last Name" formControlName="lastName">
+               </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <input class="form-control" type="email" name="email" placeholder="Email" formControlName="email">
+                </div>               
+            </td>
+            <td></td>
+            <td>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password" formControlName="password">
+                </div>  
+            </td>
+        </tr>
+        <tr>
+         <td>
+            <div class="form-group">
+            <input class="form-control" type="text" name="mobileNumber" placeholder="Mobilenumber" formControlName="mobileNumber">
+           </div>
+        </td>
+        <td></td>
+            <td> 
+                <div class="form-group">           
+                    <select class="form-control" id="roleId"  formControlName="roleId">
+                        <option value="">Select a role</option>
+                        <option *ngFor="let item of labroles" [value]="item.roleId">{{ item.roleName }}</option>
+                     </select>
+                </div>         
+            </td>
+        </tr>
+       </table>
+        <input type="submit" value="Signup">
+    </form>
+    <div class="card-terms">
+        <input type="checkbox"> <span>I have read and agree to the <a href="">Terms of Service</a></span>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="modal">
+    <div class="modal-content">
+      <div *ngIf="isAddHeaderVisible" class="modal-header">
+        <h4>Add Role</h4>
+        <button class="close-button" (click)="close()">X</button>
+      </div>
+      <div *ngIf="isEditHeaderVisible" class="modal-header">
+        <h4>View/Edit Role</h4>
+        <button class="close-button" (click)="close()">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="container mt-3">
+          <div class="row">
+              <div  class="col-md-6">
+                  <label>Role Code</label>
+                  <input class="form-control" matInput placeholder="Enter role code" [(ngModel)]="lisrolerequest.roleCode"  />
+                </div>
+              <div class="col-md-6">
+                <label>Role Name</label>
+                <input  class="form-control" matInput  placeholder="Enter role name" [(ngModel)]="lisrolerequest.roleName"  />
+              </div>
+          </div>
+          <br/>
+          <div class="row">
+              <div class="col-md-6">
+                  <label>Department</label>
+                  <select class="form-control" [(ngModel)]="lisrolerequest.department">
+                    <option value="">~Please Choose~</option>
+                    <option *ngFor="let item of deptResponse" [value]="item.departmentName">{{item.departmentName}}</option>
+                 </select>
+                </div>
+              <div class="col-md-6">
+                <label>Role Type</label>
+                <select class="form-control" [(ngModel)]="lisrolerequest.roleType">
+                  <option value="">~Please Choose~</option>
+                  <option *ngFor="let item of roleTypeResponse" [value]="item.roleType">{{item.roleType}}</option>
+               </select>
+              </div>
+          </div>
+          <br/>
+          <div class="row">
+            <div class="col-md-6">
+                <label>Role Status</label>
+                <select class="form-control" [(ngModel)]="lisrolerequest.roleStatus">
+                  <option value="">~Please Choose~</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">InActive</option>
+               </select>
+              </div>
+        </div>
+       </div>   
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSubmit()">Submit</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdate()">Update</button>
+        <button class="close-button" (click)="close()">Close</button>
+      </div>
+    </div>
+  </div>
+  <app-toast></app-toast>
