@@ -1,0 +1,21 @@
+/* file-upload.component.css */
+.file-upload-container {
+    margin: 5px;
+  }
+  
+  textarea {
+    margin-top: 5px;
+    width: 100%;
+  }
+  
+  .imgage{
+    margin-top: 8px;
+  }
+
+  .matIcon{
+    color:red;
+    font-size: 30px;
+  }
+  .uploadImage{
+    max-width: 100%; height: auto;
+  }

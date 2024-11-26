@@ -1,0 +1,45 @@
+<div class="modal">
+  <div class="modal-content">
+    <div *ngIf="isAddHeaderVisible" class="modal-header">
+      <h4>Add Meta Tag</h4>
+      <button class="close-button" (click)="onClose()">X</button>
+    </div>
+    <div *ngIf="isEditHeadrVisible" class="modal-header">
+      <h4>View/Edit Meta Tag</h4>
+      <button class="close-button" (click)="onClose()">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="container mt-3">
+          <div class="row">
+              <div  class="col-md-6">
+                  <label>Tag Code</label>
+                  <input class="form-control" matInput placeholder="Enter tag code" [(ngModel)]="metaTagRequest.tagCode" />
+                </div>
+              <div class="col-md-6">
+                <label>Tag Name</label>
+                <input class="form-control" matInput  placeholder="Enter tag name" [(ngModel)]="metaTagRequest.tagDescription" />
+              </div>
+          </div>
+          <br/>
+          <div class="row">
+              <div class="col-md-6">
+                <label>Status</label>
+                <select class="form-control" [(ngModel)]="metaTagRequest.tagStatus">
+                  <option value="">~Please Choose~</option>
+                  <option value="active">Active</option>
+                  <option value="inActive">InActive</option>
+               </select>
+              </div>
+          </div>
+       </div>   
+    </div>
+    <div class="modal-footer">
+      <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSubmit()">Submit</button>
+      <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdate()">Update</button>
+      <button class="close-button" (click)="onClose()">Close</button>
+    </div>
+  </div>
+</div>
+<app-toast></app-toast>
+<app-toast></app-toast>
+<app-loader *ngIf="loading$ | async"></app-loader>

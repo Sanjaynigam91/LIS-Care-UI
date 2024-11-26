@@ -1,0 +1,77 @@
+.table {
+    width: 100%;
+    border: none;
+  }
+  
+  th.mat-header-cell {
+    text-align: center;
+  }
+  
+  td.mat-cell {
+    text-align: center;
+  }
+  
+  .display-column {
+    color: black; /* Optional: Change text color for better contrast */
+    padding: 10px; /* Optional: Adjust padding as needed */
+    background-color: #17f3e1;
+    cursor: pointer;
+  }
+
+  .mat-elevation-z8 {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .div-container{
+    margin-top: 20px;
+  }
+
+  .tbl-div{
+    margin-top: 20px;
+  }
+  
+ .search-button {
+    background-color: #4CAF50; /* Green */
+    margin: 20px;
+}
+
+.search-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.update-button {
+    background-color: #f44336; /* Red */
+}
+
+.update-button:hover {
+    background-color: #e53935;
+    transform: scale(1.05);
+}
+
+.search-button:active, .update-button:active {
+    transform: scale(0.98);
+}
+
+pagination-controls {
+  display: flex;
+  justify-content: right;
+  margin-top: 10px;
+}
+
+pagination-controls .pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+pagination-controls .page-item {
+  margin: 0 5px;
+}
+
+.NoRecord-Found{
+  margin-bottom: 400px;
+  background-color:black;
+  color: red;
+  text-align: center;
+}

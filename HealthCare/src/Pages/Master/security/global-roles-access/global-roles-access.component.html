@@ -1,0 +1,100 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<div class="container div-container">
+  <div class="row" [formGroup]="globalRoleForm">
+    <div class="col-md-3">
+        <label>User Type</label>
+        <select class="form-control" id="roleType"  formControlName="ddlUserType" (change)="GetUserRoleByRoleType($event)">
+          <option value="">~Please Choose~</option>
+          <option *ngFor="let item of userTypeResponse" [value]="item.roleType">{{item.roleType}}</option>
+       </select> 
+      </div>
+      <div  class="col-md-3">
+        <label>User Role</label>
+        <select class="form-control"  formControlName="ddlUserRole">
+          <option value="">~Please Choose~</option>
+         <option *ngFor="let item of lisRolNameResponse" [value]="item.roleId">{{item.roleName}}</option>
+       </select>
+      </div>
+      <div  class="col-md-6">
+        <button mat-flat-button class="search-button" (click)="SerachPermissionByRoles()" ><mat-icon>search</mat-icon>Search Permission</button>
+        <button mat-flat-button class="update-button" (click)="AllowPagePermissions()" ><mat-icon>badge</mat-icon>Allow Permission</button>
+      </div>
+  </div>
+  <br/>
+  <div class="row" [formGroup]="searchForm">
+  <div class="col-md-3"></div>
+  <div class="col-md-3"></div>
+  <div class="col-md-3"></div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <input class="form-control" formControlName="filterTerm" placeholder="Search..." />
+    </div>
+  </div>
+  </div> 
+
+  <div *ngIf="ishasDataList" class="row tbl-div">
+    <table class="table table-bordered table-striped" mat-table [dataSource]="pageHeaderResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+          <!-- Data Columns -->
+          <ng-container matColumnDef="pageName">
+            <th mat-header-cell *matHeaderCellDef>Page Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.messageHeader }}</td>
+          </ng-container>      
+        <!-- Checkbox Columns -->
+        <ng-container matColumnDef="read">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="readToggle($event)">Read</mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <mat-checkbox (change)="onSelectRead(element, $event)" [checked]="readSelection.includes(element)"></mat-checkbox> -->
+            <mat-checkbox (change)="onSelectRead(element, $event)" [checked]="element.isReadEnabled"></mat-checkbox>
+          </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="write">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="writeToggle($event)">Write</mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <mat-checkbox (change)="onSelectWrite(element, $event)" [checked]="writeSelection.includes(element)"></mat-checkbox> -->
+            <mat-checkbox (change)="onSelectWrite(element, $event)" [checked]="element.isWriteEnabled"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="approve">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="approveToggle($event)">Approve</mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <mat-checkbox (change)="onSelectApprove(element, $event)" [checked]="approveSelection.includes(element)"></mat-checkbox> -->
+            <mat-checkbox (change)="onSelectApprove(element, $event)" [checked]="element.isApproveEnabled"></mat-checkbox>
+          </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="specialRights">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="SpecialRightsToggle($event)">Special Rights</mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <mat-checkbox (change)="onSelectSpecialRights(element, $event)" [checked]="specialRightsSelection.includes(element)"></mat-checkbox> -->
+            <mat-checkbox (change)="onSelectSpecialRights(element, $event)" [checked]="element.isSpecialPermssion"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr class="display-column" mat-header-row *matHeaderRowDef="displayedPageColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedPageColumns;"></tr>
+    </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+  <div *ngIf="isNoDataList" calss="row">
+    <br/>
+    <div class="form-group form-control NoRecord-Found">
+      No Records Found! Please Choose User Type and Role
+    </div>
+    <br/>
+  </div>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>  
+<app-toast></app-toast>
+
+  

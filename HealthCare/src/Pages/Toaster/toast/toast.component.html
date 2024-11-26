@@ -1,0 +1,5 @@
+<!-- toaster.component.html -->
+<div *ngFor="let toast of toasts" [ngStyle]="{'background-color': getBackgroundColor(toast.type), 'color': 'white', 'padding': '10px', 'margin': '10px', 'border-radius': '5px', 'position': 'fixed', 'top': '10px', 'right': '10px'}">
+    {{ toast.message }}
+  </div>
+  

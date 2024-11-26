@@ -1,0 +1,56 @@
+<div class="modal">
+    <div class="modal-content">
+      <div *ngIf="isAddHeaderVisible" class="modal-header">
+        <h4>Add Lis Page</h4>
+        <button class="close-button" (click)="close()">X</button>
+      </div>
+      <div *ngIf="isEditHeaderVisible" class="modal-header">
+        <h4>View/Edit Lis Page</h4>
+        <button class="close-button" (click)="close()">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="container mt-3">
+            <div class="row">
+                <div  class="col-md-6">
+                    <label>Criteria</label>
+                    <select class="form-control" [(ngModel)]="lisPageRequestModel.criteria">
+                      <option value="">~Please Choose~</option>
+                      <option *ngFor="let item of lisCareCriteriaModel" [value]="item.criteria">{{item.criteria}}</option>
+                   </select> 
+                  </div>
+                <div class="col-md-6">
+                  <label>Page Entity</label>
+                  <select class="form-control" (change)="getPagesByEntites($event)" [(ngModel)]="lisPageRequestModel.pageEntity">
+                    <option value="">~Please Choose~</option>
+                    <option *ngFor="let item of lisPageEntityModel" [value]="item.pageEntity">{{item.pageEntity}}</option>
+                 </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Pages</label>
+                    <select class="form-control" [(ngModel)]="lisPageRequestModel.pageName" >
+                      <option value="">~Please Choose~</option>
+                      <option *ngFor="let item of lisPageModel" [value]="item.pageName">{{item.pageName}}</option>
+                   </select> 
+                  </div>
+                <div class="col-md-6">
+                  <label>Status</label>
+                  <select class="form-control" [(ngModel)]="lisPageRequestModel.isActive">
+                    <option value="">~Please Choose~</option>
+                    <option value="Active">Active</option>
+                    <option value="InActive">InActive</option>
+                 </select>
+                </div>
+            </div>
+         </div>   
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSubmit()">Submit</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdate()">Update</button>
+        <button class="close-button" (click)="close()">Close</button>
+      </div>
+    </div>
+</div>
+  <app-toast></app-toast>
