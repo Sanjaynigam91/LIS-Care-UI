@@ -5,7 +5,7 @@
 <br>
   <div class="row">
    <div class="col-md-1"></div>
-   <div class="col-md-11">
+   <div class="col-md-11" [formGroup]="SampleCollectionPlaceForm">
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
@@ -22,10 +22,10 @@
           </button></td>
         </tr>
         <tr>
-          <td> <input class="form-control" name="itemType" type="text" formControlName="sampleCollectedPlace"  placeholder="Enter Place Name">
+          <td> <input class="form-control" name="PlaceName" type="text" formControlName="PlaceName"  placeholder="Enter Place Name">
           </td>
           <td>
-            <button class="add-button" matTooltip="add tag">
+            <button class="add-button" matTooltip="add tag" (click)="onSubmit()">
               <mat-icon class="add-icon">add</mat-icon>
             </button>
           </td>
