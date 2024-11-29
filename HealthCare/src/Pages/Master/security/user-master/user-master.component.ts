@@ -108,6 +108,7 @@ export class UserMasterComponent {
     }) 
    }
 
+   
    filterData(term: string) {
     debugger;
     this.filteredData = this.users.filter((item: {
