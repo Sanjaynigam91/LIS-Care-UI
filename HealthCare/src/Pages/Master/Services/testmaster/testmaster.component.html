@@ -21,7 +21,7 @@
         <div class="col-md-3">
             <label>Processed Lab</label>
             <select class="form-control"  formControlName="ddlOutLab">
-                <option value="-All-">~Please Choose~</option>
+                <option value="null">~Please Choose~</option>
                 <option value="0">InLab</option>
                 <option value="1">OutLab</option>
             </select>
@@ -34,7 +34,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="div-button">
-            <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Test</button>
+            <button mat-flat-button class="search-button" (click)="onSearchClick()"><mat-icon>search</mat-icon>Search Test</button>
             <button mat-flat-button class="add-button">
               <mat-icon>person</mat-icon> Add New Test</button> 
           </div>
@@ -80,7 +80,7 @@
               <button class="edit-button" matTooltip="edit test">
               <mat-icon class="edit-icon">edit</mat-icon>
             </button>
-            <button class="delete-button" matTooltip="delete test">
+            <button class="delete-button" matTooltip="delete test" (click)="testDeleteConfirmationDialog(item.testCode)">
               <mat-icon class="delete-icon">delete</mat-icon>
             </button>
           </td>

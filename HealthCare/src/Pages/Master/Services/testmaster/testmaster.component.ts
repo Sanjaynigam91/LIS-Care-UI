@@ -101,7 +101,7 @@ export class TestmasterComponent {
     /// used to get the all test department 
     this.GetTestDeptData();
     /// used to load and Serach the Test Data
-    this.onTestSearch();
+    this.ReteriveTestRecords();
     this.loaderService.hide();
 
    }
@@ -115,7 +115,7 @@ export class TestmasterComponent {
     }) 
    }
 
-   onTestSearch(){
+   ReteriveTestRecords(){
     debugger;
     this.loaderService.show();
     this.testMasterSearch.partnerId=this.partnerId;
@@ -129,7 +129,7 @@ export class TestmasterComponent {
     this.testMasterSearch.isProcessedAt=this.testMasterForm.value.ddlOutLab;
     this.testMasterSearch.testName=this.testMasterForm.value.TestNameOrCode;
 
-    this.testService.SearchTestInfo(this.testMasterSearch).subscribe((response:any)=>{
+    this.testService.BindTestInfo(this.testMasterSearch).subscribe((response:any)=>{
       debugger;
      if(response.status && response.statusCode==200) {
       debugger;
@@ -148,6 +148,41 @@ export class TestmasterComponent {
   }
 
 
+  onSearchClick(){
+    debugger;
+    this.loaderService.show();
+    this.testMasterSearch.partnerId=this.partnerId;
+    this.testMasterSearch.deptOrDiscipline=this.testMasterForm.value.ddlDeptOrDescipline;
+    if(this.testMasterForm.value.ddlTestStatus==""){
+      this.testMasterSearch.isActive=true;
+    }
+    else if(this.testMasterForm.value.ddlTestStatus=="false"){
+      this.testMasterSearch.isActive=false;
+    }
+    else{
+      this.testMasterSearch.isActive=true;
+    }
+    this.testMasterSearch.isProcessedAt=this.testMasterForm.value.ddlOutLab;
+    this.testMasterSearch.testName=this.testMasterForm.value.TestNameOrCode;
+
+    this.testService.SearchTests(this.testMasterSearch).subscribe((response:any)=>{
+      debugger;
+     if(response.status && response.statusCode==200) {
+      debugger;
+      this.testDataApiResponse = response.data; 
+      //this.totalItems=response.data.length;
+      console.log(this.testDataApiResponse);
+     }
+     else{
+      console.log("No Record! Found");
+     }
+     this.loaderService.hide();
+    },err=>{
+      console.log(err);
+      this.loaderService.hide();
+    }) 
+  }
+
   filterTestData(term: string) {
     debugger;
     this.filteredData = this.testDataApiResponse.filter((item: {
@@ -159,7 +194,8 @@ export class TestmasterComponent {
       item.specimenType.toLowerCase().includes(term.toLowerCase()) ||
       item.referenceUnits.toLowerCase().includes(term.toLowerCase()) ||
       item.discipline.toLowerCase().includes(term.toLowerCase()) ||
-      item.reportTemplateTame.toLowerCase().includes(term.toLowerCase())   
+      item.reportTemplateTame.toLowerCase().includes(term.toLowerCase())
+         
      );
      debugger;
     this.testDataApiResponse= this.filteredData;
@@ -167,5 +203,38 @@ export class TestmasterComponent {
       this.ngOnInit();
     }
   }
+
+  testDeleteConfirmationDialog(testCode:any): void {
+    debugger;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+      width: '250px',
+      data: { message: 'Are you sure you want to delete this test?',testCode: testCode }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      debugger;
+      if (result.success) {
+        debugger;
+        this.testService.DeleteTestByTestCode(this.partnerId,result.testCode).subscribe((response:any)=>{
+          debugger;
+         if(response.status && response.statusCode==200){
+          this.toasterService.showToast('Test data Deleted Successfully ,Test Master!', 'success');
+          this.ngOnInit();
+         }
+         else{
+          this.toasterService.showToast('Test deletion failed!', 'error');
+         }
+         console.log(response);
+        }) 
+        console.log('Returned User ID:', result.userId);
+        console.log('User confirmed the action.');
+      } else {
+        debugger;
+        // User clicked 'Cancel'
+        console.log('User canceled the action.');
+      }
+    });
+  }
+
 
 }

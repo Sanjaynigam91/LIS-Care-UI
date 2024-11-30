@@ -15,6 +15,7 @@ export class ConfirmationDialogComponentComponent {
   recordId:any; //used for delete master tag list
   roleId:any;// used for delete role
   pageId:any;//Used to delete the Page
+  testCode:any;// used to delete test from test master page
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -22,13 +23,14 @@ export class ConfirmationDialogComponentComponent {
     this.message = data.message;
     this.userId = data.userId;
     this.recordId=data.recordId;
-    this.roleId=data.roleId
+    this.roleId=data.roleId;
+    this.testCode=data.testCode
   }
 
   onConfirm(): void {
     this.dialogRef.close({ success: true,userId: this.data.userId,
       recordId:this.data.recordId ,roleId:this.data.roleId,
-      pageId:this.data.pageId}); 
+      pageId:this.data.pageId,testCode:this.testCode}); 
   }
 
   onCancel(): void {
