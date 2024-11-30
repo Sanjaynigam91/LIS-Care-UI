@@ -52,8 +52,8 @@ export class TestmasterComponent {
   sortColumn = '';
   sortDirection = 'asc';
   // Filter criteria
-  filterTerm: string = '';
-  searchForm!: FormGroup;
+  filterTest: string = '';
+  searchTestForm!: FormGroup;
   globalRoleForm!:FormGroup
 
   filteredData: any[] = []; // Data array for the table
@@ -76,7 +76,14 @@ export class TestmasterComponent {
   public dialog: MatDialog,private loaderService: LoaderService,private toasterService: ToastService){
     this.loading$ = this.loaderService.loading$;
     this.partnerId= localStorage.getItem('partnerId');
-
+    /// Started to search the tests details by using test terms
+    this.searchTestForm=this.formBuilder.group({
+      filterTest: ['']
+    })
+    this.searchTestForm.get('filterTest')?.valueChanges.subscribe(value => {
+      this.filterTestData(value);
+    });
+    /// Ended to search the tests details by using test terms
   }
 
   ngOnInit(): void{
@@ -88,7 +95,6 @@ export class TestmasterComponent {
       ddlOutLab: [''],
       TestNameOrCode: [''],
     });
-
 
     this.loggedInUserId=localStorage.getItem('userId');
     this.loaderService.show();
@@ -141,5 +147,25 @@ export class TestmasterComponent {
     }) 
   }
 
+
+  filterTestData(term: string) {
+    debugger;
+    this.filteredData = this.testDataApiResponse.filter((item: {
+      testCode: any;testName: any; specimenType:any;referenceUnits:any;discipline:any;
+      reportTemplateTame:any
+    }) => 
+      item.testCode.toLowerCase().includes(term.toLowerCase()) ||
+      item.testName.toLowerCase().includes(term.toLowerCase()) ||
+      item.specimenType.toLowerCase().includes(term.toLowerCase()) ||
+      item.referenceUnits.toLowerCase().includes(term.toLowerCase()) ||
+      item.discipline.toLowerCase().includes(term.toLowerCase()) ||
+      item.reportTemplateTame.toLowerCase().includes(term.toLowerCase())   
+     );
+     debugger;
+    this.testDataApiResponse= this.filteredData;
+    if(term==""){
+      this.ngOnInit();
+    }
+  }
 
 }

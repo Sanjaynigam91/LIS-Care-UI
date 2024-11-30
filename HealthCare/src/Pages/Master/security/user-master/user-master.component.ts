@@ -186,7 +186,6 @@ export class UserMasterComponent {
     }) 
   }
 
-
   redirectToAddUser(){
     debugger;
     this.router.navigate(['Pages/Master/security/addUser',0]);
