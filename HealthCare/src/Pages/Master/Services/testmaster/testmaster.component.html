@@ -31,7 +31,7 @@
       <input class="form-control" type="TestNameOrCode" name="TestNameOrCode" placeholder="Type test name or code" formControlName="TestNameOrCode">
         </div>
     </div>
-    <div class="row" >
+    <div class="row">
         <div class="col-md-12">
             <div class="div-button">
             <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Test</button>
@@ -41,13 +41,13 @@
         </div>
     </div>
     <br/>
-    <div class="row">
+    <div class="row" [formGroup]="searchTestForm">
     <div class="col-md-3"></div>
     <div class="col-md-3"></div>
     <div class="col-md-3"></div>
     <div class="col-md-3">
       <div class="form-group">
-        <input class="form-control" placeholder="Search..." />
+        <input class="form-control" formControlName="filterTest" placeholder="Search..." />
       </div>
     </div>
     </div> 
