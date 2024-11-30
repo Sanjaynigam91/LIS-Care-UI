@@ -97,12 +97,10 @@ export class TestmasterComponent {
     });
 
     this.loggedInUserId=localStorage.getItem('userId');
-    this.loaderService.show();
     /// used to get the all test department 
     this.GetTestDeptData();
     /// used to load and Serach the Test Data
     this.ReteriveTestRecords();
-    this.loaderService.hide();
 
    }
 

@@ -14,14 +14,14 @@
         <div class="col-md-3">
             <label>Department / Discipline</label>
             <select class="form-control" id="roleType"  formControlName="ddlDeptOrDescipline">
-                <option value="-All-">~Please Choose~</option>
+                <option value="">~Please Choose~</option>
                 <option *ngFor="let item of testDeptApiResponse" [value]="item.testDepartment">{{item.testDepartment}}</option>
             </select>
         </div>
         <div class="col-md-3">
             <label>Processed Lab</label>
             <select class="form-control"  formControlName="ddlOutLab">
-                <option value="null">~Please Choose~</option>
+                <option value="">~Please Choose~</option>
                 <option value="0">InLab</option>
                 <option value="1">OutLab</option>
             </select>
