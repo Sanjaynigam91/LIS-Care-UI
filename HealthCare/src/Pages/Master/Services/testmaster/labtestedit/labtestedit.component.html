@@ -1,0 +1,32 @@
+<div class="modal">
+    <div class="modal-content">
+      <div *ngIf="isAddHeaderVisible" class="modal-header">
+        <h4>Add Lab Test</h4>
+        <button class="close-button" (click)="close()">X</button>
+      </div>
+      <div *ngIf="isEditHeaderVisible" class="modal-header">
+        <h4>View/Edit Lis Page</h4>
+        <button class="close-button" (click)="close()">X</button>
+      </div>
+      <div class="modal-body">
+        <mat-tab-group>
+            <mat-tab label="Test Details"> Content 1 </mat-tab>
+            <mat-tab label="Referral Ranges"> Content 2 </mat-tab>
+            <mat-tab label="Special Values"> Content 3 </mat-tab>
+            <mat-tab label="Centre Rates"> Content 4 </mat-tab>
+          </mat-tab-group>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" >Submit</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" >Update</button>
+        <button class="close-button" (click)="close()">Close</button>
+      </div>
+    </div>
+</div>
+  <app-toast></app-toast>
+
+
+
+
+
+  
