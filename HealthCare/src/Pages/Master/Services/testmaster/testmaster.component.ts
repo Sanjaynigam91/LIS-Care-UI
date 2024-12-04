@@ -24,6 +24,7 @@ import { testDepartmentResponse } from '../../../../Interfaces/TestMaster/testDe
 import { testDataSearchResponse } from '../../../../Interfaces/TestMaster/testDataSearchResponse';
 import { testMasterSearchRequest } from '../../../../Interfaces/TestMaster/testMasterSearchRequest';
 import { TestService } from '../../../../auth/TestMasterService/test.service';
+import { LabtesteditComponent } from './labtestedit/labtestedit.component';
 
 
 
@@ -234,5 +235,13 @@ export class TestmasterComponent {
     });
   }
 
+
+  OpenAddNewTest(): void {
+    debugger;
+    this.dialog.open(LabtesteditComponent, {
+      width: '5000px',// Customize width
+      data: {}        // Pass data if needed
+    });
+  }
 
 }
