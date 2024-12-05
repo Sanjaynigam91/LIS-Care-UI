@@ -250,17 +250,124 @@
                       <textarea class="form-control" name="ReferralRangesGroup" formControlName="ReferralRangesGroup" rows="3" cols="30" required></textarea>
                     </td>
                      <td> 
-                      <button class="delete-button" matTooltip="delete tag">
+                      <button mat-icon-button class="add-button" matTooltip="save tag">
+                        <mat-icon>save</mat-icon>
+                      </button>
+                    <button class="delete-button" matTooltip="delete tag">
                       <mat-icon class="delete-icon">delete</mat-icon>
-                    </button></td>
+                    </button>
+                  </td>
                   </tr>
                 </tbody>
               </table> 
                 </div>
               </div>
             </mat-tab>
-            <mat-tab label="Special Values"> Special Values Content  </mat-tab>
-            <mat-tab label="Centre Rates"> Centre Rates Content  </mat-tab>
+            <mat-tab label="Special Values">
+              <div class="container mt-3">
+                <div class="row">
+                  <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                   <th>Allowed Value</th>
+                   <th>Edited Value</th>
+                   <th>Is Abnormal</th>
+                   <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <input class="form-control" name="AllowedValue" type="text" formControlName="AllowedValue"  placeholder="Allowed Value" disabled>
+                        </div>
+                     </div>
+                    </td>
+                    <td>
+                      <div class="row">
+                       <div class="col-md-12">
+                        <input class="form-control" name="EditedValue" type="text" formControlName="EditedValue"  placeholder="Edited Value">
+                       </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <mat-checkbox class="checkbox-margin" formControlName="IsAbnormal"></mat-checkbox>
+                        </div>
+                       </div>
+                    </td>
+                     <td> 
+                      <button mat-icon-button class="add-button" matTooltip="save tag">
+                        <mat-icon>save</mat-icon>
+                      </button>
+                    <button class="delete-button" matTooltip="delete tag">
+                      <mat-icon class="delete-icon">delete</mat-icon>
+                    </button>
+                  </td>
+                  </tr>
+                </tbody>
+              </table> 
+                </div>
+              </div> 
+              </mat-tab>
+            <mat-tab label="Centre Rates"> 
+              <div class="container mt-3">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="form-group">
+                      <label>Agreed Rate</label>
+                      <input class="form-control" name="CenterAgreedRate" type="text" formControlName="CenterAgreedRate"  placeholder="Enter agreed rates..">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button mat-flat-button class="apply-button" >Apply Rates</button>
+                    <button mat-flat-button class="save-button" >Save Rates</button>
+                  </div>
+                  <br/>
+                </div>
+                <div class="row">
+                  <div class="col-md-3"></div>
+                  <div class="col-md-3"></div>
+                  <div class="col-md-3"></div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input class="form-control" formControlName="filterCeterRates" placeholder="Search..." />
+                    </div>
+                  </div>
+                  </div> 
+                  <br/>
+                <div class="row">
+                  <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                   <th>Center Name</th>
+                   <th>AgreedRate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <input class="form-control" name="CenterName" type="text" formControlName="CenterName"  placeholder="Center Name" disabled>
+                        </div>
+                     </div>
+                    </td>
+                    <td>
+                      <div class="row">
+                       <div class="col-md-12">
+                        <input class="form-control" name="AgreedRate" type="text" formControlName="AgreedRate"  placeholder="Agreed Rate">
+                       </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table> 
+                </div>
+              </div> 
+            </mat-tab>
         </mat-tab-group>
       </div>
       <div class="modal-footer">
