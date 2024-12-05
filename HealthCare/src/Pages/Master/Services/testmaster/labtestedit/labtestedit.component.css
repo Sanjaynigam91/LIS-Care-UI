@@ -349,5 +349,30 @@ pagination-controls {
   .SearchTerms{
     margin-left: 60px;
   }
+  .checkbox-margin {
+    margin: 0 12px;
+  }
   
+  .apply-button {
+    background-color: #17f3e1; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  .save-button {
+    background-color: #1729f3; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 25px;
+  }
   

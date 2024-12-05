@@ -8,11 +8,12 @@ import { ToastService } from '../../../../../auth/Toaster/toast.service';
 import { RefreshPageService } from '../../../../../auth/Shared/refresh-page.service';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-labtestedit',
   standalone: true,
-  imports: [MatTabsModule, ToastComponent,CommonModule,MatIconModule],
+  imports: [MatTabsModule, ToastComponent,CommonModule,MatIconModule,MatCheckboxModule],
   templateUrl: './labtestedit.component.html',
   styleUrl: './labtestedit.component.css'
 })
