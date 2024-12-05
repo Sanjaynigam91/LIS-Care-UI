@@ -7,11 +7,12 @@ import { TestService } from '../../../../../auth/TestMasterService/test.service'
 import { ToastService } from '../../../../../auth/Toaster/toast.service';
 import { RefreshPageService } from '../../../../../auth/Shared/refresh-page.service';
 import { Observable } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-labtestedit',
   standalone: true,
-  imports: [MatTabsModule, ToastComponent,CommonModule],
+  imports: [MatTabsModule, ToastComponent,CommonModule,MatIconModule],
   templateUrl: './labtestedit.component.html',
   styleUrl: './labtestedit.component.css'
 })
