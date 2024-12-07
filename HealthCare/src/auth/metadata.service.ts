@@ -4,6 +4,7 @@ import { metadataresponse } from '../Interfaces/metadataresponse';
 import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { metadatalistresponse } from '../Interfaces/metadatalistresponse';
+import { metaTagResponse } from '../Interfaces/metaTagResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +70,41 @@ export class MetadataService {
    let params = new HttpParams()
    .set('tagId', tagId.toString());
    return this.httpClient.get<metadataresponse>(`${this.baseUrl}/GetMetaTagById`, {params});
+  }
+
+  LoadAllDepartments(partnerId:any):Observable<metaTagResponse>{
+    debugger;
+    // Create HttpParams to pass query parameters
+    let params = new HttpParams().set('partnerId', partnerId);
+    return this.httpClient.get<metaTagResponse>(`${this.baseUrl}/GetDepartments`,{ params });
+  }
+
+  LoadSubDepartments(partnerId:any):Observable<metaTagResponse>{
+    debugger;
+    // Create HttpParams to pass query parameters
+    let params = new HttpParams().set('partnerId', partnerId);
+    return this.httpClient.get<metaTagResponse>(`${this.baseUrl}/GetSubTestDepartments`,{ params });
+  }
+
+  LoadSpecimenType(partnerId:any):Observable<metaTagResponse>{
+    debugger;
+    // Create HttpParams to pass query parameters
+    let params = new HttpParams().set('partnerId', partnerId);
+    return this.httpClient.get<metaTagResponse>(`${this.baseUrl}/GetSpecimenType`,{ params });
+  }
+
+  LoadReportingStyle(partnerId:any):Observable<metaTagResponse>{
+    debugger;
+    // Create HttpParams to pass query parameters
+    let params = new HttpParams().set('partnerId', partnerId);
+    return this.httpClient.get<metaTagResponse>(`${this.baseUrl}/GetReportingStyle`,{ params });
+  }
+
+  LoadGetReportTemplates(partnerId:any):Observable<metaTagResponse>{
+    debugger;
+    // Create HttpParams to pass query parameters
+    let params = new HttpParams().set('partnerId', partnerId);
+    return this.httpClient.get<metaTagResponse>(`${this.baseUrl}/GetReportTemplates`,{ params });
   }
 
 }

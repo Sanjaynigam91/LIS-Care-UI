@@ -25,14 +25,14 @@
                     <label>Department</label>
                     <select class="form-control" formControlName="ddlTestDepartment">
                       <option value="">~Please Choose~</option>
-                      <option></option>
+                      <option *ngFor="let item of testDepartmentResponse" [value]="item.itemType">{{item.itemDescription}}</option>
                    </select>
                   </div>
                   <div  class="col-md-3">
                     <label>Sub-Department</label>
                     <select class="form-control" formControlName="ddlSubDepartment">
                       <option value="">~Please Choose~</option>
-                      <option></option>
+                      <option *ngFor="let item of testSubDepartmentResponse" [value]="item.itemType">{{item.itemDescription}}</option>
                    </select>
                   </div>
               </div>
@@ -46,7 +46,7 @@
                       <label>Specimen Type</label>
                       <select class="form-control" formControlName="ddlSpecimenType">
                         <option value="">~Please Choose~</option>
-                        <option></option>
+                        <option *ngFor="let item of specimenTypeResponse" [value]="item.itemType">{{item.itemDescription}}</option>
                      </select>
                     </div>
                     <div  class="col-md-3">
@@ -57,7 +57,7 @@
                       <label>Reporting Style</label>
                       <select class="form-control" formControlName="ddlReportingStyle">
                         <option value="">~Please Choose~</option>
-                        <option></option>
+                        <option *ngFor="let item of reportingStyleResponse" [value]="item.itemType">{{item.itemDescription}}</option>
                      </select> 
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     <label>Report Template</label>
                     <select class="form-control" formControlName="ddlReportTemplate">
                       <option value="">~Please Choose~</option>
-                      <option></option>
+                      <option *ngFor="let item of reportTemplatesResponse" [value]="item.itemType">{{item.itemDescription}}</option>
                    </select>
                   </div>
                     <div class="col-md-2">
