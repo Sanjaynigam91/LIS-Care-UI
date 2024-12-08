@@ -46,6 +46,7 @@ export class LabtesteditComponent {
   , private toasterService: ToastService,private refPageService:RefreshPageService,
     private metaService:MetadataService,private formBuilder: FormBuilder,
     private loaderService: LoaderService){
+  private metaService:MetadataService){
       this.partnerId= localStorage.getItem('partnerId');
       this.labtestCode=data.testCode;
     }
