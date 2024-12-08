@@ -244,13 +244,4 @@ export class TestmasterComponent {
     });
   }
 
-  ViewEditTestDetails(testCode:any): void {
-    debugger;
-    this.loaderService.hide();
-    this.dialog.open(LabtesteditComponent, {
-      width: '5000px',// Customize width
-      data: {testCode:testCode}        // Pass data if needed
-    });
-  }
-
 }
