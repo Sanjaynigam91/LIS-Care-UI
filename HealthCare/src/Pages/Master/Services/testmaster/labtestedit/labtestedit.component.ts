@@ -38,7 +38,8 @@ export class LabtesteditComponent {
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService
-  , private toasterService: ToastService,private refPageService:RefreshPageService,private metaService:MetadataService,){
+  , private toasterService: ToastService,private refPageService:RefreshPageService,
+  private metaService:MetadataService){
       this.partnerId= localStorage.getItem('partnerId');
       this.labtestCode=data.labtestCode;
     }
