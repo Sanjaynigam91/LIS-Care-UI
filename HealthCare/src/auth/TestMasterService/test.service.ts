@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { delay } from 'rxjs';
 import { testDepartmentResponse } from '../../Interfaces/TestMaster/testDepartmentResponse';
 import { testDataSearchResponse } from '../../Interfaces/TestMaster/testDataSearchResponse';
+import { testDataResponse } from '../../Interfaces/TestMaster/testDataResponse';
 
 
 
@@ -51,5 +52,14 @@ DeleteTestByTestCode(partnerId:any,testCode:any){
  return this.httpClient.delete(`${this.baseUrl}/DeleteTest`, {params});
 }
 
+
+GetTestDetailsByTestCode(partnerId:any,testCode:any):Observable<testDataResponse>{
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+ .set('partnerId', partnerId.toString())
+ .set('testCode', testCode.toString());
+ return this.httpClient.get<testDataResponse>(`${this.baseUrl}/GetTestByTestCode`, {params}).pipe(delay(1000));
+}
 
 }

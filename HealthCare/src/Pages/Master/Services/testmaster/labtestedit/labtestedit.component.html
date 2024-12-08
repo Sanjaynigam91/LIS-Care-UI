@@ -1,21 +1,22 @@
 <div class="modal">
     <div class="modal-content">
       <div *ngIf="isAddHeaderVisible" class="modal-header">
-        <h4>Add Lab Test</h4>
+        <h4>Add Test Details</h4>
         <button class="close-button" (click)="close()">X</button>
       </div>
       <div *ngIf="isEditHeaderVisible" class="modal-header">
-        <h4>View/Edit Lis Page</h4>
+        <h4>View/Edit Test Details</h4>
         <button class="close-button" (click)="close()">X</button>
       </div>
       <div class="modal-body">
         <mat-tab-group>
             <mat-tab label="Test Details"> 
-              <div class="container mt-3">
+              <br/>
+              <div class="container mt-3" [formGroup]="editTestForm">
                 <div class="row">
                   <div  class="col-md-2">
                       <label>Test Code</label>
-                      <input class="form-control" name="testCode" type="text"  formControlName="testCode" placeholder="Test Code" disabled>
+                      <input class="form-control" name="testCode" type="text"  formControlName="testCode" placeholder="Test Code">
                     </div>
                     <div class="col-md-4">
                       <label>Test Name</label>
@@ -90,8 +91,8 @@
                       <label>Direct Test entry restricted?</label>
                       <select class="form-control" formControlName="ddlTestEntryRestricted">
                       <option value="">~Please Choose~</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
+                      <option value="Y">Yes</option>
+                      <option value="N">No</option>
                     </select>
                     </div>
                 </div>
@@ -125,8 +126,8 @@
                    </select>
                   </div>
                   <div class="col-md-2">
-                    <label>Default Value</label>
-                    <input class="form-control" name="DefaultValue" type="number"  formControlName="DefaultValue" placeholder="Enter Default Value">
+                    <label>Analyzer Name</label>
+                    <input class="form-control" name="DefaultValue" type="text"  formControlName="DefaultValue" placeholder="Enter Default Value">
                   </div>
                   <div class="col-md-2">
                     <label>Is Automated?</label>
@@ -154,6 +155,7 @@
                 <div class="col-md-3">
                     <label>Test Applicable</label>
                     <select class="form-control" formControlName="ddlTestApplicable">
+                    <option value="">~Please Choose~</option>
                     <option value="B">Both</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -187,6 +189,7 @@
               </div>  
             </mat-tab>
             <mat-tab label="Referral Ranges">  
+              <br/>
               <div class="container mt-3">
                 <div class="row">
                   <table class="table table-bordered table-striped">
@@ -205,7 +208,7 @@
                     <td>
                       <div class="row">
                         <div class="col-md-12">
-                          <select class="form-control" formControlName="ddlProcessedAt">
+                          <select class="form-control">
                             <option value="">~Please Choose~</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -216,35 +219,35 @@
                     <td>
                       <div class="row">
                        <div class="col-md-6">
-                        <input class="form-control" name="LowValue" type="text" formControlName="LowValue"  placeholder="Enter Low Value">
+                        <input class="form-control" name="LowValue" type="text" placeholder="Enter Low Value">
                        </div>
                        <div class="col-md-6">
-                        <input class="form-control" name="HighValue" type="text" formControlName="HighValue"  placeholder="Enter High Value">
+                        <input class="form-control" name="HighValue" type="text"  placeholder="Enter High Value">
                        </div>
                       </div>
                     </td>
                     <td>
                       <div class="row">
                         <div class="col-md-6">
-                         <input class="form-control" name="FromDays" type="text" formControlName="FromDays"  placeholder="Enter From Day">
+                         <input class="form-control" name="FromDays" type="text"  placeholder="Enter From Day">
                         </div>
                         <div class="col-md-6">
-                         <input class="form-control" name="ToDays" type="text" formControlName="ToDays"  placeholder="Enter To Day">
+                         <input class="form-control" name="ToDays" type="text"  placeholder="Enter To Day">
                         </div>
                        </div>
                     </td>
                     <td>
                       <div class="row">
                         <div class="col-md-6">
-                         <input class="form-control" name="CriticalLowValue" type="text" formControlName="CriticalLowValue"  placeholder="Low Critical Value">
+                         <input class="form-control" name="CriticalLowValue" type="text"  placeholder="Low Critical Value">
                         </div>
                         <div class="col-md-6">
-                         <input class="form-control" name="CriticalHighValue" type="text" formControlName="CriticalHighValue"  placeholder="High Critical Value">
+                         <input class="form-control" name="CriticalHighValue" type="text"  placeholder="High Critical Value">
                         </div>
                        </div>
                     </td>
                     <td>
-                      <textarea class="form-control" name="ReferralRangesGroup" formControlName="ReferralRangesGroup" rows="3" cols="30" required></textarea>
+                      <textarea class="form-control" name="ReferralRangesGroup" rows="3" cols="30" required></textarea>
                     </td>
                      <td> 
                       <button mat-icon-button class="add-button" matTooltip="save tag">
@@ -261,6 +264,7 @@
               </div>
             </mat-tab>
             <mat-tab label="Special Values">
+              <br/>
               <div class="container mt-3">
                 <div class="row">
                   <table class="table table-bordered table-striped">
@@ -277,21 +281,21 @@
                     <td>
                       <div class="row">
                         <div class="col-md-12">
-                          <input class="form-control" name="AllowedValue" type="text" formControlName="AllowedValue"  placeholder="Allowed Value" disabled>
+                          <input class="form-control" name="AllowedValue" type="text"  placeholder="Allowed Value">
                         </div>
                      </div>
                     </td>
                     <td>
                       <div class="row">
                        <div class="col-md-12">
-                        <input class="form-control" name="EditedValue" type="text" formControlName="EditedValue"  placeholder="Edited Value">
+                        <input class="form-control" name="EditedValue" type="text"  placeholder="Edited Value">
                        </div>
                       </div>
                     </td>
                     <td>
                       <div class="row">
                         <div class="col-md-12">
-                          <mat-checkbox class="checkbox-margin" formControlName="IsAbnormal"></mat-checkbox>
+                          <mat-checkbox class="checkbox-margin"></mat-checkbox>
                         </div>
                        </div>
                     </td>
@@ -311,11 +315,12 @@
               </mat-tab>
             <mat-tab label="Centre Rates"> 
               <div class="container mt-3">
+                <br/>
                 <div class="row">
                   <div class="col-md-8">
                     <div class="form-group">
                       <label>Agreed Rate</label>
-                      <input class="form-control" name="CenterAgreedRate" type="text" formControlName="CenterAgreedRate"  placeholder="Enter agreed rates..">
+                      <input class="form-control" name="CenterAgreedRate" type="text"   placeholder="Enter agreed rates..">
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -330,7 +335,7 @@
                   <div class="col-md-3"></div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input class="form-control" formControlName="filterCeterRates" placeholder="Search..." />
+                      <input class="form-control" placeholder="Search..." />
                     </div>
                   </div>
                   </div> 
@@ -348,14 +353,14 @@
                     <td>
                       <div class="row">
                         <div class="col-md-12">
-                          <input class="form-control" name="CenterName" type="text" formControlName="CenterName"  placeholder="Center Name" disabled>
+                          <input class="form-control" name="CenterName" type="text"  placeholder="Center Name">
                         </div>
                      </div>
                     </td>
                     <td>
                       <div class="row">
                        <div class="col-md-12">
-                        <input class="form-control" name="AgreedRate" type="text" formControlName="AgreedRate"  placeholder="Agreed Rate">
+                        <input class="form-control" name="AgreedRate" type="text"   placeholder="Agreed Rate">
                        </div>
                       </div>
                     </td>
