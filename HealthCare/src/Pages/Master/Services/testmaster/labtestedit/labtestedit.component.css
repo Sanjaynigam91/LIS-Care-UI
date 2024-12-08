@@ -1,0 +1,378 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 1500px;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    /* background-color: #17f3e1;  */
+    height: 50px;
+  }
+  
+  .modal-body {
+    margin-top: 10px;
+  }
+  
+  .modal-footer {
+    margin-top: 3px;
+    text-align: right;
+    height: 80px;
+  }
+  
+  .close-button {
+    background-color: gray; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    
+  }
+  
+  .close-button:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
+
+  .submit-button {
+    background-color: green; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  
+  .submit-button:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
+
+  .update-button {
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 28px;
+  }
+  
+  .update-button:hover {
+    background-color: #17f3e1; /* Darker green for hover effect */
+  }
+
+  .mat-form{
+    margin-left: 30px;
+    margin-top: 10px;
+  }
+  .mat-Select{
+    margin-left: 50px;
+  }
+
+  pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  pagination-controls .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+  }
+  
+  pagination-controls .page-item {
+    margin: 0 5px;
+  }
+
+  mat-card {
+    margin: 10px 0;
+  }
+  mat-list-item {
+    padding: 0;
+  }
+  
+  mat-grid-tile {
+    background: lightblue;
+  }
+  
+  .username{
+    min-width: 300px;
+}
+.action-link{
+    padding:10px;
+}
+.list-users{
+    margin: 10px;
+    background-color: whitesmoke;
+}
+.display-users{
+    margin: 10px;;
+}
+mat-icon {
+  font-size: 24px; /* Adjust icon size */
+  color: #000; /* Adjust icon color */
+}
+
+.addUser{
+  margin-left: 980px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.card-title h1 {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+
+section {
+  display: table;
+}
+
+.example-label {
+  display: table-cell;
+  font-size: 14px;
+  margin-left: 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  display: table-cell;
+  max-width: 600px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+
+th {
+  color: black; /* Optional: Change text color for better contrast */
+  padding: 10px; /* Optional: Adjust padding as needed */
+  background-color: #17f3e1;
+  cursor: pointer;
+}
+
+.edit-button{
+  background-color: #1c93cf;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.edit-icon {
+  color:  lightsalmon; /* Change to your desired color */
+}
+
+.map-button{
+  background-color: #1c93cf;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.map-icon {
+  color:  green; /* Change to your desired color */
+}
+
+.delete-icon {
+  color:  #d70e6f; /* Change to your desired color */
+}
+
+
+.delete-button{
+  background-color: #d70e6f;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.add-icon {
+  color:  blue; /* Change to your desired color */
+}
+
+
+.add-button{
+  background-color: #17f3e1;;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.table-header{
+  color: black; /* Optional: Change text color for better contrast */
+  padding: 10px; /* Optional: Adjust padding as needed */
+  background-color: #17f3e1;
+  cursor: pointer;
+}
+
+ngx-datatable {
+  font-size: 14px;
+  border: 1px solid #ccc;
+}
+
+ngx-datatable .datatable-header {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+ngx-datatable .datatable-body-cell {
+  padding: 8px;
+}
+
+ngx-datatable .datatable-footer {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+::ng-deep ngx-datatable {
+  .datatable-header {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .datatable-body-cell {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .datatable-footer {
+    background-color: #007bff;
+    color: #fff;
+  }
+}
+
+@media (max-width: 768px) {
+  ngx-datatable {
+    font-size: 12px;
+  }
+
+  ngx-datatable .datatable-header {
+    font-size: 12px;
+  }
+}
+
+.custom-name {
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* styles.css or your-component.css */
+.custom-header {
+  background-color: #17f3e1; /* Replace with your desired color */
+  color: black; /* Optional: text color */
+}
+
+mat-table {
+  width: 100%;
+}
+mat-paginator {
+  margin: 16px 0;
+}
+
+.ng-container{
+  background-color: #17f3e1; /* Replace with your desired color */
+  color: black; /* Optional: text color */
+}
+
+pagination-controls {
+    display: flex;
+    justify-content: left;
+    margin-top: 10px;
+  }
+  
+  pagination-controls .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+  }
+  
+  pagination-controls .page-item {
+    margin: 0 5px;
+  }
+  
+  .example-h2 {
+    margin: 10px;
+  }
+  
+  .example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  
+  .example-margin {
+    margin: 0 10px;
+  }
+  
+  .example-card {
+    margin-bottom: 10px;
+  }
+  .SearchTerms{
+    margin-left: 60px;
+  }
+  .checkbox-margin {
+    margin: 0 12px;
+  }
+  
+  .apply-button {
+    background-color: #17f3e1; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  .save-button {
+    background-color: #1729f3; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 25px;
+  }
+  
