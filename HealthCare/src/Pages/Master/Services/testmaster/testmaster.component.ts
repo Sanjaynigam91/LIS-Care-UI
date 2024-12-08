@@ -244,4 +244,12 @@ export class TestmasterComponent {
     });
   }
 
+  ViewTestDetails(testCode:string){
+    debugger;
+    this.dialog.open(LabtesteditComponent, {
+      width: '5000px',// Customize width
+      data: {testCode:testCode}        // Pass data if needed
+    });
+  }
+
 }
