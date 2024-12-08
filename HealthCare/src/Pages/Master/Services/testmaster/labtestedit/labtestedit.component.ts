@@ -11,11 +11,17 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MetadataService } from '../../../../../auth/metadata.service';
 import { metaTagResponse } from '../../../../../Interfaces/metaTagResponse';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { testDataResponse } from '../../../../../Interfaces/TestMaster/testDataResponse';
+import { testDataUpdateRequest } from '../../../../../Interfaces/TestMaster/testDataUpdateRequest';
+import { LoaderService } from '../../../../../Interfaces/loader.service';
+import { LoaderComponent } from "../../../../loader/loader.component";
 
 @Component({
   selector: 'app-labtestedit',
   standalone: true,
-  imports: [MatTabsModule, ToastComponent,CommonModule,MatIconModule,MatCheckboxModule],
+  imports: [MatTabsModule, ToastComponent, CommonModule, MatIconModule, MatCheckboxModule,
+    ReactiveFormsModule, LoaderComponent],
   templateUrl: './labtestedit.component.html',
   styleUrl: './labtestedit.component.css'
 })
@@ -34,36 +40,137 @@ export class LabtesteditComponent {
   specimenTypeResponse: Observable<metaTagResponse>| any;
   reportingStyleResponse: Observable<metaTagResponse>| any;
   reportTemplatesResponse: Observable<metaTagResponse>| any;
-  metaDataService: any;
+  testDataResponse:Observable<testDataResponse>|any;
+  editTestForm!: FormGroup<any>;
+
+  testDataUpdateRequest:testDataUpdateRequest={
+    partnerId: '',
+    testCode: '',
+    testName: '',
+    specimenType: '',
+    containerType: '',
+    specimenVolume: '',
+    transportConditions: '',
+    department: '',
+    subDepartment: '',
+    methodology: '',
+    analyzerName: '',
+    isAutomated: false,
+    isCalculated: false,
+    reportingLeadTime: '',
+    mrp: 0,
+    isActive: false,
+    normalRangeOneline: '',
+    reportTemplateName: '',
+    reportingDecimals: 0,
+    referenceUnits: '',
+    B2CRates: 0,
+    reportingStyle: '',
+    scheduledDays: '',
+    isReserved: '',
+    isOutlab: false,
+    outlabCode: '',
+    reportPrintOrder: 0,
+    reportSection: '',
+    labRates: 0,
+    lowestAllowed: 0,
+    highestAllowed: 0,
+    technology: '',
+    printAs: '',
+    cptCode: '',
+    calculatedValue: '',
+    aliasName: '',
+    recordId: 0,
+    normalRangeFooter: '',
+    departmentWiseNumbers: '',
+    testShortName: '',
+    modality: '',
+    defaultFilmCount: '',
+    defaultContrastML: '',
+    testProfitRate: '',
+    labTestCode: '',
+    testApplicable: '',
+    isLMP: false,
+    oldtestCode: '',
+    isNABLApplicable: false
+  }
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService
-  , private toasterService: ToastService,private refPageService:RefreshPageService,private metaService:MetadataService,){
+    @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService,private formBuilder: FormBuilder,
+    private toasterService: ToastService,private refPageService:RefreshPageService,
+    private metaService:MetadataService,private loaderService: LoaderService){
+      this.loading$ = this.loaderService.loading$;
       this.partnerId= localStorage.getItem('partnerId');
-      this.labtestCode=data.labtestCode;
+      this.labtestCode=data.testCode;
+
+     
     }
 
     ngOnInit():void{
       debugger;
-      this.isSubmitVisible=true;
+      this.editTestForm = this.formBuilder.group({
+        testCode: [''],
+        testName:[''],
+        ddlTestDepartment:[''],
+        ddlSubDepartment:[''],
+        Methodology:[''],
+        ddlSpecimenType:[''],
+        ReferenceUnit:[''],
+        ddlReportingStyle:[''],
+        ddlReportTemplate:[''],
+        ReportingDecimals:[''],
+        ddlProcessedAt:[''],
+        PrintSequence:[''],
+        ddlTestEntryRestricted:[''],
+        ShortName:[''],
+        PatinetRate:[''],
+        ClientRate:[''],
+        LabRate:[''],
+        ddlTestStatus:[''],
+        DefaultValue:[''],
+        ddlIsAutomated:[''],
+        ddlIsCalculated:[''],
+        LabTestCode:[''],
+        ddlTestApplicable:[''],
+        ddlIsLMP:[''],
+        ddlIsNABLApplicable:[''],
+        ReferralRangesComments:['']
+      });
       if(this.labtestCode!==undefined){
+        this.loadTestDetails(this.labtestCode);
         this.isSubmitVisible=false;
         this.isUpdateVisible=true;
         this.isAddHeaderVisible=false;
         this.isEditHeaderVisible=true;
       }
       else{
-        this.BindAllDepartment();
-        this.BindAllSubDepartment();
-        this.BindTestSpecimenTypes();
-        this.BindAllReportingStyle();
-        this.BindAllReportTemplates();
         this.isSubmitVisible=true;
         this.isUpdateVisible=false;
         this.isAddHeaderVisible=true;
         this.isEditHeaderVisible=false;
+        this.editTestForm.patchValue({      
+          ddlTestDepartment:"",
+          ddlSubDepartment:"",
+          ddlSpecimenType:"",
+          ddlReportingStyle:"",
+          ddlReportTemplate:"",
+          ddlProcessedAt:"",
+          ddlTestEntryRestricted:"",
+          ddlTestStatus:"",
+          ddlIsAutomated:"",
+          ddlIsCalculated:"",
+          ddlTestApplicable:"",
+          ddlIsLMP:"",
+          ddlIsNABLApplicable:"",      
+        })
+       
       }
       
+      this.BindAllDepartment();
+      this.BindAllSubDepartment();
+      this.BindTestSpecimenTypes();
+      this.BindAllReportingStyle();
+      this.BindAllReportTemplates();
       
     }  
 
@@ -118,6 +225,61 @@ export class LabtesteditComponent {
      this.reportTemplatesResponse = response.data; 
      console.log(response);
     }) 
+   }
+
+   loadTestDetails(testCode:any){
+    debugger;
+    this.loaderService.show();
+    this.testService.GetTestDetailsByTestCode(this.partnerId,testCode).subscribe((response:any)=>{
+      debugger;
+      if(response.status && response.statusCode==200){
+        debugger;
+        let isOutLab=response.data.isOutlab;
+        if(isOutLab){isOutLab="True";}else{isOutLab="False";}
+        let testStatus=response.data.isActive;
+        if(testStatus){testStatus="Active";}else{testStatus="InActive";}
+        let IsAutoMated=response.data.isAutomated;
+        if(IsAutoMated){IsAutoMated="Yes";}else{IsAutoMated="No";}
+        let isCalculated=response.data.isCalculated;
+        if(isCalculated){isCalculated="Yes";}else{isCalculated="No";}
+        let isLMP=response.data.isLMP;
+        if(isLMP){isLMP="True";}else{isLMP="False";}
+        let isNABLApplicable=response.data.isNABLApplicable;
+        if(isNABLApplicable){isNABLApplicable="Yes";}else{isNABLApplicable="No";}
+
+        this.editTestForm.patchValue({
+          testCode:response.data.testCode,
+          testName:response.data.testName,
+          ddlTestDepartment:response.data.discipline,
+          ddlSubDepartment:response.data.subDiscipline,
+          Methodology:response.data.methodology,
+          ddlSpecimenType:response.data.specimenType,
+          ReferenceUnit:response.data.referenceUnits,
+          ddlReportingStyle:response.data.reportingStyle,
+          ddlReportTemplate:response.data.reportTemplateName,
+          ReportingDecimals:response.data.reportingDecimals,
+          ddlProcessedAt:isOutLab,
+          PrintSequence:response.data.reportPrintOrder,
+          ddlTestEntryRestricted:response.data.isReserved,
+          ShortName:response.data.testShortName,
+          PatinetRate:response.data.mrp,
+          ClientRate:response.data.b2CRates,
+          LabRate:response.data.labRates,
+          ddlTestStatus:testStatus,
+          DefaultValue:response.data.analyzerName,
+          ddlIsAutomated:IsAutoMated,
+          ddlIsCalculated:isCalculated,
+          LabTestCode:response.data.labTestCode,
+          ddlTestApplicable:response.data.testApplicable,
+          ddlIsLMP:isLMP,
+          ddlIsNABLApplicable:isNABLApplicable,
+          ReferralRangesComments:response.data.normalRangeFooter,
+        })
+      }
+      console.log(this.editTestForm);
+     console.log(response);
+    }) 
+    this.loaderService.hide();
    }
 
 }

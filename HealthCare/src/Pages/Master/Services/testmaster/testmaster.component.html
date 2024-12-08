@@ -77,7 +77,7 @@
             <td>{{ item.reportTemplateTame }}</td>
             <td>{{ item.mrp }}</td>
             <td>  
-              <button class="edit-button" matTooltip="edit test">
+              <button class="edit-button" matTooltip="edit test" (click)="ViewEditTestDetails(item.testCode)">
               <mat-icon class="edit-icon">edit</mat-icon>
             </button>
             <button class="delete-button" matTooltip="delete test" (click)="testDeleteConfirmationDialog(item.testCode)">

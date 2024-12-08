@@ -54,7 +54,7 @@ export class UserService {
     debugger;
     return this.httpClient.post<LoginApiResponse>(`${this.baseUrl}/SearchAllUser`,data).pipe(delay(1000));
   }
-
+  
   GetUserInfoById(userId:any):Observable<LoginApiResponse>{
     debugger;
     //const apiUrl = `${this.baseUrl}/GetUserById?userId=${userId}`;
