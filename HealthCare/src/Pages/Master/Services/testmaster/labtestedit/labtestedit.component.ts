@@ -11,15 +11,16 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MetadataService } from '../../../../../auth/metadata.service';
 import { metaTagResponse } from '../../../../../Interfaces/metaTagResponse';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { testDataResponse } from '../../../../../Interfaces/TestMaster/testDataResponse';
 import { LoaderService } from '../../../../../Interfaces/loader.service';
+import { LoaderComponent } from "../../../../loader/loader.component";
 
 @Component({
   selector: 'app-labtestedit',
   standalone: true,
-  imports: [MatTabsModule, ToastComponent,CommonModule,MatIconModule,MatCheckboxModule,
-    ReactiveFormsModule
-  ],
+  imports: [MatTabsModule, ToastComponent,CommonModule,
+    ReactiveFormsModule, LoaderComponent,MatIconModule,MatCheckboxModule],
   templateUrl: './labtestedit.component.html',
   styleUrl: './labtestedit.component.css'
 })
@@ -38,17 +39,19 @@ export class LabtesteditComponent {
   specimenTypeResponse: Observable<metaTagResponse>| any;
   reportingStyleResponse: Observable<metaTagResponse>| any;
   reportTemplatesResponse: Observable<metaTagResponse>| any;
+  testDataResponse:Observable<testDataResponse>|any;
   editTestForm!: FormGroup<any>;
 
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService
-  , private toasterService: ToastService,private refPageService:RefreshPageService,
-    private metaService:MetadataService,private formBuilder: FormBuilder,
-    private loaderService: LoaderService){
-  private metaService:MetadataService){
+    @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService,private formBuilder: FormBuilder,
+    private toasterService: ToastService,private refPageService:RefreshPageService,
+    private metaService:MetadataService,private loaderService: LoaderService){
+      this.loading$ = this.loaderService.loading$;
       this.partnerId= localStorage.getItem('partnerId');
       this.labtestCode=data.testCode;
+
+     
     }
 
     ngOnInit():void{
@@ -81,7 +84,6 @@ export class LabtesteditComponent {
         ddlIsNABLApplicable:[''],
         ReferralRangesComments:['']
       });
-
       if(this.labtestCode!==undefined){
         this.loadTestDetails(this.labtestCode);
         this.isSubmitVisible=false;
@@ -94,13 +96,29 @@ export class LabtesteditComponent {
         this.isUpdateVisible=false;
         this.isAddHeaderVisible=true;
         this.isEditHeaderVisible=false;
+        this.editTestForm.patchValue({      
+          ddlTestDepartment:"",
+          ddlSubDepartment:"",
+          ddlSpecimenType:"",
+          ddlReportingStyle:"",
+          ddlReportTemplate:"",
+          ddlProcessedAt:"",
+          ddlTestEntryRestricted:"",
+          ddlTestStatus:"",
+          ddlIsAutomated:"",
+          ddlIsCalculated:"",
+          ddlTestApplicable:"",
+          ddlIsLMP:"",
+          ddlIsNABLApplicable:"",      
+        })
+       
       }
       
-        this.BindAllDepartment();
-        this.BindAllSubDepartment();
-        this.BindTestSpecimenTypes();
-        this.BindAllReportingStyle();
-        this.BindAllReportTemplates();
+      this.BindAllDepartment();
+      this.BindAllSubDepartment();
+      this.BindTestSpecimenTypes();
+      this.BindAllReportingStyle();
+      this.BindAllReportTemplates();
       
     }  
 
@@ -174,6 +192,8 @@ export class LabtesteditComponent {
         if(isCalculated){isCalculated="Yes";}else{isCalculated="No";}
         let isLMP=response.data.isLMP;
         if(isLMP){isLMP="True";}else{isLMP="False";}
+        let isReserved=response.data.isReserved;
+        if(isReserved){isReserved="Y";}else{isReserved="N";}
         let isNABLApplicable=response.data.isNABLApplicable;
         if(isNABLApplicable){isNABLApplicable="Yes";}else{isNABLApplicable="No";}
 
@@ -211,7 +231,5 @@ export class LabtesteditComponent {
     }) 
     this.loaderService.hide();
    }
-
-
 
 }
