@@ -41,6 +41,7 @@ export class LabtesteditComponent {
   reportTemplatesResponse: Observable<metaTagResponse>| any;
   testDataResponse:Observable<testDataResponse>|any;
   editTestForm!: FormGroup<any>;
+  referralRangeForm!: FormGroup<any>;
 
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
@@ -84,8 +85,20 @@ export class LabtesteditComponent {
         ddlIsNABLApplicable:[''],
         ReferralRangesComments:['']
       });
+
+      this.referralRangeForm = this.formBuilder.group({
+        ddlGender:[''],
+        LowValue:[''],
+        HighValue:[''],
+        FromDays:[''],
+        ToDays:[''],
+        CriticalLowValue:[''],
+        CriticalHighValue:[''],
+        ReferralRangesGroup:['']
+      });
       if(this.labtestCode!==undefined){
         this.loadTestDetails(this.labtestCode);
+        this.loadReferralRangeValues(this.labtestCode);
         this.isSubmitVisible=false;
         this.isUpdateVisible=true;
         this.isAddHeaderVisible=false;
@@ -110,7 +123,11 @@ export class LabtesteditComponent {
           ddlTestApplicable:"",
           ddlIsLMP:"",
           ddlIsNABLApplicable:"",      
-        })
+        });
+        this.referralRangeForm.patchValue({
+          ddlGender:"",
+        }) 
+
        
       }
       
@@ -224,6 +241,30 @@ export class LabtesteditComponent {
           ddlIsLMP:isLMP,
           ddlIsNABLApplicable:isNABLApplicable,
           ReferralRangesComments:response.data.normalRangeFooter,
+        })
+      }
+      console.log(this.editTestForm);
+     console.log(response);
+    }) 
+    this.loaderService.hide();
+   }
+
+   loadReferralRangeValues(testCode:any){
+    debugger;
+    this.loaderService.show();
+    this.testService.GetReferralRangeByTestCode(this.partnerId,testCode).subscribe((response:any)=>{
+      debugger;
+      if(response.status && response.statusCode==200){
+        debugger;
+        this.referralRangeForm.patchValue({
+          ddlGender:response.data.gender,
+          LowValue:response.data.lowRange,
+          HighValue:response.data.highRange,
+          FromDays:response.data.ageFrom,
+          ToDays:response.data.ageTo,
+          CriticalLowValue:response.data.lowCriticalValue,
+          CriticalHighValue:response.data.highCriticalValue,
+          ReferralRangesGroup:response.data.normalRange,   
         })
       }
       console.log(this.editTestForm);

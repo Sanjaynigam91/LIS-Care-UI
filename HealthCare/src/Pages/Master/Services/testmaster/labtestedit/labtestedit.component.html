@@ -190,7 +190,7 @@
             </mat-tab>
             <mat-tab label="Referral Ranges">  
               <br/>
-              <div class="container mt-3">
+              <div class="container mt-3" [formGroup]="referralRangeForm" >
                 <div class="row">
                   <table class="table table-bordered table-striped">
                 <thead>
@@ -208,10 +208,11 @@
                     <td>
                       <div class="row">
                         <div class="col-md-12">
-                          <select class="form-control">
+                          <select class="form-control" formControlName="ddlGender">
                             <option value="">~Please Choose~</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="B">Both</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
                          </select>
                         </div>
                      </div>
@@ -219,35 +220,35 @@
                     <td>
                       <div class="row">
                        <div class="col-md-6">
-                        <input class="form-control" name="LowValue" type="text" placeholder="Enter Low Value">
+                        <input class="form-control" name="LowValue" type="number" formControlName="LowValue" placeholder="Enter Low Value">
                        </div>
                        <div class="col-md-6">
-                        <input class="form-control" name="HighValue" type="text"  placeholder="Enter High Value">
+                        <input class="form-control" name="HighValue" type="number" formControlName="HighValue"  placeholder="Enter High Value">
                        </div>
                       </div>
                     </td>
                     <td>
                       <div class="row">
                         <div class="col-md-6">
-                         <input class="form-control" name="FromDays" type="text"  placeholder="Enter From Day">
+                         <input class="form-control" name="FromDays" type="number" formControlName="FromDays"  placeholder="Enter From Day">
                         </div>
                         <div class="col-md-6">
-                         <input class="form-control" name="ToDays" type="text"  placeholder="Enter To Day">
+                         <input class="form-control" name="ToDays" type="number" formControlName="ToDays"  placeholder="Enter To Day">
                         </div>
                        </div>
                     </td>
                     <td>
                       <div class="row">
                         <div class="col-md-6">
-                         <input class="form-control" name="CriticalLowValue" type="text"  placeholder="Low Critical Value">
+                         <input class="form-control" name="CriticalLowValue" type="number"  formControlName="CriticalLowValue" placeholder="Low Critical Value">
                         </div>
                         <div class="col-md-6">
-                         <input class="form-control" name="CriticalHighValue" type="text"  placeholder="High Critical Value">
+                         <input class="form-control" name="CriticalHighValue" type="number" formControlName="CriticalHighValue"  placeholder="High Critical Value">
                         </div>
                        </div>
                     </td>
                     <td>
-                      <textarea class="form-control" name="ReferralRangesGroup" rows="3" cols="30" required></textarea>
+                      <textarea class="form-control" name="ReferralRangesGroup" formControlName="ReferralRangesGroup" rows="3" cols="30" required></textarea>
                     </td>
                      <td> 
                       <button mat-icon-button class="add-button" matTooltip="save tag">
