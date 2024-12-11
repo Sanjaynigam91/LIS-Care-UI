@@ -278,13 +278,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr *ngFor="let item of specialValueResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
                     <td>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <input class="form-control" name="AllowedValue" type="text"  placeholder="Allowed Value">
-                        </div>
-                     </div>
+                      {{ item.allowedValue}}
                     </td>
                     <td>
                       <div class="row">
@@ -296,7 +292,7 @@
                     <td>
                       <div class="row">
                         <div class="col-md-12">
-                          <mat-checkbox class="checkbox-margin"></mat-checkbox>
+                          <mat-checkbox class="checkbox-margin"> {{ item.isAbnormal}}</mat-checkbox>
                         </div>
                        </div>
                     </td>
@@ -311,6 +307,7 @@
                   </tr>
                 </tbody>
               </table> 
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
                 </div>
               </div> 
               </mat-tab>
