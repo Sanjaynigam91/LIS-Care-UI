@@ -8,6 +8,7 @@ import { testDepartmentResponse } from '../../Interfaces/TestMaster/testDepartme
 import { testDataSearchResponse } from '../../Interfaces/TestMaster/testDataSearchResponse';
 import { testDataResponse } from '../../Interfaces/TestMaster/testDataResponse';
 import { referalRangeResponse } from '../../Interfaces/TestMaster/referalRangeResponse';
+import { specialValueResponse } from '../../Interfaces/TestMaster/specialValueResponse';
 
 
 
@@ -70,6 +71,15 @@ GetReferralRangeByTestCode(partnerId:any,testCode:any):Observable<referalRangeRe
  .set('partnerId', partnerId.toString())
  .set('testCode', testCode.toString());
  return this.httpClient.get<referalRangeResponse>(`${this.baseUrl}/GetReferalRangeByTestCode`, {params}).pipe(delay(1000));
+}
+
+GetSpecialValueByTestCode(partnerId:any,testCode:any):Observable<specialValueResponse>{
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+ .set('partnerId', partnerId.toString())
+ .set('testCode', testCode.toString());
+ return this.httpClient.get<specialValueResponse>(`${this.baseUrl}/GetSpecialValueByTestCode`, {params}).pipe(delay(1000));
 }
 
 }

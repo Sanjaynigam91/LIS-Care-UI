@@ -15,12 +15,16 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { testDataResponse } from '../../../../../Interfaces/TestMaster/testDataResponse';
 import { LoaderService } from '../../../../../Interfaces/loader.service';
 import { LoaderComponent } from "../../../../loader/loader.component";
+import { specialValueResponse } from '../../../../../Interfaces/TestMaster/specialValueResponse';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-labtestedit',
   standalone: true,
   imports: [MatTabsModule, ToastComponent,CommonModule,
-    ReactiveFormsModule, LoaderComponent,MatIconModule,MatCheckboxModule],
+    ReactiveFormsModule, LoaderComponent,MatIconModule,MatCheckboxModule
+    ,NgxPaginationModule],
   templateUrl: './labtestedit.component.html',
   styleUrl: './labtestedit.component.css'
 })
@@ -42,7 +46,10 @@ export class LabtesteditComponent {
   testDataResponse:Observable<testDataResponse>|any;
   editTestForm!: FormGroup<any>;
   referralRangeForm!: FormGroup<any>;
-
+  specialValueResponse:Observable<specialValueResponse>|any;
+  p: number = 1; // current page
+  totalItems: number =0; // total number of items, for example
+  itemsPerPage: number = 10; // items per page
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService,private formBuilder: FormBuilder,
@@ -99,6 +106,7 @@ export class LabtesteditComponent {
       if(this.labtestCode!==undefined){
         this.loadTestDetails(this.labtestCode);
         this.loadReferralRangeValues(this.labtestCode);
+        this.loadSpecialValues(this.labtestCode);
         this.isSubmitVisible=false;
         this.isUpdateVisible=true;
         this.isAddHeaderVisible=false;
@@ -271,6 +279,15 @@ export class LabtesteditComponent {
      console.log(response);
     }) 
     this.loaderService.hide();
+   }
+
+   loadSpecialValues(testCode:any){
+    debugger;
+    this.testService.GetSpecialValueByTestCode(this.partnerId,testCode).subscribe((response:any)=>{
+      debugger;
+     this.specialValueResponse = response.data; 
+     console.log(response);
+    }) 
    }
 
 }
