@@ -9,6 +9,7 @@ import { testDataSearchResponse } from '../../Interfaces/TestMaster/testDataSear
 import { testDataResponse } from '../../Interfaces/TestMaster/testDataResponse';
 import { referalRangeResponse } from '../../Interfaces/TestMaster/referalRangeResponse';
 import { specialValueResponse } from '../../Interfaces/TestMaster/specialValueResponse';
+import { centerRateResponse } from '../../Interfaces/TestMaster/centerRateResponse';
 
 
 
@@ -80,6 +81,15 @@ GetSpecialValueByTestCode(partnerId:any,testCode:any):Observable<specialValueRes
  .set('partnerId', partnerId.toString())
  .set('testCode', testCode.toString());
  return this.httpClient.get<specialValueResponse>(`${this.baseUrl}/GetSpecialValueByTestCode`, {params}).pipe(delay(1000));
+}
+
+GetCenterRtaesByTestCode(partnerId:any,testCode:any):Observable<centerRateResponse>{
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+ .set('partnerId', partnerId.toString())
+ .set('testCode', testCode.toString());
+ return this.httpClient.get<centerRateResponse>(`${this.baseUrl}/GetCenterRateByTestCode`, {params}).pipe(delay(1000));
 }
 
 }
