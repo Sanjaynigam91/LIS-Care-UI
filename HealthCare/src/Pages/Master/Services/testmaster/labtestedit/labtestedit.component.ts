@@ -18,13 +18,14 @@ import { LoaderComponent } from "../../../../loader/loader.component";
 import { specialValueResponse } from '../../../../../Interfaces/TestMaster/specialValueResponse';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { centerRateResponse } from '../../../../../Interfaces/TestMaster/centerRateResponse';
 
 @Component({
   selector: 'app-labtestedit',
   standalone: true,
   imports: [MatTabsModule, ToastComponent,CommonModule,
     ReactiveFormsModule, LoaderComponent,MatIconModule,MatCheckboxModule
-    ,NgxPaginationModule],
+    ,NgxPaginationModule,FormsModule],
   templateUrl: './labtestedit.component.html',
   styleUrl: './labtestedit.component.css'
 })
@@ -47,9 +48,15 @@ export class LabtesteditComponent {
   editTestForm!: FormGroup<any>;
   referralRangeForm!: FormGroup<any>;
   specialValueResponse:Observable<specialValueResponse>|any;
+  centerRateResponse:Observable<centerRateResponse>|any;
   p: number = 1; // current page
   totalItems: number =0; // total number of items, for example
   itemsPerPage: number = 7; // items per page
+
+  p1: number = 1; // current page
+  totalItems1: number =0; // total number of items, for example
+  itemsPerPage1: number = 7; // items per page
+  
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService,private formBuilder: FormBuilder,
@@ -107,6 +114,7 @@ export class LabtesteditComponent {
         this.loadTestDetails(this.labtestCode);
         this.loadReferralRangeValues(this.labtestCode);
         this.loadSpecialValues(this.labtestCode);
+        this.loadCenterRates(this.labtestCode);
         this.isSubmitVisible=false;
         this.isUpdateVisible=true;
         this.isAddHeaderVisible=false;
@@ -286,6 +294,15 @@ export class LabtesteditComponent {
     this.testService.GetSpecialValueByTestCode(this.partnerId,testCode).subscribe((response:any)=>{
       debugger;
      this.specialValueResponse = response.data; 
+     console.log(response);
+    }) 
+   }
+
+   loadCenterRates(testCode:any){
+    debugger;
+    this.testService.GetCenterRtaesByTestCode(this.partnerId,testCode).subscribe((response:any)=>{
+      debugger;
+     this.centerRateResponse = response.data; 
      console.log(response);
     }) 
    }

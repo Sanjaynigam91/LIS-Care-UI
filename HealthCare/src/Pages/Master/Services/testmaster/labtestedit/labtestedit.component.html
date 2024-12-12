@@ -347,24 +347,21 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr *ngFor="let item of centerRateResponse | paginate: { itemsPerPage: itemsPerPage1, currentPage: p1 }; let i = index">
                     <td>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <input class="form-control" name="CenterName" type="text"  placeholder="Center Name">
-                        </div>
-                     </div>
+                      {{ item.partnerName}}
                     </td>
                     <td>
                       <div class="row">
                        <div class="col-md-12">
-                        <input class="form-control" name="AgreedRate" type="text"   placeholder="Agreed Rate">
+                        <input class="form-control" name="AgreedRate" [(ngModel)]="item.billRate"   placeholder="Agreed Rate">
                        </div>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table> 
+              <pagination-controls (pageChange)="p1 = $event"></pagination-controls>
                 </div>
               </div> 
             </mat-tab>
