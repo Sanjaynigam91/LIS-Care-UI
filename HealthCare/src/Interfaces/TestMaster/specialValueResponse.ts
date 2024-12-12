@@ -9,6 +9,6 @@ export interface specialValueResponse {
         testCode:string;
         testName:string;
         allowedValue:string;
-        isAbnormal:string;
+        isAbnormal:boolean;
     }; 
   }

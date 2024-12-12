@@ -49,7 +49,7 @@ export class LabtesteditComponent {
   specialValueResponse:Observable<specialValueResponse>|any;
   p: number = 1; // current page
   totalItems: number =0; // total number of items, for example
-  itemsPerPage: number = 10; // items per page
+  itemsPerPage: number = 7; // items per page
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService,private formBuilder: FormBuilder,
