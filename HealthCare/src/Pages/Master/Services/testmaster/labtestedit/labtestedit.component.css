@@ -376,3 +376,14 @@ pagination-controls {
     margin: 25px;
   }
   
+  
+.NoRecord-Found{
+  margin-bottom: 400px;
+  background-color:black;
+  color: red;
+  text-align: center;
+}
+
+.tbl-div{
+  margin-top: 20px;
+}

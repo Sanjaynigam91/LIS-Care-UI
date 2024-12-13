@@ -56,6 +56,8 @@ export class LabtesteditComponent {
   p1: number = 1; // current page
   totalItems1: number =0; // total number of items, for example
   itemsPerPage1: number = 7; // items per page
+  IsNoRecordFound=false;
+  IsRecordFound=false;
   
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
@@ -71,6 +73,8 @@ export class LabtesteditComponent {
 
     ngOnInit():void{
       debugger;
+      this.IsNoRecordFound=true;
+      this.IsRecordFound=false;
       this.editTestForm = this.formBuilder.group({
         testCode: [''],
         testName:[''],
@@ -293,7 +297,16 @@ export class LabtesteditComponent {
     debugger;
     this.testService.GetSpecialValueByTestCode(this.partnerId,testCode).subscribe((response:any)=>{
       debugger;
-     this.specialValueResponse = response.data; 
+      if(response.status && response.statusCode==200){
+         this.IsNoRecordFound=false;
+         this.IsRecordFound=true;
+         this.specialValueResponse = response.data;  
+      }
+      else{
+        this.IsNoRecordFound=true;
+        this.IsRecordFound=false;
+      }
+     
      console.log(response);
     }) 
    }

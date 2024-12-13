@@ -266,7 +266,14 @@
             </mat-tab>
             <mat-tab label="Special Values">
               <br/>
-              <div class="container mt-3">
+              <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found">
+                  No Records Found! 
+                </div>
+                <br/>
+              </div>
+              <div *ngIf="IsRecordFound" class="container mt-3">
                 <div class="row">
                   <table class="table table-bordered table-striped">
                 <thead>
