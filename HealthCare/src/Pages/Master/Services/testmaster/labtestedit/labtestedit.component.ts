@@ -60,6 +60,7 @@ export class LabtesteditComponent {
   IsNoRecordFound=false;
   IsRecordFound=false;
   loggedInUserId:any;
+  isDisabled=false;
 // Used for add/edit the test details
   testMasterRequest:testMasterRequest={
     partnerId: '',
@@ -136,6 +137,8 @@ export class LabtesteditComponent {
         ddlIsNABLApplicable:[''],
         ReferralRangesComments:['']
       });
+
+      this.editTestForm.get('testCode')?.disable();
 
       this.referralRangeForm = this.formBuilder.group({
         ddlGender:[''],
