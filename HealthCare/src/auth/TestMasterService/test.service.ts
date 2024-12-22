@@ -92,4 +92,14 @@ GetCenterRtaesByTestCode(partnerId:any,testCode:any):Observable<centerRateRespon
  return this.httpClient.get<centerRateResponse>(`${this.baseUrl}/GetCenterRateByTestCode`, {params}).pipe(delay(1000));
 }
 
+saveTestDetails(data:any){
+  debugger;
+  return this.httpClient.post(`${this.baseUrl}/CreateTest`, data).pipe(delay(1000));
+}
+
+editTestDetails(data:any){
+  debugger;
+  return this.httpClient.put(`${this.baseUrl}/UpdateTest`, data).pipe(delay(1000));
+}
+
 }
