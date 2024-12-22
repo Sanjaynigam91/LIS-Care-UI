@@ -19,6 +19,7 @@ import { specialValueResponse } from '../../../../../Interfaces/TestMaster/speci
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { centerRateResponse } from '../../../../../Interfaces/TestMaster/centerRateResponse';
+import { testMasterRequest } from '../../../../../Interfaces/TestMaster/testMasterRequest';
 
 @Component({
   selector: 'app-labtestedit',
@@ -58,6 +59,38 @@ export class LabtesteditComponent {
   itemsPerPage1: number = 7; // items per page
   IsNoRecordFound=false;
   IsRecordFound=false;
+  loggedInUserId:any;
+// Used for add/edit the test details
+  testMasterRequest:testMasterRequest={
+    partnerId: '',
+    testCode: '',
+    testName: '',
+    department: '',
+    subDepartment: '',
+    methodology: '',
+    specimenType: '',
+    referenceUnits: '',
+    reportingStyle: '',
+    reportTemplateName: '',
+    reportingDecimals: 0,
+    isOutlab: false,
+    printSequence: 0,
+    isReserved: '',
+    testShortName: '',
+    patientRate: 0,
+    clientRate: 0,
+    labRate: 0,
+    status: false,
+    analyzerName: '',
+    isAutomated: false,
+    isCalculated: false,
+    labTestCode: '',
+    testApplicable: '',
+    isLMP: false,
+    isNABLApplicable: false,
+    referalRangeComments: '',
+    updatedBy: ''
+  }
   
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
@@ -66,8 +99,8 @@ export class LabtesteditComponent {
     private metaService:MetadataService,private loaderService: LoaderService){
       this.loading$ = this.loaderService.loading$;
       this.partnerId= localStorage.getItem('partnerId');
+      this.loggedInUserId=localStorage.getItem('userId');
       this.labtestCode=data.testCode;
-
      
     }
 
@@ -318,6 +351,204 @@ export class LabtesteditComponent {
      this.centerRateResponse = response.data; 
      console.log(response);
     }) 
+   }
+
+
+   onSubmit():void{
+    debugger;
+    this.loaderService.show();
+    if(this.editTestForm.value.testName==''){
+      this.toasterService.showToast('Please enter test description...', 'error');
+    }   
+    else if(this.editTestForm.value.ddlTestDepartment==''){
+      this.toasterService.showToast('Please choose test department.', 'error');
+    }
+    else if(this.editTestForm.value.ddlSubDepartment==''){
+      this.toasterService.showToast('Please choose sub department.', 'error');
+    }
+    else if(this.editTestForm.value.ddlSpecimenType==''){
+      this.toasterService.showToast('Please choose specimen type', 'error');
+    }
+  else {
+    debugger;
+      this.testMasterRequest.partnerId=this.partnerId;
+      this.testMasterRequest.testCode=this.editTestForm.value.testCode;
+      this.testMasterRequest.testName=this.editTestForm.value.testName;
+      this.testMasterRequest.department=this.editTestForm.value.ddlTestDepartment;
+      this.testMasterRequest.subDepartment=this.editTestForm.value.ddlSubDepartment;
+      this.testMasterRequest.methodology=this.editTestForm.value.Methodology;
+      this.testMasterRequest.specimenType=this.editTestForm.value.ddlSpecimenType;
+      this.testMasterRequest.referenceUnits=this.editTestForm.value.ReferenceUnit;
+      this.testMasterRequest.reportingStyle=this.editTestForm.value.ddlReportingStyle;
+      this.testMasterRequest.reportTemplateName=this.editTestForm.value.ddlReportTemplate;
+      this.testMasterRequest.reportingDecimals=this.editTestForm.value.ReportingDecimals;
+      if(this.editTestForm.value.ddlProcessedAt=="True"){
+        this.testMasterRequest.isOutlab=true;
+      }
+      else{
+        this.testMasterRequest.isOutlab=false;
+     }
+      this.testMasterRequest.printSequence=this.editTestForm.value.PrintSequence;
+      this.testMasterRequest.isReserved=this.editTestForm.value.ddlTestEntryRestricted;
+      this.testMasterRequest.testShortName=this.editTestForm.value.ShortName;
+      this.testMasterRequest.patientRate=this.editTestForm.value.PatinetRate;
+      this.testMasterRequest.clientRate=this.editTestForm.value.ClientRate;
+      this.testMasterRequest.labRate=this.editTestForm.value.LabRate;
+      if(this.editTestForm.value.ddlTestStatus=="Active"){
+          this.testMasterRequest.status=true;
+      }
+      else{
+        this.testMasterRequest.status=false;
+      }
+      this.testMasterRequest.analyzerName=this.editTestForm.value.DefaultValue;
+      if(this.editTestForm.value.ddlIsAutomated=="Yes"){
+        this.testMasterRequest.isAutomated=true;
+      }
+      else{
+        this.testMasterRequest.isAutomated=false;
+      }
+      if(this.editTestForm.value.ddlIsCalculated=="Yes"){
+        this.testMasterRequest.isCalculated=true;
+      }
+      else{
+        this.testMasterRequest.isCalculated=false;
+      }
+      this.testMasterRequest.labTestCode=this.editTestForm.value.LabTestCode;
+      this.testMasterRequest.testApplicable=this.editTestForm.value.ddlTestApplicable;
+      if(this.editTestForm.value.ddlIsLMP=="True"){
+        this.testMasterRequest.isLMP=true;
+      }
+      else{
+        this.testMasterRequest.isLMP=false;
+      }
+      if(this.editTestForm.value.ddlIsNABLApplicable=="Yes"){
+        this.testMasterRequest.isNABLApplicable=true;
+      }
+      else{
+        this.testMasterRequest.isNABLApplicable=false;
+      }    
+      this.testMasterRequest.referalRangeComments=this.editTestForm.value.ReferralRangesComments;
+      this.testMasterRequest.updatedBy=this.loggedInUserId;
+  
+      this.testService.saveTestDetails(this.testMasterRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+            this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast('Test details created successfully!', 'success');
+            this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.message);
+          }
+          
+        },
+        error: (err) => console.log(err)
+      });   
+    }
+    this.loaderService.hide();
+   }
+
+   onEditTest():void{
+    debugger;
+    this.loaderService.show();
+    if(this.editTestForm.value.testName==''){
+      this.toasterService.showToast('Please enter test description...', 'error');
+    }   
+    else if(this.editTestForm.value.ddlTestDepartment==''){
+      this.toasterService.showToast('Please choose test department.', 'error');
+    }
+    else if(this.editTestForm.value.ddlSubDepartment==''){
+      this.toasterService.showToast('Please choose sub department.', 'error');
+    }
+    else if(this.editTestForm.value.ddlSpecimenType==''){
+      this.toasterService.showToast('Please choose specimen type', 'error');
+    }
+  else {
+    debugger;
+      this.testMasterRequest.partnerId=this.partnerId;
+      this.testMasterRequest.testCode=this.editTestForm.value.testCode;
+      this.testMasterRequest.testName=this.editTestForm.value.testName;
+      this.testMasterRequest.department=this.editTestForm.value.ddlTestDepartment;
+      this.testMasterRequest.subDepartment=this.editTestForm.value.ddlSubDepartment;
+      this.testMasterRequest.methodology=this.editTestForm.value.Methodology;
+      this.testMasterRequest.specimenType=this.editTestForm.value.ddlSpecimenType;
+      this.testMasterRequest.referenceUnits=this.editTestForm.value.ReferenceUnit;
+      this.testMasterRequest.reportingStyle=this.editTestForm.value.ddlReportingStyle;
+      this.testMasterRequest.reportTemplateName=this.editTestForm.value.ddlReportTemplate;
+      this.testMasterRequest.reportingDecimals=this.editTestForm.value.ReportingDecimals;
+      if(this.editTestForm.value.ddlProcessedAt=="True"){
+        this.testMasterRequest.isOutlab=true;
+      }
+      else{
+        this.testMasterRequest.isOutlab=false;
+     }
+      this.testMasterRequest.printSequence=this.editTestForm.value.PrintSequence;
+      this.testMasterRequest.isReserved=this.editTestForm.value.ddlTestEntryRestricted;
+      this.testMasterRequest.testShortName=this.editTestForm.value.ShortName;
+      this.testMasterRequest.patientRate=this.editTestForm.value.PatinetRate;
+      this.testMasterRequest.clientRate=this.editTestForm.value.ClientRate;
+      this.testMasterRequest.labRate=this.editTestForm.value.LabRate;
+      if(this.editTestForm.value.ddlTestStatus=="Active"){
+          this.testMasterRequest.status=true;
+      }
+      else{
+        this.testMasterRequest.status=false;
+      }
+      this.testMasterRequest.analyzerName=this.editTestForm.value.DefaultValue;
+      if(this.editTestForm.value.ddlIsAutomated=="Yes"){
+        this.testMasterRequest.isAutomated=true;
+      }
+      else{
+        this.testMasterRequest.isAutomated=false;
+      }
+      if(this.editTestForm.value.ddlIsCalculated=="Yes"){
+        this.testMasterRequest.isCalculated=true;
+      }
+      else{
+        this.testMasterRequest.isCalculated=false;
+      }
+      this.testMasterRequest.labTestCode=this.editTestForm.value.LabTestCode;
+      this.testMasterRequest.testApplicable=this.editTestForm.value.ddlTestApplicable;
+      if(this.editTestForm.value.ddlIsLMP=="True"){
+        this.testMasterRequest.isLMP=true;
+      }
+      else{
+        this.testMasterRequest.isLMP=false;
+      }
+      if(this.editTestForm.value.ddlIsNABLApplicable=="Yes"){
+        this.testMasterRequest.isNABLApplicable=true;
+      }
+      else{
+        this.testMasterRequest.isNABLApplicable=false;
+      }    
+      this.testMasterRequest.referalRangeComments=this.editTestForm.value.ReferralRangesComments;
+      this.testMasterRequest.updatedBy=this.loggedInUserId;
+  
+      this.testService.editTestDetails(this.testMasterRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+            this.toasterService.showToast('Test details updated successfully!', 'success');
+          }
+          else{
+            debugger;
+            console.log(response.message);
+          }
+          
+        },
+        error: (err) => console.log(err)
+      });   
+    }
+    this.loaderService.hide();
    }
 
 }
