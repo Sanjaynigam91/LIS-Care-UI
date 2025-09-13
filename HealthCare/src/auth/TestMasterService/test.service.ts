@@ -107,6 +107,17 @@ editTestDetails(data: any) {
     }
   ).pipe(delay(1000));
 }
+saveUpdateReferralRanges(data:any){
+  debugger;
+  return this.httpClient.post(`${this.baseUrl}/SaveUpdateReferralRanges`, data).pipe(delay(1000));
+}
+
+DeleteNormalRangeById(referralId: number) {
+  debugger;
+  return this.httpClient.delete(`${this.baseUrl}/DeleteReferralRanges`, {
+    params: { referralId: referralId.toString() }
+  }).pipe(delay(1000));
+}
 
 
 }

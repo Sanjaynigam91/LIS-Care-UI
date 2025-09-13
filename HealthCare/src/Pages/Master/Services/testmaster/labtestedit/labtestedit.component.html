@@ -207,6 +207,7 @@
                   <tr>
                     <td>
                       <div class="row">
+                        <input type="hidden" class="form-control" name="referralId" formControlName="hdnReferralId">
                         <div class="col-md-12">
                           <select class="form-control" formControlName="ddlGender">
                             <option value="">~Please Choose~</option>
@@ -251,12 +252,13 @@
                       <textarea class="form-control" name="ReferralRangesGroup" formControlName="ReferralRangesGroup" rows="3" cols="30" required></textarea>
                     </td>
                      <td> 
-                      <button mat-icon-button class="add-button" matTooltip="save tag">
+                      <button mat-icon-button class="add-button" matTooltip="save tag" (click)="onAddReferralRange()" >
                         <mat-icon>save</mat-icon>
                       </button>
-                    <button class="delete-button" matTooltip="delete tag">
+                          <button class="delete-button" matTooltip="delete tag" (click)="NormalRangeDeleteConfirmationDialog(referralRangeForm.get('hdnReferralId')?.value)">
                       <mat-icon class="delete-icon">delete</mat-icon>
                     </button>
+
                   </td>
                   </tr>
                 </tbody>
@@ -318,7 +320,7 @@
                 </div>
               </div> 
               </mat-tab>
-            <mat-tab label="Centre Rates"> 
+            <!-- <mat-tab label="Centre Rates"> need to implement later
               <div class="container mt-3">
                 <br/>
                 <div class="row">
@@ -371,7 +373,7 @@
               <pagination-controls (pageChange)="p1 = $event"></pagination-controls>
                 </div>
               </div> 
-            </mat-tab>
+            </mat-tab> -->
         </mat-tab-group>
         <app-toast></app-toast>
       </div>
