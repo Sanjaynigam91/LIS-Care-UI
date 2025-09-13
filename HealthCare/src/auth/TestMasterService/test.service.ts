@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../app/environments/environments';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
 import { delay } from 'rxjs';
@@ -97,9 +97,16 @@ saveTestDetails(data:any){
   return this.httpClient.post(`${this.baseUrl}/CreateTest`, data).pipe(delay(1000));
 }
 
-editTestDetails(data:any){
-  debugger;
-  return this.httpClient.put(`${this.baseUrl}/UpdateTest`, data).pipe(delay(1000));
+editTestDetails(data: any) {
+  console.log("Payload before sending:", data); // Debugging line to check the payload
+  return this.httpClient.put(
+    `${this.baseUrl}/UpdateTest`,
+    data,
+    {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }
+  ).pipe(delay(1000));
 }
+
 
 }

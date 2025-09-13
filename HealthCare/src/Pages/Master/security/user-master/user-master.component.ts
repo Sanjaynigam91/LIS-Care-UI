@@ -168,22 +168,23 @@ export class UserMasterComponent {
     this.userRequest.userStatus= this.userStatus;
     this.userRequest.roleType= this.userType;
     this.userRequest.email= this.email;
-    this.userService.SearchUserInfo(this.userRequest).subscribe((response:any)=>{
-      debugger;
-     if(response.status && response.statusCode==200) {
-      debugger;
-      this.users = response.data; 
-      this.totalItems=response.data.length;
-      console.log(response);
-     }
-     else{
-      console.log("No Record! Found");
-     }
-     this.loaderService.hide();
-    },err=>{
-      console.log(err);
+
+    this.userService.SearchUserInfo(this.userRequest).subscribe({
+    next: (response) => {
+      if (response?.status && response?.statusCode === 200 && Array.isArray(response.data)) {
+        this.users = response.data;
+        this.totalItems = response.data.length;
+        this.loaderService.hide();
+      } else {
+        console.warn("No data found", response);
+        this.loaderService.hide();
+      }
+    },
+    error: (err) => {
+      console.error("API call failed", err);
       this.loaderService.hide();
-    }) 
+    }
+  });
   }
 
   redirectToAddUser(){

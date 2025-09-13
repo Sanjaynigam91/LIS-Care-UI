@@ -41,7 +41,7 @@
         </div>
     </div>
     <br/>
-    <div class="row" [formGroup]="searchTestForm">
+    <div class="row" [formGroup]="searchTestForm" *ngIf="IsRecordFound">
     <div class="col-md-3"></div>
     <div class="col-md-3"></div>
     <div class="col-md-3"></div>
@@ -52,7 +52,14 @@
     </div>
     </div> 
     <br/>
-    <table class="table table-bordered table-striped">
+    <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found">
+                  No Test Details Found! 
+                </div>
+                <br/>
+   </div>
+  <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
         <thead>
           <tr>
             <!-- <th>Sr.No.</th> -->
@@ -87,6 +94,7 @@
           </tr>
         </tbody>
       </table> 
-      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+   
+      <pagination-controls (pageChange)="p = $event" *ngIf="IsRecordFound"></pagination-controls>
 </div>
 <app-loader *ngIf="loading$ | async"></app-loader>

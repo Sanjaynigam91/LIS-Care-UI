@@ -375,9 +375,9 @@ export class LabtesteditComponent {
   else {
     debugger;
       this.testMasterRequest.partnerId=this.partnerId;
-      this.testMasterRequest.testCode=this.editTestForm.value.testCode;
+      this.testMasterRequest.testCode=''
       this.testMasterRequest.testName=this.editTestForm.value.testName;
-      this.testMasterRequest.department=this.editTestForm.value.ddlTestDepartment;
+        this.testMasterRequest.department=this.editTestForm.value.ddlTestDepartment;
       this.testMasterRequest.subDepartment=this.editTestForm.value.ddlSubDepartment;
       this.testMasterRequest.methodology=this.editTestForm.value.Methodology;
       this.testMasterRequest.specimenType=this.editTestForm.value.ddlSpecimenType;
@@ -475,7 +475,7 @@ export class LabtesteditComponent {
   else {
     debugger;
       this.testMasterRequest.partnerId=this.partnerId;
-      this.testMasterRequest.testCode=this.editTestForm.value.testCode;
+      this.testMasterRequest.testCode=this.labtestCode;
       this.testMasterRequest.testName=this.editTestForm.value.testName;
       this.testMasterRequest.department=this.editTestForm.value.ddlTestDepartment;
       this.testMasterRequest.subDepartment=this.editTestForm.value.ddlSubDepartment;

@@ -256,3 +256,12 @@ pagination-controls {
 .div-button{
   margin-top: 15px;
 }
+.tbl-div{
+  margin-top: 20px;
+}
+.NoRecord-Found{
+  margin-bottom: 400px;
+  background-color:black;
+  color: red;
+  text-align: center;
+}

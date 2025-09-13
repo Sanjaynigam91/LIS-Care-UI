@@ -49,7 +49,8 @@ export class TestmasterComponent {
   p: number = 1; // current page
   totalItems: number =0; // total number of items, for example
   itemsPerPage: number = 10; // items per page
-
+  IsNoRecordFound=false;
+  IsRecordFound=false;
   sortColumn = '';
   sortDirection = 'asc';
   // Filter criteria
@@ -133,14 +134,20 @@ export class TestmasterComponent {
      if(response.status && response.statusCode==200) {
       debugger;
       this.testDataApiResponse = response.data; 
-      //this.totalItems=response.data.length;
+      this.IsNoRecordFound=false;
+      this.IsRecordFound=true;
       console.log(this.testDataApiResponse);
      }
      else{
+      this.IsNoRecordFound=true;
+       this.IsRecordFound=false;
       console.log("No Record! Found");
+      this.loaderService.hide();
      }
      this.loaderService.hide();
     },err=>{
+      this.IsNoRecordFound=true;
+       this.IsRecordFound=false;
       console.log(err);
       this.loaderService.hide();
     }) 
@@ -164,22 +171,45 @@ export class TestmasterComponent {
     this.testMasterSearch.isProcessedAt=this.testMasterForm.value.ddlOutLab;
     this.testMasterSearch.testName=this.testMasterForm.value.TestNameOrCode;
 
-    this.testService.SearchTests(this.testMasterSearch).subscribe((response:any)=>{
-      debugger;
-     if(response.status && response.statusCode==200) {
-      debugger;
-      this.testDataApiResponse = response.data; 
-      //this.totalItems=response.data.length;
+this.testService.SearchTests(this.testMasterSearch).subscribe(
+  (response: any) => {
+    debugger;
+    if (response && response.status && response.statusCode === 200) {
+      // Success case
+      this.testDataApiResponse = response.data || [];
+      this.totalItems = this.testDataApiResponse.length;
+      this.IsNoRecordFound=false;
+       this.IsRecordFound=true;
+      console.log("Total records:", this.totalItems);
       console.log(this.testDataApiResponse);
-     }
-     else{
-      console.log("No Record! Found");
-     }
-     this.loaderService.hide();
-    },err=>{
-      console.log(err);
-      this.loaderService.hide();
-    }) 
+    } else {
+      // API returned a valid response but with no records
+      this.testDataApiResponse = [];
+      this.totalItems = 0;
+      console.log(response.responseMessage || "No Record Found!");
+      this.IsNoRecordFound=true;
+      this.IsRecordFound=false;
+    }
+    
+    this.loaderService.hide();
+  },
+  (err: any) => {
+    debugger;
+    console.error("HTTP Error:", err);
+    // Handle backend's custom error structure
+    if (err.error && err.error.statusCode) {
+      this.testDataApiResponse = [];
+      this.totalItems = 0;
+      console.log(err.error.responseMessage || "Error fetching records");
+      this.IsNoRecordFound=true;
+       this.IsRecordFound=false;
+    }
+
+    this.loaderService.hide();
+  }
+);
+
+
   }
 
   filterTestData(term: string) {
