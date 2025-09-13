@@ -20,17 +20,22 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { centerRateResponse } from '../../../../../Interfaces/TestMaster/centerRateResponse';
 import { testMasterRequest } from '../../../../../Interfaces/TestMaster/testMasterRequest';
+import { referralRangesRequest } from '../../../../../Interfaces/TestMaster/referralRangesRequest';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponentComponent } from '../../../../confirmation-dialog-component/confirmation-dialog-component.component';
+
 
 @Component({
   selector: 'app-labtestedit',
   standalone: true,
-  imports: [MatTabsModule, ToastComponent,CommonModule,
-    ReactiveFormsModule, LoaderComponent,MatIconModule,MatCheckboxModule
-    ,NgxPaginationModule,FormsModule],
+  imports: [MatTabsModule, ToastComponent, CommonModule,
+    ReactiveFormsModule, LoaderComponent, MatIconModule, MatCheckboxModule,
+    NgxPaginationModule, FormsModule],
   templateUrl: './labtestedit.component.html',
   styleUrl: './labtestedit.component.css'
 })
 export class LabtesteditComponent {
+  [x: string]: any;
 
   isVisible = false;
   isSubmitVisible=false;
@@ -93,11 +98,30 @@ export class LabtesteditComponent {
     updatedBy: ''
   }
   
+  // Used for add/edit the referral range details
+referralRangesRequest: referralRangesRequest = {
+  opType: '',
+  referralId: 0,
+  testCode: '',
+  lowRange: 0,
+  highRange: 0,
+  normalRange: '',
+  ageFrom: 0,
+  ageTo: 0,
+  gender: '',
+  isPregnant: false,
+  lowCriticalValue: 0,
+  highCriticalValue: 0,
+  partnerId: '',
+  updatedBy: ''
+};
+
+
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,private testService:TestService,private formBuilder: FormBuilder,
     private toasterService: ToastService,private refPageService:RefreshPageService,
-    private metaService:MetadataService,private loaderService: LoaderService){
+    private metaService:MetadataService,private loaderService: LoaderService,public dialog: MatDialog,private fb: FormBuilder){
       this.loading$ = this.loaderService.loading$;
       this.partnerId= localStorage.getItem('partnerId');
       this.loggedInUserId=localStorage.getItem('userId');
@@ -140,21 +164,22 @@ export class LabtesteditComponent {
 
       this.editTestForm.get('testCode')?.disable();
 
-      this.referralRangeForm = this.formBuilder.group({
-        ddlGender:[''],
-        LowValue:[''],
-        HighValue:[''],
-        FromDays:[''],
-        ToDays:[''],
-        CriticalLowValue:[''],
-        CriticalHighValue:[''],
-        ReferralRangesGroup:['']
+        this.referralRangeForm = this.fb.group({
+        hdnReferralId: [0],
+        ddlGender: [''],
+        LowValue: [0],
+        HighValue: [0],
+        FromDays: [0],
+        ToDays: [0],
+        CriticalLowValue: [0],
+        CriticalHighValue: [0],
+        ReferralRangesGroup: ['']
       });
       if(this.labtestCode!==undefined){
         this.loadTestDetails(this.labtestCode);
         this.loadReferralRangeValues(this.labtestCode);
         this.loadSpecialValues(this.labtestCode);
-        this.loadCenterRates(this.labtestCode);
+        // this.loadCenterRates(this.labtestCode); need to implement later
         this.isSubmitVisible=false;
         this.isUpdateVisible=true;
         this.isAddHeaderVisible=false;
@@ -312,7 +337,10 @@ export class LabtesteditComponent {
       debugger;
       if(response.status && response.statusCode==200){
         debugger;
+        this.referralRangesRequest.referralId=response.data.referralId;
+        this.referralRangeForm.value.HighValue=response.data.highRange;
         this.referralRangeForm.patchValue({
+          hdnReferralId:response.data.referralId,
           ddlGender:response.data.gender,
           LowValue:response.data.lowRange,
           HighValue:response.data.highRange,
@@ -320,7 +348,7 @@ export class LabtesteditComponent {
           ToDays:response.data.ageTo,
           CriticalLowValue:response.data.lowCriticalValue,
           CriticalHighValue:response.data.highCriticalValue,
-          ReferralRangesGroup:response.data.normalRange,   
+          ReferralRangesGroup:response.data.normalRange,
         })
       }
       console.log(this.editTestForm);
@@ -553,5 +581,100 @@ export class LabtesteditComponent {
     }
     this.loaderService.hide();
    }
+
+    onAddReferralRange():void{
+      debugger;
+    this.loaderService.show();
+    if(this.referralRangeForm.value.ddlGender=='' || this.referralRangeForm.value.ddlGender==null){
+      this.toasterService.showToast('Please choose gender...', 'error');
+    }   
+    else if(this.referralRangeForm.value.LowValue==0){
+      this.toasterService.showToast('Please enter the low range value.', 'error');
+    }
+    else if(this.referralRangeForm.value.HighValue==0){
+      this.toasterService.showToast('Please enter the high range value.', 'error');
+    }
+    else if(this.referralRangeForm.value.CriticalLowValue==0){
+      this.toasterService.showToast('Please enter the low Critical Value', 'error');
+    }
+    else if(this.referralRangeForm.value.CriticalHighValue==0){
+      this.toasterService.showToast('Please enter the high Critical Value', 'error');
+    }
+  else {
+    debugger;
+      this.referralRangesRequest.partnerId=this.partnerId;
+      this.referralRangesRequest.testCode=this.labtestCode;
+      this.referralRangesRequest.gender=this.referralRangeForm.value.ddlGender;
+      this.referralRangesRequest.lowRange=this.referralRangeForm.value.LowValue;
+      this.referralRangesRequest.highRange=this.referralRangeForm.value.HighValue;
+      this.referralRangesRequest.ageFrom=this.referralRangeForm.value.FromDays;
+      this.referralRangesRequest.ageTo=this.referralRangeForm.value.ToDays;
+      this.referralRangesRequest.lowCriticalValue=this.referralRangeForm.value.CriticalLowValue;
+      this.referralRangesRequest.highCriticalValue=this.referralRangeForm.value.CriticalHighValue;
+      this.referralRangesRequest.normalRange=this.referralRangeForm.value.ReferralRangesGroup;
+      if(this.referralRangesRequest.referralId>0){
+        this.referralRangesRequest.opType='Update';
+      }
+      else{
+          this.referralRangesRequest.opType='Insert';
+      }
+      this.referralRangesRequest.updatedBy=this.loggedInUserId;
+      this.referralRangesRequest.isPregnant=false;
+  
+      this.testService.saveUpdateReferralRanges(this.referralRangesRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+           // this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+          
+        },
+        error: (err) => console.log(err)
+      });   
+    }
+    this.loaderService.hide();
+    }
+
+     NormalRangeDeleteConfirmationDialog(referralId:number): void {
+        debugger;
+        const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+          width: '250px',
+          data: { message: 'Are you sure you want to delete this Normal Range?',referralId: referralId }
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          debugger;
+          if (result.success) {
+            debugger;
+            this.testService.DeleteNormalRangeById(referralId).subscribe((response:any)=>{
+              debugger;
+             if(response.status && response.statusCode==200){
+              this.toasterService.showToast(response.responseMessage, 'success');
+              this.ngOnInit();
+             }
+             else{
+              this.toasterService.showToast(response.responseMessage, 'error');
+             }
+             console.log(response);
+            }) 
+            console.log('Returned referralId:', result.referralId);
+            console.log('User confirmed the action.');
+          } else {
+            debugger;
+            // User clicked 'Cancel'
+            console.log('User canceled the action.');
+          }
+        });
+      }
 
 }
