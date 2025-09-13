@@ -1,0 +1,267 @@
+mat-card {
+    margin: 10px 0;
+  }
+  mat-list-item {
+    padding: 0;
+  }
+
+  mat-grid-tile {
+    background: lightblue;
+  }
+
+  .username{
+    min-width: 300px;
+}
+.action-link{
+    padding:10px;
+}
+.list-users{
+    margin: 10px;
+    background-color: whitesmoke;
+}
+.display-users{
+    margin: 10px;;
+}
+mat-icon {
+  font-size: 24px; /* Adjust icon size */
+  color: #000; /* Adjust icon color */
+}
+
+.addUser{
+  margin-left: 980px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.card-title h1 {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+
+section {
+  display: table;
+}
+
+.example-label {
+  display: table-cell;
+  font-size: 14px;
+  margin-left: 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  display: table-cell;
+  max-width: 600px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+
+th {
+  color: black; /* Optional: Change text color for better contrast */
+  padding: 10px; /* Optional: Adjust padding as needed */
+  background-color: #17f3e1;
+  cursor: pointer;
+}
+
+.edit-button{
+  background-color: #1c93cf;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+
+}
+
+.edit-icon {
+  color:  green; /* Change to your desired color */
+}
+
+.delete-icon {
+  color:  #d70e6f; /* Change to your desired color */
+}
+
+
+.delete-button{
+  background-color: #d70e6f;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+
+}
+
+.table-header{
+  color: black; /* Optional: Change text color for better contrast */
+  padding: 10px; /* Optional: Adjust padding as needed */
+  background-color: #17f3e1;
+  cursor: pointer;
+}
+
+ngx-datatable {
+  font-size: 14px;
+  border: 1px solid #ccc;
+}
+
+ngx-datatable .datatable-header {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+ngx-datatable .datatable-body-cell {
+  padding: 8px;
+}
+
+ngx-datatable .datatable-footer {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+::ng-deep ngx-datatable {
+  .datatable-header {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .datatable-body-cell {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .datatable-footer {
+    background-color: #007bff;
+    color: #fff;
+  }
+}
+
+@media (max-width: 768px) {
+  ngx-datatable {
+    font-size: 12px;
+  }
+
+  ngx-datatable .datatable-header {
+    font-size: 12px;
+  }
+}
+
+.custom-name {
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* styles.css or your-component.css */
+.custom-header {
+  background-color: #17f3e1; /* Replace with your desired color */
+  color: black; /* Optional: text color */
+}
+
+mat-table {
+  width: 100%;
+}
+mat-paginator {
+  margin: 16px 0;
+}
+
+.ng-container{
+  background-color: #17f3e1; /* Replace with your desired color */
+  color: black; /* Optional: text color */
+}
+
+pagination-controls {
+    display: flex;
+    justify-content: right;
+    margin-top: 10px;
+  }
+
+  pagination-controls .pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+  }
+
+  pagination-controls .page-item {
+    margin: 0 5px;
+  }
+
+  .example-h2 {
+    margin: 10px;
+  }
+
+  .example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+
+  .example-margin {
+    margin: 0 10px;
+  }
+
+  .example-card {
+    margin-bottom: 10px;
+  }
+
+    /* search.component.css or styles.css */
+.search-button {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  border: none; /* Remove default border */
+  padding: 10px 20px; /* Add padding */
+  text-align: center; /* Center text */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Inline block for layout */
+  font-size: 16px; /* Font size */
+  margin: 4px 4px; /* Margins for spacing */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Add hover effect */
+.search-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+  /* add.component.css or styles.css */
+  .add-button {
+    background-color: #007bff; /* Green background */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    padding: 10px 20px; /* Add padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Inline block for layout */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+
+  /* Add hover effect */
+  .add-button:hover {
+    background-color: #007bff; /* Darker green on hover */
+  }
+
+.div-button{
+  margin-top: 15px;
+}
+.tbl-div{
+  margin-top: 20px;
+}
+.NoRecord-Found{
+  margin-bottom: 400px;
+  background-color:black;
+  color: red;
+  text-align: center;
+}

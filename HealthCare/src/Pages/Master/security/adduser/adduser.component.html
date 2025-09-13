@@ -1,0 +1,110 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<div class="container" [formGroup]="editUserForm">
+  <br/>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>First Name<mat-icon class="matIcon">*</mat-icon></label>
+        <input class="form-control" name="firstName" type="text"  formControlName="firstName" placeholder="Enter first name">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Last Name<mat-icon class="matIcon">*</mat-icon></label>
+        <input class="form-control" name="lastName" type="text"  formControlName="lastName" placeholder="Enter last name">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Email<mat-icon class="matIcon">*</mat-icon></label>
+        <input class="form-control" name="email" type="email"  formControlName="email" placeholder="Enter email">
+      </div>
+    </div>
+  </div>
+ <br/>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Mobile Number<mat-icon class="matIcon">*</mat-icon></label>
+        <input class="form-control" name="mobileNumber" type="text"  formControlName="mobileNumber" placeholder="Enter mobile number">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Password<mat-icon class="matIcon">*</mat-icon></label>
+        <input class="form-control" name="password" type="password"  formControlName="password" placeholder="Enter password">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>User Department<mat-icon class="matIcon">*</mat-icon></label>
+        <select class="form-control"  formControlName="ddlDepartmentId">
+          <option value="0">~Please Choose~</option>
+          <option *ngFor="let item of userDeptResponse" [value]="item.departmentId">{{item.departmentName}}</option>
+       </select>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Assign Role<mat-icon class="matIcon">*</mat-icon></label>
+        <select class="form-control" id="roleType"  formControlName="ddlUserAssignRole">
+          <option value="0">~Please Choose~</option>
+          <option *ngFor="let item of rolesApiResponse" [value]="item.roleId">{{item.roleName}}</option>
+       </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+       <label>User Status<mat-icon class="matIcon">*</mat-icon></label>
+        <select class="form-control"  formControlName="ddlUserStatus">
+          <option value="">~Please Choose~</option>
+          <option value="Active">Active</option>
+          <option value="InActive">InActive</option>
+       </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label>Upload logo<mat-icon class="matIcon">*</mat-icon></label>
+      <div class="file-upload-container">
+        <div class="form-group">
+          <input type="file" (change)="onFileChange($event)" />
+          <div *ngIf="fileBase64" class="imgage">
+            <img [src]="fileBase64" alt="Uploaded Image" class="uploadImage" />
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-card-actions class="card-title">
+        <section>
+          <div class="example-button-row">
+            <button mat-flat-button color="primary" (click)="BackScreen()">
+             Back</button>
+          </div>
+        </section>
+  </mat-card-actions>
+    </div>
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+      <mat-card-actions class="card-title">
+        <section>
+          <div class="example-button-row">
+            <button *ngIf="isSaveVisible" mat-flat-button color="primary" (click)="onSubmit()">
+             Save</button>
+             <button *ngIf="isUpdateVisible" mat-flat-button color="primary" (click)="onUpdateSubmit()">
+              Update</button>
+          </div>
+        </section>
+  </mat-card-actions>
+    </div>
+  </div>
+  </div>
+  <app-toast></app-toast>
+

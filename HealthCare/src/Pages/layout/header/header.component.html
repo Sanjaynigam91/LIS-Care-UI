@@ -1,0 +1,27 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<header>
+    <!-- <h3>Welocome to LIS Care</h3> -->
+    <!-- Navigation links can go here -->
+     <div calss="row">
+      <mat-toolbar color="primary">
+        <div *ngIf="fileBase64" class="logo">
+          <img [src]="fileBase64" alt="Profile logo"/>
+        </div>
+        <span class="spacer"></span>
+        <div class="profile">
+          <mat-icon>account_circle</mat-icon>
+          <span>Welcome, {{ username }}!</span>
+          <mat-card-actions class="card-title">
+            <section>
+              <div class="example-button-row">
+                <button mat-flat-button color="primary"(click)="UserLogOut()">Logout</button>
+              </div>
+            </section>
+      </mat-card-actions>
+        </div>
+      </mat-toolbar>
+     </div>
+    
+  </header>
+  
+  

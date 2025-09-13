@@ -1,0 +1,104 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<div class="container mt-3">
+  <br/>
+  <div class="row" [formGroup]="metaDataForm">
+  <div class="col-md-3">
+    <button mat-flat-button color="primary" (click)="AddMetaTagPopUp()">
+      <mat-icon>medical_services</mat-icon> Add New Tag</button> 
+  </div>
+  <div class="col-md-3">
+  </div>
+  <div class="col-md-3"></div>
+  <div class="col-md-3">
+   
+  </div>
+  </div> 
+  <br/>
+  <div class="row">
+   <div class="col-md-6">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <!-- <th>Sr.No.</th> -->
+          <th (click)="sortTable('tagCode')">TagCode
+            <span *ngIf="sortColumn === 'tagCode'">
+              <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+              <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+            </span>
+          </th>
+          <th (click)="sortTable('tagDescription')">Tag Name
+            <span *ngIf="sortColumn === 'tagDescription'">
+              <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+              <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+            </span>
+          </th>
+          <th (click)="sortTable('metaStatus')">Status
+            <span *ngIf="sortColumn === 'metaStatus'">
+              <i class="bi bi-caret-up" *ngIf="sortDirection === 'asc'"></i>
+              <i class="bi bi-caret-down" *ngIf="sortDirection === 'desc'"></i>
+            </span>
+          </th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of metaTags | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+          <!-- <td>{{ i + 1 }}</td> -->
+          <td>{{ item.tagCode }}</td>
+          <td>{{ item.tagDescription }}</td>
+          <td>{{ item.metaStatus }}</td>
+          <td>  
+            <button class="edit-button" matTooltip="edit tag" (click)="ViewMetaTag(item.tagId)">
+              <mat-icon class="edit-icon">edit</mat-icon>
+            </button>
+            <button class="map-button" matTooltip="map tag" (click)="GetTagMasterList(item.tagCode)">
+            <mat-icon class="map-icon">map</mat-icon>
+          </button>
+         
+        </td>
+        </tr>
+      </tbody>
+    </table> 
+   </div>
+   <div class="col-md-1"></div>
+   <div class="col-md-5" *ngIf="isMetaDataListVisible" [formGroup]="metaListForm">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+         <th>Tag Type</th>
+         <th>Tag Description </th>
+         <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of metaTagsList">
+          <!-- <td>{{ i + 1 }}</td> -->
+          <td>{{ item.itemType }}</td>
+          <td>{{ item.itemDescription }}</td>
+           <td> 
+            <button class="delete-button" matTooltip="delete tag" (click)="openConfirmationDialog(item.recordId)">
+            <mat-icon class="delete-icon">delete</mat-icon>
+          </button></td>
+        </tr>
+        <tr>
+          <td> <input class="form-control" name="itemType" type="text" formControlName="itemType"  placeholder="Enter tag Type">
+          </td>
+          <td> <input class="form-control" name="itemDescription" type="text" formControlName="itemDescription"  placeholder="Enter description">
+          </td>
+          <td>
+            <button class="add-button" matTooltip="add tag" (click)="CreateMasterLst()">
+              <mat-icon class="add-icon">add</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table> 
+   </div>
+  </div>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+</div>
+<app-toast></app-toast>
+<app-loader *ngIf="loading$ | async"></app-loader>
+ 
