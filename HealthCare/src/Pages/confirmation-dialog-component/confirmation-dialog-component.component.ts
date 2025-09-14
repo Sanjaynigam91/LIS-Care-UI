@@ -17,6 +17,7 @@ export class ConfirmationDialogComponentComponent {
   pageId:any;//Used to delete the Page
   testCode:any;// used to delete test from test master page
   referralId:any;// used to delete referral range from test master page
+  partnerId:any;// used to delete referral range from test master page
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -27,6 +28,7 @@ export class ConfirmationDialogComponentComponent {
     this.roleId=data.roleId;
     this.testCode=data.testCode;
     this.referralId=data.referralId
+    this.partnerId=data.partnerId
   }
 
   onConfirm(): void {

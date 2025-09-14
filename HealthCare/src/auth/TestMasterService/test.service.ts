@@ -119,5 +119,16 @@ DeleteNormalRangeById(referralId: number) {
   }).pipe(delay(1000));
 }
 
+saveUpdateSpecialValues(data:any){
+  debugger;
+  return this.httpClient.post(`${this.baseUrl}/SaveUpdateSpecialValues`, data).pipe(delay(1000));
+ }
+
+ deleteSpecialValueById(recordId: number,partnerId:string) {
+  debugger;
+  return this.httpClient.delete(`${this.baseUrl}/DeleteSpecialValue`, {
+    params: { recordId: recordId.toString(), partnerId: partnerId }
+  }).pipe(delay(1000));
+ }
 
 }
