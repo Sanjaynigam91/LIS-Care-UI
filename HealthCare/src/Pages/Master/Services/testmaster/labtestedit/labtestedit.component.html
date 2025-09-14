@@ -275,7 +275,7 @@
                 </div>
                 <br/>
               </div>
-              <div *ngIf="IsRecordFound" class="container mt-3">
+              <div *ngIf="IsRecordFound" class="container mt-3" [formGroup]="specialValueForm">
                 <div class="row">
                   <table class="table table-bordered table-striped">
                 <thead>
@@ -294,22 +294,22 @@
                     <td>
                       <div class="row">
                        <div class="col-md-12">
-                        <input class="form-control" name="EditedValue" type="text"  placeholder="Edited Value">
+                        <input class="form-control" name="EditedValue" type="text" formControlName="EditedValue"  placeholder="Edited Value">
                        </div>
                       </div>
                     </td>
                     <td>
                       <div class="row">
                         <div class="col-md-12">
-                          <mat-checkbox class="checkbox-margin" [checked]="item.isAbnormal"></mat-checkbox>
+                          <mat-checkbox class="checkbox-margin" [checked]="item.isAbnormal" formControlName="isAbnormal"></mat-checkbox>
                         </div>
                        </div>
                     </td>
                      <td> 
-                      <button mat-icon-button class="add-button" matTooltip="save tag">
+                      <button mat-icon-button class="add-button" matTooltip="save tag" (click)="onSaveUpdateSpecialValues()" >
                         <mat-icon>save</mat-icon>
                       </button>
-                    <button class="delete-button" matTooltip="delete tag">
+                    <button class="delete-button" matTooltip="delete tag" (click)="SpecialValueDeleteConfirmationDialog(item.recordId,item.partnerId)">
                       <mat-icon class="delete-icon">delete</mat-icon>
                     </button>
                   </td>

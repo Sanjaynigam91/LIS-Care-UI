@@ -53,6 +53,7 @@ export class LabtesteditComponent {
   testDataResponse:Observable<testDataResponse>|any;
   editTestForm!: FormGroup<any>;
   referralRangeForm!: FormGroup<any>;
+  specialValueForm!: FormGroup<any>;
   specialValueResponse:Observable<specialValueResponse>|any;
   centerRateResponse:Observable<centerRateResponse>|any;
   p: number = 1; // current page
@@ -116,6 +117,15 @@ referralRangesRequest: referralRangesRequest = {
   updatedBy: ''
 };
 
+specialValueRequest = {
+  partnerId: '',
+  opType: '', 
+  testCode: '',
+  recordId: 0,
+  allowedValue: '',
+  testName: '',
+  isAbnormal: false,
+};
 
 
   constructor(public dialogRef: MatDialogRef<LabtesteditComponent>,
@@ -211,6 +221,17 @@ referralRangesRequest: referralRangesRequest = {
 
        
       }
+
+      this.specialValueForm = this.fb.group({
+        partnerId: [''],
+        opType: [''],
+        testCode: [''],
+        recordId: [0],
+        allowedValues: [''],
+        testName: [''],
+        isAbnormal: [false],
+        EditedValue: ['']
+        })
       
       this.BindAllDepartment();
       this.BindAllSubDepartment();
@@ -357,23 +378,41 @@ referralRangesRequest: referralRangesRequest = {
     this.loaderService.hide();
    }
 
-   loadSpecialValues(testCode:any){
-    debugger;
-    this.testService.GetSpecialValueByTestCode(this.partnerId,testCode).subscribe((response:any)=>{
+  loadSpecialValues(testCode: any) {
+  debugger;
+  this.testService.GetSpecialValueByTestCode(this.partnerId, testCode)
+    .subscribe((response: any) => {
       debugger;
-      if(response.status && response.statusCode==200){
-         this.IsNoRecordFound=false;
-         this.IsRecordFound=true;
-         this.specialValueResponse = response.data;  
+      if (response?.status && response?.statusCode === 200 && Array.isArray(response.data)) {
+        this.IsNoRecordFound = false;
+        this.IsRecordFound = true;
+
+        this.specialValueResponse = response.data;
+
+        // Example: take the first record
+        const record = response.data[0];
+
+        if (record) {
+          this.specialValueRequest.recordId = record.recordId;
+          this.specialValueRequest.testName = record.testName;
+          this.specialValueForm.patchValue({
+            partnerId: record.partnerId,
+            testCode: record.testCode,
+            recordId: record.recordId,
+            allowedValues: record.allowedValue,   // note: in JSON it is "allowedValue" not "allowedValues"
+            testName: record.testName,
+            isAbnormal: record.isAbnormal
+          });
+        }
+      } else {
+        this.IsNoRecordFound = true;
+        this.IsRecordFound = false;
       }
-      else{
-        this.IsNoRecordFound=true;
-        this.IsRecordFound=false;
-      }
-     
-     console.log(response);
-    }) 
-   }
+
+      console.log(response);
+    });
+}
+
 
    loadCenterRates(testCode:any){
     debugger;
@@ -649,7 +688,7 @@ referralRangesRequest: referralRangesRequest = {
         debugger;
         const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
           width: '250px',
-          data: { message: 'Are you sure you want to delete this Normal Range?',referralId: referralId }
+          data: { message: 'Are you sure you want to delete this normal range?',referralId: referralId }
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -677,4 +716,76 @@ referralRangesRequest: referralRangesRequest = {
         });
       }
 
+  onSaveUpdateSpecialValues():void{
+      debugger;
+    this.loaderService.show();
+      debugger;
+      this.specialValueRequest.partnerId=this.partnerId;
+      this.specialValueRequest.testCode=this.labtestCode;
+      if(this.specialValueRequest.recordId>0)
+      {
+          this.specialValueRequest.opType='Update';
+      }
+        else{
+          this.specialValueRequest.opType='Insert';
+        }
+      this.specialValueRequest.allowedValue=this.specialValueForm.value.EditedValue;      
+      this.specialValueRequest.isAbnormal=this.specialValueForm.value.isAbnormal;
+ 
+      this.testService.saveUpdateSpecialValues(this.specialValueRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+           // this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+          
+        },
+        error: (err) => console.log(err)
+      });   
+
+    this.loaderService.hide();
+  
+  }
+
+   SpecialValueDeleteConfirmationDialog(recordId:number,partnerId:string): void {
+        debugger;
+        const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+          width: '250px',
+          data: { message: 'Are you sure you want to delete this special value?',recordId: recordId,partnerId:partnerId }
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          debugger;
+          if (result.success) {
+            debugger;
+            this.testService.deleteSpecialValueById(recordId,partnerId).subscribe((response:any)=>{
+              debugger;
+             if(response.status && response.statusCode==200){
+              this.toasterService.showToast(response.responseMessage, 'success');
+              this.ngOnInit();
+             }
+             else{
+              this.toasterService.showToast(response.responseMessage, 'error');
+             }
+             console.log(response);
+            }) 
+            console.log('Returned referralId:', result.referralId);
+            console.log('User confirmed the action.');
+          } else {
+            debugger;
+            // User clicked 'Cancel'
+            console.log('User canceled the action.');
+          }
+        });
+      }
 }
