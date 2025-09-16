@@ -2,46 +2,29 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <div class="container mt-3">
-    <div class="row" >
+    <div class="row" [formGroup]="profileMasterForm">
         <div class="col-md-3">
-        <label>Test Status</label>
-        <select class="form-control"  formControlName="ddlTestStatus">
+        <label>Profile Status</label>
+        <select class="form-control"  formControlName="ddlProfileStatus">
             <option value="">~Please Choose~</option>
             <option value="true">Active</option>
             <option value="false">InActive</option>
         </select>
         </div>
         <div class="col-md-3">
-            <label>Department / Discipline</label>
-            <select class="form-control" id="roleType"  formControlName="ddlDeptOrDescipline">
-                <option value="">~Please Choose~</option>
-                <!-- <option *ngFor="let item of testDeptApiResponse" [value]="item.testDepartment">{{item.testDepartment}}</option> -->
-            </select>
+            <label>Profile Name / Code</label>
+      <input class="form-control" type="ProfileNameOrCode" name="ProfileNameOrCode" placeholder="Type profile name or code" formControlName="ProfileNameOrCode">
         </div>
-        <div class="col-md-3">
-            <label>Processed Lab</label>
-            <select class="form-control"  formControlName="ddlOutLab">
-                <option value="">~Please Choose~</option>
-                <option value="0">InLab</option>
-                <option value="1">OutLab</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label>Test Name / Code</label>
-      <input class="form-control" type="TestNameOrCode" name="TestNameOrCode" placeholder="Type test name or code" formControlName="TestNameOrCode">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+         <div class="col-md-6">
             <div class="div-button">
-            <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Test</button>
+            <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Profile</button>
             <button mat-flat-button class="add-button">
-              <mat-icon>person</mat-icon> Add New Test</button> 
+              <mat-icon>person</mat-icon> Add New Profile</button> 
           </div>
         </div>
     </div>
     <br/>
-    <div class="row" *ngIf="IsRecordFound">
+    <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-3"></div>
     <div class="col-md-3"></div>
@@ -60,41 +43,41 @@
                 <br/>
    </div>
   <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <!-- <th>Sr.No.</th> -->
-            <th>Test Code</th>
-            <th>Test Name</th>
-            <th>Specimen Type</th>
-            <th>Reference Units</th>
-            <th>Department</th>
-            <th>Report Format </th>
-            <th>Patient Rate</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <!-- <td>{{ i + 1 }}</td> -->
-            <!-- <td>{{ item.testCode}}</td>
-            <td>{{ item.testName }}</td>
-            <td>{{ item.specimenType}}</td>
-            <td>{{ item.referenceUnits}}</td>
-            <td>{{ item.discipline}}</td>
-            <td>{{ item.reportTemplateTame }}</td>
-            <td>{{ item.mrp }}</td> -->
-            <td>  
-              <button class="edit-button" matTooltip="edit test">
-              <mat-icon class="edit-icon">edit</mat-icon>
-            </button>
-            <button class="delete-button" matTooltip="delete test">
-              <mat-icon class="delete-icon">delete</mat-icon>
-            </button>
-          </td>
-          </tr>
-        </tbody>
-      </table> 
-   
-      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <thead>
+    <tr>
+      <!-- <th>Sr.No.</th> -->
+      <th>Profile Code</th>
+      <th>Profile Name</th>
+      <th>Specimen Type</th>
+      <th>MRP</th>
+      <th>Client</th>
+      <th>Lab</th>
+      <th>Profile Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of profileApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <!-- <td>{{ i + 1 }}</td> -->
+      <td>{{ item.profileCode }}</td>
+      <td>{{ item.profileName }}</td>
+      <td>{{ item.sampleTypes }}</td>
+      <td>{{ item.mrp }}</td>
+      <td>{{ item.b2CRates }}</td>
+      <td>{{ item.labrates }}</td>
+      <td>{{ item.profileStatus === true ? 'Active' : 'InActive' }}</td>
+      <td>
+        <button class="edit-button" matTooltip="edit profile">
+          <mat-icon class="edit-icon">edit</mat-icon>
+        </button>
+        <button class="delete-button" matTooltip="delete profile">
+          <mat-icon class="delete-icon">delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table> 
+<pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>
 <app-loader *ngIf="loading$ | async"></app-loader>
