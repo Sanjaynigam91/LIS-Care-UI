@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,6 +17,13 @@ import { ConfirmationDialogComponentComponent } from '../../../confirmation-dial
 import { ToastComponent } from '../../../Toaster/toast/toast.component';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastService } from '../../../../auth/Toaster/toast.service';
+import { LoaderService } from '../../../../Interfaces/loader.service';
+import { ViewChild } from '@angular/core';
+import { ProfileService } from '../../../../auth/ProfileMasterService/profile.service';
+import { ProfileResponse } from '../../../../Interfaces/ProfileMaster/ProfileResponse';
+
 
 @Component({
   selector: 'app-profilemaster',
@@ -29,7 +36,7 @@ import { Router } from '@angular/router';
   styleUrl: './profilemaster.component.css'
 })
 export class ProfilemasterComponent {
-[x: string]: any;
+//[x: string]: any;
   router  =  inject(Router);
 
   loading$!: Observable<boolean>;
@@ -50,7 +57,72 @@ export class ProfilemasterComponent {
   filteredData: any[] = []; // Data array for the table
 
    profileMasterForm!: FormGroup;
+   searchProfileForm!: FormGroup;
+   profileApiResponse:Observable<ProfileResponse>| any;
+
+ @ViewChild('hdnUserId')
+  hdnUserId!: ElementRef<HTMLInputElement>;
+  constructor(private profileService: ProfileService,private formBuilder: FormBuilder,
+  public dialog: MatDialog,private loaderService: LoaderService,private toasterService: ToastService){
+    this.loading$ = this.loaderService.loading$;
+    this.partnerId= localStorage.getItem('partnerId');
+    /// Started to search the tests details by using test terms
+    this.searchTestForm=this.formBuilder.group({
+      filterTest: ['']
+    })
+    this.searchTestForm.get('filterTest')?.valueChanges.subscribe(value => {
+      //this.filterTestData(value);
+    });
+    /// Ended to search the tests details by using test terms
+  }
+
+ngOnInit(): void{
+    debugger;
+ this.profileMasterForm = this.formBuilder.group({
+      ddlProfileStatus: [''],
+      ProfileNameOrCode: [''],     
+    });
 
 
+    this.loggedInUserId=localStorage.getItem('userId');
+    /// used to load and Serach the Test Data
+    this.ReteriveProfileRecords();
+
+   }
+
+    ReteriveProfileRecords(){
+    debugger;
+    this.loaderService.show();
+
+    this.profileService.getAllProfiles(this.partnerId).subscribe({
+      next: (response: any) => {
+        debugger;
+
+        if (response?.status && response?.statusCode === 200) {
+          this.profileApiResponse = response.data; 
+          this.IsNoRecordFound = false;
+          this.IsRecordFound = true;
+          console.log(this.profileApiResponse);
+        } else {
+          this.IsNoRecordFound = true;
+          this.IsRecordFound = false;
+          console.warn("No Record Found!");
+        }
+
+        this.loaderService.hide();
+      },
+      error: (err) => {
+        this.IsNoRecordFound = true;
+        this.IsRecordFound = false;
+        console.error("Error while fetching profiles:", err);
+        this.loaderService.hide();
+      }
+    });
+
+  } 
   
 }
+
+
+
+
