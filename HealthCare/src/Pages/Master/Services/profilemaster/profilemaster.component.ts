@@ -55,6 +55,7 @@ export class ProfilemasterComponent {
   globalRoleForm!:FormGroup
 
   filteredData: any[] = []; // Data array for the table
+  searchProfileData: any[] = []; // Data array for the table
 
    profileMasterForm!: FormGroup;
    profileApiResponse:Observable<ProfileResponse>| any;
@@ -86,7 +87,6 @@ ngOnInit(): void{
     this.loggedInUserId=localStorage.getItem('userId');
     /// used to load and Serach the Test Data
     this.ReteriveProfileRecords();
-
    }
 
     ReteriveProfileRecords(){
@@ -141,7 +141,76 @@ ngOnInit(): void{
       this.ngOnInit();
     }
   }
-  
+
+
+SearchProfileDetails() {
+  debugger;
+  this.loaderService.show();
+  // get values from form
+  const statusSearch = (this.profileMasterForm.value.ddlProfileStatus ?? '').toLowerCase();
+  const nameOrCodeSearch = (this.profileMasterForm.value.ProfileNameOrCode ?? '').toLowerCase();
+
+  this.searchProfileData = this.profileApiResponse.filter((item: {
+    profileCode: any;
+    profileName: any;
+    profileStatus: any;
+  }) => {
+    return (
+      // Profile Status filter (dropdown) → only apply if selected
+      (statusSearch === '' || (item.profileStatus ?? '').toString().toLowerCase() === statusSearch) &&
+
+      // Profile Name/Code filter → check against both
+      (nameOrCodeSearch === '' ||
+        (item.profileCode ?? '').toString().toLowerCase().includes(nameOrCodeSearch) ||
+        (item.profileName ?? '').toString().toLowerCase().includes(nameOrCodeSearch))
+    );
+  });
+
+  debugger;
+
+  this.profileApiResponse = this.searchProfileData;
+
+  // if all filters empty → reset list
+  if (!statusSearch && !nameOrCodeSearch) {
+    this.ngOnInit();
+  }
+  this.loaderService.hide();
+}
+
+ profileDeleteConfirmationDialog(profileCode:any): void {
+    debugger;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+      width: '250px',
+      data: { message: 'Are you sure you want to delete this profile?',profileCode: profileCode }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      debugger;
+      if (result.success) {
+        debugger;
+        this.profileService.DeleteProfileByProfileCode(this.partnerId,result.profileCode).subscribe((response:any)=>{
+          debugger;
+         if(response.status && response.statusCode==200){
+          this.toasterService.showToast(response.responseMessage, 'success');
+          this.ngOnInit();
+         }
+         else{
+          this.toasterService.showToast(response.responseMessage, 'error');
+         }
+         console.log(response);
+        }) 
+        console.log('Returned User ID:', result.userId);
+        console.log('User confirmed the action.');
+      } else {
+        debugger;
+        // User clicked 'Cancel'
+        console.log('User canceled the action.');
+      }
+    });
+  }
+
+
+
 }
 
 
