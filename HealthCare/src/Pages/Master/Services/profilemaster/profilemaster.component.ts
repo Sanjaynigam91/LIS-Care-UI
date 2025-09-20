@@ -23,6 +23,7 @@ import { LoaderService } from '../../../../Interfaces/loader.service';
 import { ViewChild } from '@angular/core';
 import { ProfileService } from '../../../../auth/ProfileMasterService/profile.service';
 import { ProfileResponse } from '../../../../Interfaces/ProfileMaster/ProfileResponse';
+import { PopupProfilemastereditComponent } from '../../../PopUp/popup-profilemasteredit/popup-profilemasteredit.component';
 
 
 @Component({
@@ -208,6 +209,20 @@ SearchProfileDetails() {
       }
     });
   }
+
+/// Open Add New Profile Page
+
+OpenAddProfilePopUp(): void {
+  this.dialog.open(PopupProfilemastereditComponent, {
+    width: '1500px',           // slightly larger than medium
+    maxWidth: '90vw',         // responsive on smaller screens
+    height: '87vh',           // taller than medium but not full screen
+    minHeight: '400px',       // ensures minimum height
+    panelClass: 'large-dialog', // optional custom CSS
+    data: {}                  // pass data if needed
+  });
+}
+
 
 
 
