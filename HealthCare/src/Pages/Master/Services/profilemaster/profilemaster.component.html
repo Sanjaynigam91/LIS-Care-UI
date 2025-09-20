@@ -17,7 +17,7 @@
         </div>
          <div class="col-md-6">
             <div class="div-button">
-            <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Profile</button>
+            <button mat-flat-button class="search-button" (click)="SearchProfileDetails()" ><mat-icon>search</mat-icon>Search Profile</button>
             <button mat-flat-button class="add-button">
               <mat-icon>person</mat-icon> Add New Profile</button> 
           </div>
@@ -71,7 +71,7 @@
         <button class="edit-button" matTooltip="edit profile">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete profile">
+        <button class="delete-button" matTooltip="delete profile" (click)="profileDeleteConfirmationDialog(item.profileCode)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

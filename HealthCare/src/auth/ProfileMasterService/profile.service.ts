@@ -29,5 +29,14 @@ private baseUrl :string=environment.apiUrl;
   return this.httpClient.get<ProfileResponse[]>(`${this.baseUrl}/GetAllProfileDetails?partnerId=${partnerId}`);
 }
 
+DeleteProfileByProfileCode(partnerId:any,profileCode:any){
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+  .set('partnerId', partnerId.toString())
+  .set('profileCode', profileCode.toString());
+ return this.httpClient.delete(`${this.baseUrl}/DeleteProfileByProfileCode`, {params});
+}
+
 
 }
