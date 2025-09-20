@@ -1,0 +1,183 @@
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Profile</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Profile</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+
+  <!-- Content / Form -->
+    <div class="container mt-3" [formGroup]="editTestProfileForm">
+    <div class="popup-content" >
+    <div class="row">
+    <div class="col-md-2">
+        <label class="form-label">Profile Code</label>
+        <input type="text"  formControlName="profileCode" class="form-control" placeholder="Enter Profile Code" />
+    </div>
+    <div class="col-md-4">
+        <label  class="form-label">Profile Name</label>
+        <input type="text" formControlName="profileName" class="form-control" placeholder="Enter Profile Name" />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Patient Rate</label>
+        <input type="number" formControlName="patientRate" class="form-control" placeholder="Enter Profile Code" />
+    </div>
+    <div class="col-md-2">
+        <label  class="form-label">Client Rate</label>
+        <input type="number" formControlName="clientRate" class="form-control" placeholder="Enter Profile Name" />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Lab Rate</label>
+        <input type="number" formControlName="labRate" class="form-control" placeholder="Enter Profile Name" />
+    </div>
+    </div>
+     <br/>
+    <div class="row">      
+    <div class="col-md-2">
+        <label class="form-label">Status</label>
+         <select class="form-control"  formControlName="ddlProfileStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label  class="form-label">Short Name</label>
+        <input type="text" formControlName="profileShortName" class="form-control" placeholder="Enter Short Name" />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Print Sequence</label>
+        <input type="number" formControlName="printSequence" class="form-control" placeholder="Enter Print Sequence" />
+    </div>
+    <div class="col-md-2">
+        <label  class="form-label">Sample Types</label>
+        <input type="text" formControlName="sampleTypes" class="form-control" placeholder="Enter Sample Types" />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Available for all?</label>
+        <select class="form-control"  formControlName="ddlAvailableForAll">
+            <option value="">~Please Choose~</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label  class="form-label">Lab Test Code</label>
+        <input type="text" formControlName="labTestCode" class="form-control" placeholder="Enter Lab Test Code" />
+    </div>
+    </div>
+    <br>
+    <div class="row">      
+    <div class="col-md-2">
+        <label>Processed at?</label>
+                      <select class="form-control" formControlName="ddlProcessedAt">
+                        <option value="">~Please Choose~</option>
+                        <option value="False">InLab</option>
+                        <option value="True">OutLab</option>
+                     </select>
+    </div>
+    <div class="col-md-2">
+         <label>Test Applicable</label>
+                    <select class="form-control" formControlName="ddlTestApplicable">
+                    <option value="">~Please Choose~</option>
+                    <option value="B">Both</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                   </select> 
+    </div>
+    <div class="col-md-2">
+        <label>Is LMP?</label>
+                  <select class="form-control" formControlName="ddlIsLMP">
+                    <option value="">~Please Choose~</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                 </select>
+    </div>
+    <div class="col-md-2">
+        <label>Is NABL Applicable?</label>
+                  <select class="form-control" formControlName="ddlIsNABLApplicable">
+                    <option value="">~Please Choose~</option>
+                    <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                 </select> 
+    </div>
+    <div class="col-md-4">
+       <label>Footer</label>
+       <textarea class="form-control" name="profileFooter" formControlName="profileFooter" rows="4" cols="30" required></textarea>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-2">
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button">Submit</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button">Update</button>
+       </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12" *ngIf="isProfileMappingListVisible">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+         <th>Sr.No.</th>
+         <th>Test Name </th>
+         <th>Section Name </th>
+         <th>Print Order</th>
+         <th>Template Name </th>
+         <th>Group Header </th>
+         <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+           <td> 
+            <button class="delete-button" matTooltip="delete profile's test">
+            <mat-icon class="delete-icon">delete</mat-icon>
+          </button></td>
+        </tr>
+        <tr>
+        <td></td>
+          <td> 
+            <select class="form-control"  formControlName="ddlTestName">
+            <option value="">~Please Choose~</option>  
+            <option *ngFor="let item of testDataApiResponse" [value]="item.testCode">{{item.testName}}</option>
+        </select>
+        </td>
+          <td> <input class="form-control" name="ProfileSectionName" type="text" formControlName="ProfileSectionName"  placeholder="Enter Section Name">
+          </td>
+          <td>
+            <input class="form-control" name="printOrder" type="number" formControlName="printOrder"  placeholder="0">
+          </td>
+           <td> 
+            <select class="form-control"  formControlName="ddlTemplateName">
+            <option value="">~Please Choose~</option> 
+            <option *ngFor="let item of reportTemplatesResponse" [value]="item.itemType">{{item.itemDescription}}</option> 
+            </select>
+        </td>
+          <td> <input class="form-control" name="GroupHeader" type="text" formControlName="GroupHeader"  placeholder="Enter Group Header">
+          </td>
+          <td>
+            <button class="add-button" matTooltip="add tag">
+              <mat-icon class="add-icon">add</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table> 
+    </div>
+    </div>
+    </div>
+<br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Cancel</button>
+  </div>
+</div>
