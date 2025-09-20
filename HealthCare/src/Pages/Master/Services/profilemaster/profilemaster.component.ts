@@ -51,13 +51,12 @@ export class ProfilemasterComponent {
   sortDirection = 'asc';
   // Filter criteria
   filterTest: string = '';
-  searchTestForm!: FormGroup;
+  searchProfileForm!: FormGroup;
   globalRoleForm!:FormGroup
 
   filteredData: any[] = []; // Data array for the table
 
    profileMasterForm!: FormGroup;
-   searchProfileForm!: FormGroup;
    profileApiResponse:Observable<ProfileResponse>| any;
 
  @ViewChild('hdnUserId')
@@ -67,11 +66,11 @@ export class ProfilemasterComponent {
     this.loading$ = this.loaderService.loading$;
     this.partnerId= localStorage.getItem('partnerId');
     /// Started to search the tests details by using test terms
-    this.searchTestForm=this.formBuilder.group({
-      filterTest: ['']
+    this.searchProfileForm=this.formBuilder.group({
+      filterProfile: ['']
     })
-    this.searchTestForm.get('filterTest')?.valueChanges.subscribe(value => {
-      //this.filterTestData(value);
+    this.searchProfileForm.get('filterProfile')?.valueChanges.subscribe(value => {
+      this.filterProfileData(value);
     });
     /// Ended to search the tests details by using test terms
   }
@@ -120,6 +119,28 @@ ngOnInit(): void{
     });
 
   } 
+
+   filterProfileData(term: string) {
+    debugger;
+    
+    this.filteredData = this.profileApiResponse.filter((item: {
+      profileCode: any;profileName: any; sampleTypes:any;mrp:any;b2CRates:any;
+      labrates:any;profileStatus:any;
+    }) => 
+      item.profileCode.toLowerCase().includes(term.toLowerCase()) ||
+      item.profileName.toLowerCase().includes(term.toLowerCase()) ||
+      item.sampleTypes.toLowerCase().includes(term.toLowerCase()) ||
+      (item.mrp ?? '').toString().toLowerCase().includes(term.toLowerCase()) ||
+      (item.b2CRates ?? '').toString().toLowerCase().includes(term.toLowerCase()) ||
+      (item.labrates ?? '').toString().toLowerCase().includes(term.toLowerCase()) ||
+      (item.profileStatus ?? '').toString().toLowerCase().includes(term.toLowerCase())      
+     );
+     debugger;
+    this.profileApiResponse= this.filteredData;
+    if(term==""){
+      this.ngOnInit();
+    }
+  }
   
 }
 
