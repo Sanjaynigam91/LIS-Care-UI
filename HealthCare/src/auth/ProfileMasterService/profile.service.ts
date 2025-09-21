@@ -38,5 +38,13 @@ DeleteProfileByProfileCode(partnerId:any,profileCode:any){
  return this.httpClient.delete(`${this.baseUrl}/DeleteProfileByProfileCode`, {params});
 }
 
+getProfileByProfileCode(partnerId:any,profileCode:any): Observable<ProfileResponse[]> {
+  debugger;
+   // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+  .set('partnerId', partnerId.toString())
+  .set('profileCode', profileCode.toString());
+  return this.httpClient.get<ProfileResponse[]>(`${this.baseUrl}/GetProfileByProfileCode`, {params});
+}
 
 }

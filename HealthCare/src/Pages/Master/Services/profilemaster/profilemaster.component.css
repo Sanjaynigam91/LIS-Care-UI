@@ -265,3 +265,24 @@ pagination-controls {
   color: red;
   text-align: center;
 }
+
+/* styles.css */
+
+/* Default large dialog */
+.large-dialog .mat-dialog-container {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Active profile styling */
+.active-profile-dialog .mat-dialog-container {
+  background-color: #e6ffed; /* light green */
+  border: 2px solid #22c55e; /* green border */
+}
+
+/* Inactive profile styling */
+.inactive-profile-dialog .mat-dialog-container {
+  background-color: #fff5f5; /* light red */
+  border: 2px solid #ef4444; /* red border */
+}

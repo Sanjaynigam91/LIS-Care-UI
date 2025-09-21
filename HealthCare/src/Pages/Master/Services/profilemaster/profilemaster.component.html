@@ -68,7 +68,7 @@
       <td>{{ item.labrates }}</td>
       <td>{{ item.profileStatus === true ? 'Active' : 'InActive' }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit profile">
+        <button class="edit-button" matTooltip="edit profile" (click)="ViewProfileDetails(item.profileCode)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
         <button class="delete-button" matTooltip="delete profile" (click)="profileDeleteConfirmationDialog(item.profileCode)">

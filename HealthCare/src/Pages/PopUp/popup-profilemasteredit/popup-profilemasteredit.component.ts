@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, inject } from '@angular/core';
 import { ToastComponent } from "../../Toaster/toast/toast.component";
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -20,6 +20,7 @@ import { Observable } from 'rxjs';
 import { testDataSearchResponse } from '../../../Interfaces/TestMaster/testDataSearchResponse';
 import { MetadataService } from '../../../auth/metadata.service';
 import { metaTagResponse } from '../../../Interfaces/metaTagResponse';
+import { Profile, ProfileResponse } from '../../../Interfaces/ProfileMaster/ProfileResponse';
 
 @Component({
   selector: 'app-popup-profilemasteredit',
@@ -41,8 +42,10 @@ export class PopupProfilemastereditComponent {
     loggedInUserId: string |any;
     editTestProfileForm!: FormGroup<any>;
     ProfileMappingListForm!: FormGroup<any>;
-    profilrCode:any;
+    profileCode:any;
     reportTemplatesResponse: Observable<metaTagResponse>| any;
+    profileApiResponse?:Observable<ProfileResponse>| any;
+    selectedProfile?: Profile;
 
      testMasterSearch:testMasterSearchRequest={
         partnerId: '',
@@ -63,6 +66,8 @@ constructor(public dialogRef: MatDialogRef<PopupProfilemastereditComponent>,
       this.partnerId= localStorage.getItem('partnerId');
       this.loggedInUserId=localStorage.getItem('userId');
       this.roleId=data.roleId;
+      this.profileCode=data.profileCode;
+      this.profileApiResponse=data.profileApiResponse;
     }
 
 
@@ -75,7 +80,13 @@ open(): void {
   }
 
 ngOnInit():void{
-this.isProfileMappingListVisible=false;
+  if(this.profileCode!==undefined){
+    this.isProfileMappingListVisible=true;
+  }
+  else{
+    this.isProfileMappingListVisible=false;
+  }
+
 this.editTestProfileForm = this.formBuilder.group({
         profileCode: [''],
         profileName: [''],
@@ -87,21 +98,21 @@ this.editTestProfileForm = this.formBuilder.group({
         printSequence: [''],
         sampleTypes: [''],
         ddlAvailableForAll: [''],
-        labTestCodes: [''],
+        labTestCode: [''],
         ddlProcessedAt: [''],
         ddlTestApplicable: [''],
         ddlIsLMP: [''],
         ddlIsNABLApplicable: [''],
         profileFooter: [''],
         ddlTestName: [''],
-        ProfileSectionNames: [''],
+        ProfileSectionName: [''],
         printOrder: [''],
         ddlTemplateName: [''],
         GroupHeader: [''],
       });
   
  this.editTestProfileForm.get('profileCode')?.disable();
-    if(this.profilrCode!==undefined){
+    if(this.profileCode!==undefined){
         
         this.isSubmitVisible=false;
         this.isUpdateVisible=true;
@@ -117,6 +128,7 @@ this.editTestProfileForm = this.formBuilder.group({
 
  this.GetAllTestDetails();
  this.BindAllReportTemplates();
+ this.ViewProfileDetails(this.profileCode);
  }
 
 GetAllTestDetails(): void {
@@ -150,5 +162,35 @@ GetAllTestDetails(): void {
      console.log(response);
     }) 
    }
+
+ViewProfileDetails(profileCode: string) {
+  if (profileCode) {
+    this.loaderService.show();
+    this.profileService.getProfileByProfileCode(this.partnerId, profileCode).subscribe((response: any) => {
+      if (response?.data) {
+        setTimeout(() => {
+          this.editTestProfileForm.patchValue({
+            profileCode: response.data?.profileCode || '',
+            profileName: response.data?.profileName || '',
+            patientRate: response.data?.mrp || 0,
+            clientRate: response.data?.b2CRates || 0,
+            labRate: response.data?.labrates || 0,
+            ddlProfileStatus: response.data?.profileStatus || 'false',
+            profileShortName: response.data?.testShortName || '',
+            printSequence: response.data?.printSequence || 0,
+            sampleTypes: response.data?.sampleTypes || '',
+            ddlAvailableForAll: response.data?.isAvailableForAll?.toString() || 'false',
+            profileFooter: response.data?.normalRangeFooter || '',
+            ddlProcessedAt: response.data?.isProfileOutLab?.toString() || 'false' ,
+            ddlTestApplicable: response.data?.testApplicable?.toString() || '',
+            ddlIsLMP: response.data?.isLMP || 'false',
+            ddlIsNABLApplicable: response.data?.isNABLApplicable || 'false'
+          });
+        });
+      }
+      this.loaderService.hide();
+    });
+  }
+}
 
 }

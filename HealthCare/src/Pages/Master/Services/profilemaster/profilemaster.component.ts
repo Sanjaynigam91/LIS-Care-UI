@@ -223,6 +223,17 @@ OpenAddProfilePopUp(): void {
   });
 }
 
+ ViewProfileDetails(profileCode:string){
+    debugger;
+    this.dialog.open(PopupProfilemastereditComponent, {
+     width: '1500px',           // slightly larger than medium
+      maxWidth: '90vw',         // responsive on smaller screens
+      height: '87vh',           // taller than medium but not full screen
+      minHeight: '400px',       // ensures minimum height
+      panelClass: 'large-dialog', // optional custom CSS
+      data: {profileCode:profileCode,profileApiResponse:this.profileApiResponse}        // Pass data if needed
+    });
+  }
 
 
 
