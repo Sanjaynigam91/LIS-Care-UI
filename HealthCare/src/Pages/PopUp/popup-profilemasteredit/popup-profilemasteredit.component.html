@@ -75,8 +75,8 @@
         <label>Processed at?</label>
                       <select class="form-control" formControlName="ddlProcessedAt">
                         <option value="">~Please Choose~</option>
-                        <option value="False">InLab</option>
-                        <option value="True">OutLab</option>
+                        <option value="false">InLab</option>
+                        <option value="true">OutLab</option>
                      </select>
     </div>
     <div class="col-md-2">
@@ -92,16 +92,16 @@
         <label>Is LMP?</label>
                   <select class="form-control" formControlName="ddlIsLMP">
                     <option value="">~Please Choose~</option>
-                    <option value="True">True</option>
-                    <option value="False">False</option>
+                    <option value="true">True</option>
+                    <option value="false">False</option>
                  </select>
     </div>
     <div class="col-md-2">
         <label>Is NABL Applicable?</label>
                   <select class="form-control" formControlName="ddlIsNABLApplicable">
                     <option value="">~Please Choose~</option>
-                    <option value="Yes">Yes</option>
-                      <option value="No">No</option>
+                    <option value="true">Yes</option>
+                      <option value="false">No</option>
                  </select> 
     </div>
     <div class="col-md-4">
@@ -111,7 +111,7 @@
     </div>
     <div class="row">
     <div class="col-md-2">
-        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button">Submit</button>
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button">Save Profile</button>
         <button *ngIf="isUpdateVisible" mat-flat-button class="update-button">Update</button>
        </div>
     </div>
