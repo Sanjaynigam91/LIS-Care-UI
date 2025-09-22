@@ -3,6 +3,7 @@ import { environment } from '../../app/environments/environments';
 import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { ProfileResponse } from '../../Interfaces/ProfileMaster/ProfileResponse';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { ProfileTestMappingResponse } from '../../Interfaces/ProfileMaster/ProfileTestMappingResponse';
 
 
 
@@ -46,5 +47,15 @@ getProfileByProfileCode(partnerId:any,profileCode:any): Observable<ProfileRespon
   .set('profileCode', profileCode.toString());
   return this.httpClient.get<ProfileResponse[]>(`${this.baseUrl}/GetProfileByProfileCode`, {params});
 }
+
+getProfileMappedTests(profileCode:any,partnerId:any): Observable<ProfileTestMappingResponse[]> {
+  debugger;
+   // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+  .set('partnerId', partnerId.toString())
+  .set('profileCode', profileCode.toString());
+  return this.httpClient.get<ProfileTestMappingResponse[]>(`${this.baseUrl}/GetAllMappedTests`, {params});
+}
+
 
 }

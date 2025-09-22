@@ -130,13 +130,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+        <tr *ngFor="let item of profileTestMappingResponse  let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.testName }}</td>
+          <td>{{ item.sectionName }}</td>
+          <td>{{ item.printOrder }}</td>
+          <td>{{ item.reportTemplateName }}</td>
+          <td>{{ item.groupHeader }}</td>
            <td> 
             <button class="delete-button" matTooltip="delete profile's test">
             <mat-icon class="delete-icon">delete</mat-icon>
@@ -171,6 +171,9 @@
         </tr>
       </tbody>
     </table> 
+    <div calss=".popup-UpdateMapping-button" *ngIf="isUpdateMappingtVisible">
+       <button class="btn submit-button">Update Mapping</button>
+    </div>
     </div>
     </div>
     </div>

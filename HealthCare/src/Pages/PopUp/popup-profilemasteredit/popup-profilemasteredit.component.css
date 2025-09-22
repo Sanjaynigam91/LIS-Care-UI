@@ -9,6 +9,8 @@
   flex-direction: column;
   overflow: hidden;
   font-family: Arial, sans-serif;
+  overflow-y: auto;   /* vertical scrollbar */
+  overflow-x: hidden; /* disable horizontal unless needed */
 }
 
 /* Header */
@@ -147,5 +149,14 @@
   border: none; /* Removes the border */
   background: none; /* Optional: remove the background if needed */
   
+}
+
+.popup-UpdateMapping-button {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
 }
 
