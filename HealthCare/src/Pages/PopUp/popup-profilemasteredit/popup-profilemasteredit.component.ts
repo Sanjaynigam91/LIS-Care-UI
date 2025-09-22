@@ -131,7 +131,7 @@ this.editTestProfileForm = this.formBuilder.group({
         ddlTestName: [''],
         ProfileSectionName: [''],
         printOrder: [''],
-        ddlTemplateName: [''],
+        reportTemplateName: [''],
         GroupHeader: [''],
       });
   
@@ -217,7 +217,7 @@ ViewProfileDetails(profileCode: string) {
             ddlTestName: res.data?.testCode || '',
             ProfileSectionName: res.data?.sectionName || '',
             printOrder: res.data?.printOrder || 0,
-            ddlTemplateName: res.data?.ddlTemplateName || '',
+            ddlTemplateName: res.data?.reportTemplateName || '',
             GroupHeader: res.data?.groupHeader || ''
           });
         });
