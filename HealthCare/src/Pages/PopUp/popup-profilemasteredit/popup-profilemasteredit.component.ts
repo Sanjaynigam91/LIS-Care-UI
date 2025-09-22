@@ -21,6 +21,7 @@ import { testDataSearchResponse } from '../../../Interfaces/TestMaster/testDataS
 import { MetadataService } from '../../../auth/metadata.service';
 import { metaTagResponse } from '../../../Interfaces/metaTagResponse';
 import { Profile, ProfileResponse } from '../../../Interfaces/ProfileMaster/ProfileResponse';
+import { ProfileTestMappingResponse } from '../../../Interfaces/ProfileMaster/ProfileTestMappingResponse';
 
 @Component({
   selector: 'app-popup-profilemasteredit',
@@ -37,6 +38,7 @@ export class PopupProfilemastereditComponent {
     isAddHeaderVisible:boolean=false;
     isEditHeaderVisible:boolean=false;
     isProfileMappingListVisible:boolean=false;
+    isUpdateMappingtVisible:boolean=false;
     roleId:any;
     partnerId: string |any;
     loggedInUserId: string |any;
@@ -46,6 +48,7 @@ export class PopupProfilemastereditComponent {
     reportTemplatesResponse: Observable<metaTagResponse>| any;
     profileApiResponse?:Observable<ProfileResponse>| any;
     selectedProfile?: Profile;
+    profileTestMappingResponse?:Observable<ProfileTestMappingResponse>| any;
 
      testMasterSearch:testMasterSearchRequest={
         partnerId: '',
@@ -81,7 +84,7 @@ open(): void {
 
 ngOnInit():void{
   if(this.profileCode!==undefined){
-    this.isProfileMappingListVisible=true;
+    this.isProfileMappingListVisible=true;  
   }
   else{
     this.isProfileMappingListVisible=false;
@@ -118,12 +121,14 @@ this.editTestProfileForm = this.formBuilder.group({
         this.isUpdateVisible=true;
         this.isAddHeaderVisible=false;
         this.isEditHeaderVisible=true;
+         this.isUpdateMappingtVisible=true;
       }
       else{
         this.isSubmitVisible=true;
         this.isUpdateVisible=false;
         this.isAddHeaderVisible=true;
         this.isEditHeaderVisible=false;
+        this.isUpdateMappingtVisible=false;
       }
 
  this.GetAllTestDetails();
@@ -166,8 +171,10 @@ GetAllTestDetails(): void {
 ViewProfileDetails(profileCode: string) {
   if (profileCode) {
     this.loaderService.show();
-    this.profileService.getProfileByProfileCode(this.partnerId, profileCode).subscribe((response: any) => {
-      if (response?.data) {
+    this.profileService.getProfileByProfileCode(this.partnerId, profileCode).subscribe((response: any) => {      
+    this.profileService.getProfileMappedTests(profileCode,this.partnerId).subscribe((res: any) => {
+      if (response?.data || res?.data) {
+       this.profileTestMappingResponse = res.data || [];
         setTimeout(() => {
           this.editTestProfileForm.patchValue({
             profileCode: response.data?.profileCode || '',
@@ -184,10 +191,16 @@ ViewProfileDetails(profileCode: string) {
             ddlProcessedAt: response.data?.isProfileOutLab?.toString() || 'false' ,
             ddlTestApplicable: response.data?.testApplicable?.toString() || '',
             ddlIsLMP: response.data?.isLMP || 'false',
-            ddlIsNABLApplicable: response.data?.isNABLApplicable || 'false'
+            ddlIsNABLApplicable: response.data?.isNABLApplicable || 'false',
+            ddlTestName: res.data?.testCode || '',
+            ProfileSectionName: res.data?.sectionName || '',
+            printOrder: res.data?.printOrder || 0,
+            ddlTemplateName: res.data?.ddlTemplateName || '',
+            GroupHeader: res.data?.groupHeader || ''
           });
         });
-      }
+      }    
+    })
       this.loaderService.hide();
     });
   }
