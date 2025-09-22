@@ -57,5 +57,20 @@ getProfileMappedTests(profileCode:any,partnerId:any): Observable<ProfileTestMapp
   return this.httpClient.get<ProfileTestMappingResponse[]>(`${this.baseUrl}/GetAllMappedTests`, {params});
 }
 
+saveProfileDetails(data:any){
+  debugger;
+  return this.httpClient.post(`${this.baseUrl}/CreateProfile`, data).pipe(delay(1000));
+}
+
+editProfileDetails(data: any) {
+  console.log("Payload before sending:", data); // Debugging line to check the payload
+  return this.httpClient.put(
+    `${this.baseUrl}/UpdateTestProfile`,
+    data,
+    {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }
+  ).pipe(delay(1000));
+}
 
 }

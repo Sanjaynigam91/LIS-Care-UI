@@ -111,8 +111,8 @@
     </div>
     <div class="row">
     <div class="col-md-2">
-        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button">Save Profile</button>
-        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button">Update</button>
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSaveProfile()" >Save Profile</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdateProfile()">Update</button>
        </div>
     </div>
     <div class="row">
@@ -138,7 +138,7 @@
           <td>{{ item.reportTemplateName }}</td>
           <td>{{ item.groupHeader }}</td>
            <td> 
-            <button class="delete-button" matTooltip="delete profile's test">
+            <button class="delete-button" matTooltip="delete profile's test" (click)="mappedTestDeleteConfirmationDialog(item.profileCode)">
             <mat-icon class="delete-icon">delete</mat-icon>
           </button></td>
         </tr>
@@ -171,12 +171,13 @@
         </tr>
       </tbody>
     </table> 
-    <div calss=".popup-UpdateMapping-button" *ngIf="isUpdateMappingtVisible">
+    <div calss="row" *ngIf="isUpdateMappingtVisible">
        <button class="btn submit-button">Update Mapping</button>
     </div>
     </div>
     </div>
     </div>
+     <app-toast></app-toast>
 <br/>
 <br/>
   <!-- Footer / Actions -->
