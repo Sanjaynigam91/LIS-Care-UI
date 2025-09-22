@@ -30,4 +30,5 @@ export interface Profile {
   testApplicable: string;
   isLMP: boolean;
   isNABLApplicable: boolean;
+  isAvailableForAll: boolean;
 }

@@ -1,0 +1,19 @@
+export class ProfileRequest {
+  profileCode: string = '';
+  profileName: string = '';
+  partnerId: string = '';
+  patientRate: number = 0;
+  clientRate: number = 0;
+  labRate: number = 0;
+  profileStatus: boolean = false;
+  testShortName: string = '';
+  printSequence: number = 0;
+  sampleTypes: string = '';
+  isAvailableForAll: boolean = false;
+  labTestCode: string = '';
+  isProfileOutLab: boolean = false;
+  testApplicable: string = '';
+  isLMP: boolean = false;
+  isNABApplicable: boolean = false;
+  profileFooter: string = '';
+}

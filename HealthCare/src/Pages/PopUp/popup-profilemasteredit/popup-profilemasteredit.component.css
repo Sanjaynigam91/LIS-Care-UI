@@ -130,13 +130,19 @@
     background-color: #17f3e1; /* Darker green for hover effect */
   }
   
-  .delete-button{
+.delete-icon {
+  color:  #d70e6f; /* Change to your desired color */
+}
+
+
+.delete-button{
   background-color: #d70e6f;
   margin-right: 2px;
   border: none; /* Removes the border */
   background: none; /* Optional: remove the background if needed */
-  
+
 }
+
 
 .add-icon {
   color:  blue; /* Change to your desired color */
@@ -151,12 +157,8 @@
   
 }
 
-.popup-UpdateMapping-button {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px;
-  border-top: 1px solid #ddd;
-  background-color: #f9f9f9;
-}
+
+
+
+
 
