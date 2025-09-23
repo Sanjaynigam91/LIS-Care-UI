@@ -133,6 +133,7 @@ this.editTestProfileForm = this.formBuilder.group({
         printOrder: [''],
         reportTemplateName: [''],
         GroupHeader: [''],
+        ddlTemplateName: [''],
       });
   
  this.editTestProfileForm.get('profileCode')?.disable();
@@ -229,28 +230,28 @@ ViewProfileDetails(profileCode: string) {
 }
 
 
-mappedTestDeleteConfirmationDialog(profileCode:any): void {
+mappedTestDeleteConfirmationDialog(mappingId:any): void {
     debugger;
     const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
       width: '250px',
-      data: { message: 'Are you sure you want to delete this test from profile?',profileCode: profileCode }
+      data: { message: 'Are you sure you want to delete this test from profile?',mappingId: mappingId }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       debugger;
       if (result.success) {
         debugger;
-        // this.profileService.DeleteProfileByProfileCode(this.partnerId,result.profileCode).subscribe((response:any)=>{
-        //   debugger;
-        //  if(response.status && response.statusCode==200){
-        //   this.toasterService.showToast(response.responseMessage, 'success');
-        //   this.ngOnInit();
-        //  }
-        //  else{
-        //   this.toasterService.showToast(response.responseMessage, 'error');
-        //  }
-        //  console.log(response);
-        // }) 
+        this.profileService.DeleteMappedTest(mappingId,this.partnerId).subscribe((response:any)=>{
+          debugger;
+         if(response.status && response.statusCode==200){
+          this.toasterService.showToast(response.responseMessage, 'success');
+          this.ngOnInit();
+         }
+         else{
+          this.toasterService.showToast(response.responseMessage, 'error');
+         }
+         console.log(response);
+        }) 
         console.log('Returned User ID:', result.userId);
         console.log('User confirmed the action.');
       } else {

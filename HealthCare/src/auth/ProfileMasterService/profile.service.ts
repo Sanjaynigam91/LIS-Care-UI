@@ -73,4 +73,13 @@ editProfileDetails(data: any) {
   ).pipe(delay(1000));
 }
 
+DeleteMappedTest(mappingId:any,partnerId:any){
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+  .set('mappingId', mappingId.toString())
+  .set('partnerId', partnerId.toString());
+ return this.httpClient.delete(`${this.baseUrl}/DeleteMappedTest`, {params});
+}
+
 }
