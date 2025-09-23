@@ -19,6 +19,7 @@ export class ConfirmationDialogComponentComponent {
   referralId:any;// used to delete referral range from test master page
   partnerId:any;// used to delete referral range from test master page
   profileCode:any;// used to delete profile from profile master page
+  mappingId:any;// used to delete mapped test from profile master edit page
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
