@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatGridListModule, MatGridTile } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -41,6 +41,8 @@ export class AdduserComponent {
   router  =  inject(Router);
   isSaveVisible:boolean=false;
   isUpdateVisible:boolean=false;
+  isAddHeaderVisible:boolean=false;
+  isEditHeaderVisible:boolean=false;
   loading$!: Observable<boolean>;
   partnerId: string |any;
   rolesApiResponse: Observable<rolesApiResponse>| any;
@@ -68,12 +70,16 @@ export class AdduserComponent {
     modifiedById: ''
   }
 
-  constructor(private authService:AuthService,private userService: UserService,private formBuilder: FormBuilder,
+  constructor(public dialogRef: MatDialogRef<AdduserComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any,
+    private authService:AuthService,private userService: UserService,private formBuilder: FormBuilder,
     public dialog: MatDialog,private loaderService: LoaderService,private route: ActivatedRoute,
     private toasterService: ToastService) {
     this.loading$ = this.loaderService.loading$;
     this.partnerId= localStorage.getItem('partnerId');
     this.loggedInUserId=localStorage.getItem('userId');
+    this.userId=this.data.userId;
+
   }
  // Page load method
   ngOnInit(): void{
@@ -89,32 +95,40 @@ export class AdduserComponent {
       ddlUserStatus:[''],
     });
 
-    this.loaderService.hide();
-    this.route.paramMap.subscribe(params => {
-      debugger;
-      this.userId = params.get('userId');
-      console.log(params);
-    });
-     // Bind data into User Department dropdown
-     this. GetUserDepartments();
-     // Bind data into Assign User role dropdown
-     this.GetUserRoles();
-    if(this.userId!='0'){
+    if(this.userId!==undefined){
       debugger;
       // load the user data by Id into add user in edit mode
-      this.GetUserDataById();
       this.isSaveVisible=false;
       this.isUpdateVisible=true; 
+      this.isUpdateVisible=true;
+      this.isAddHeaderVisible=false;
+      this.isEditHeaderVisible=true;
     }
     else{
       debugger;
       this.isSaveVisible=true;
       this.isUpdateVisible=false; 
+      this.isUpdateVisible=false;
+      this.isAddHeaderVisible=true;
+      this.isEditHeaderVisible=false;
       this.editUserForm.patchValue({      
         ddlDepartmentId:"0",
         ddlUserAssignRole:"0"      
       })
-    }   
+    }  
+
+    this.loaderService.hide();
+    this.route.paramMap.subscribe(params => {
+      debugger;
+     // this.userId = params.get('userId');
+      console.log(params);
+    });
+     // Bind data into User Department dropdown
+     this. GetUserDepartments();
+     // Bind data into Assign User role dropdown
+    this.GetUserRoles();
+    this.GetUserDataById();
+     
      this.loaderService.hide(); 
   }
   BackScreen(){
@@ -324,4 +338,8 @@ else {
   }
   this.loaderService.hide();
  }
+
+   close(): void {
+    this.dialogRef.close();
+  }
 }

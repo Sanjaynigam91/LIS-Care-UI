@@ -1,6 +1,20 @@
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
-<div class="container" [formGroup]="editUserForm">
-  <br/>
+<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  -->
+
+
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New User</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit User</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+
+  <div class="container mt-3" [formGroup]="editUserForm">
+     <div class="popup-content" >
+      <br/>
   <div class="row">
     <div class="col-md-4">
       <div class="form-group">
@@ -83,10 +97,10 @@
     <div class="col-md-4">
       <mat-card-actions class="card-title">
         <section>
-          <div class="example-button-row">
+          <!-- <div class="example-button-row">
             <button mat-flat-button color="primary" (click)="BackScreen()">
              Back</button>
-          </div>
+          </div> -->
         </section>
   </mat-card-actions>
     </div>
@@ -107,4 +121,11 @@
   </div>
   </div>
   <app-toast></app-toast>
-
+  <br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+     </div>
+  </div>
