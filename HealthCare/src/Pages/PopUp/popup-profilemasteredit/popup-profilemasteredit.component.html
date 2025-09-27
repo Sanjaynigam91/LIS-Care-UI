@@ -164,7 +164,7 @@
           <td> <input class="form-control" name="GroupHeader" type="text" formControlName="GroupHeader"  placeholder="Enter Group Header">
           </td>
           <td>
-            <button class="add-button" matTooltip="add tag">
+            <button class="add-button" matTooltip="add tag" (click)="saveTestMapping()">
               <mat-icon class="add-icon">add</mat-icon>
             </button>
           </td>
@@ -182,6 +182,6 @@
 <br/>
   <!-- Footer / Actions -->
   <div class="popup-footer">
-    <button class="btn cancel-btn" (click)="close()">Cancel</button>
+    <button class="btn cancel-btn" (click)="close()">Close</button>
   </div>
 </div>

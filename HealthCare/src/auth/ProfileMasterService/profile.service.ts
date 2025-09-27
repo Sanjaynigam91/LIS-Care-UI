@@ -82,4 +82,9 @@ DeleteMappedTest(mappingId:any,partnerId:any){
  return this.httpClient.delete(`${this.baseUrl}/DeleteMappedTest`, {params});
 }
 
+saveTestmappingDetails(data:any){
+  debugger;
+  return this.httpClient.post(`${this.baseUrl}/SaveMappingTest`, data).pipe(delay(1000));
+}
+
 }

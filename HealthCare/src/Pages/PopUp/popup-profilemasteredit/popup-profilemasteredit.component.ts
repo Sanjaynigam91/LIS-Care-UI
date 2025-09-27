@@ -24,6 +24,7 @@ import { Profile, ProfileResponse } from '../../../Interfaces/ProfileMaster/Prof
 import { ProfileTestMappingResponse } from '../../../Interfaces/ProfileMaster/ProfileTestMappingResponse';
 import { ConfirmationDialogComponentComponent } from '../../confirmation-dialog-component/confirmation-dialog-component.component';
 import { ProfileRequest } from '../../../Interfaces/ProfileMaster/ProfileRequest ';
+import { TestMappingRequest } from '../../../Interfaces/ProfileMaster/TestMappingRequest';
 
 @Component({
   selector: 'app-popup-profilemasteredit',
@@ -80,6 +81,16 @@ export class PopupProfilemastereditComponent {
       profileCode: ''
     }
 
+    mappingRequest:TestMappingRequest={
+      profileCode: '',
+      testCode: '',
+      partnerId: '',
+      sectionName: '',
+      printOrder: 0,
+      reportTemplateName: '',
+      groupHeader: ''
+    }
+
 constructor(public dialogRef: MatDialogRef<PopupProfilemastereditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,private authService:AuthService,
       private toasterService: ToastService,private profileService:ProfileService,
@@ -133,7 +144,7 @@ this.editTestProfileForm = this.formBuilder.group({
         printOrder: [''],
         reportTemplateName: [''],
         GroupHeader: [''],
-        ddlTemplateName: [''],
+        ddlTemplateName: [''], 
       });
   
  this.editTestProfileForm.get('profileCode')?.disable();
@@ -347,6 +358,59 @@ mappedTestDeleteConfirmationDialog(mappingId:any): void {
            // this.refPageService.notifyRefresh(); // used to refresh the main list page
             this.toasterService.showToast(response.responseMessage, 'success');
             this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+        },
+        error: (err) => console.log(err)
+      });  
+
+
+    }
+    this.loaderService.hide();
+  }
+
+   saveTestMapping(){
+    debugger;
+     this.loaderService.show();
+    if(this.editTestProfileForm.value.ddlTestName==''){
+      this.toasterService.showToast('Please select test name...', 'error');
+    }
+    else if(this.editTestProfileForm.value.ProfileSectionName==''){
+      this.toasterService.showToast('Please enter section name...', 'error');
+    } 
+    else if(this.editTestProfileForm.value.printOrder==0 || this.editTestProfileForm.value.printOrder==''){
+      this.toasterService.showToast('Please enter print order...', 'error');
+    }
+    else if(this.editTestProfileForm.value.ddlTemplateName==''){
+      this.toasterService.showToast('Please select report template...', 'error');
+    }
+    else if(this.editTestProfileForm.value.GroupHeader==''){
+      this.toasterService.showToast('Please enter group header...', 'error');
+    }
+    else{
+      debugger;
+      this.mappingRequest.profileCode=this.profileCode;
+      this.mappingRequest.partnerId=this.partnerId;
+      this.mappingRequest.testCode=this.editTestProfileForm.value.ddlTestName;
+      this.mappingRequest.sectionName=this.editTestProfileForm.value.ProfileSectionName;
+      this.mappingRequest.printOrder=this.editTestProfileForm.value.printOrder; 
+      this.mappingRequest.reportTemplateName=this.editTestProfileForm.value.ddlTemplateName;
+      this.mappingRequest.groupHeader=this.editTestProfileForm.value.GroupHeader;
+     
+     this.profileService.saveTestmappingDetails(this.mappingRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+           // this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+           // this.dialogRef.close();
             this.ngOnInit();       
           }
           else{
