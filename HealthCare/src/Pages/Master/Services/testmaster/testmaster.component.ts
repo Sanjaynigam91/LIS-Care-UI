@@ -265,21 +265,30 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
     });
   }
 
-
+  /// Open Add New Profile Page
+  
   OpenAddNewTest(): void {
-    debugger;
     this.dialog.open(LabtesteditComponent, {
-      width: '5000px',// Customize width
-      data: {}        // Pass data if needed
+      width: '1500px',           // slightly larger than medium
+      maxWidth: '90vw',         // responsive on smaller screens
+      height: '87vh',           // taller than medium but not full screen
+      minHeight: '400px',       // ensures minimum height
+      panelClass: 'large-dialog', // optional custom CSS
+      data: {}                  // pass data if needed
     });
   }
 
+  /// View the Test Details
   ViewTestDetails(testCode:string){
     debugger;
-    this.dialog.open(LabtesteditComponent, {
-      width: '5000px',// Customize width
-      data: {testCode:testCode}        // Pass data if needed
-    });
+       this.dialog.open(LabtesteditComponent, {
+         width: '1500px',           // slightly larger than medium
+          maxWidth: '90vw',         // responsive on smaller screens
+          height: '98vh',           // taller than medium but not full screen
+          minHeight: '400px',       // ensures minimum height
+          panelClass: 'large-dialog', // optional custom CSS
+          data: {testCode:testCode}        // Pass data if needed
+        });
   }
 
 }
