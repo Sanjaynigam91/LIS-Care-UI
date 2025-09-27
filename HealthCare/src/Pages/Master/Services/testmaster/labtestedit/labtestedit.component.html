@@ -1,14 +1,17 @@
-<div class="modal">
-    <div class="modal-content">
-      <div *ngIf="isAddHeaderVisible" class="modal-header">
-        <h4>Add Test Details</h4>
-        <button class="close-button" (click)="close()">X</button>
-      </div>
-      <div *ngIf="isEditHeaderVisible" class="modal-header">
-        <h4>View/Edit Test Details</h4>
-        <button class="close-button" (click)="close()">X</button>
-      </div>
-      <div class="modal-body">
+
+<!-- The Modal -->
+<div class="popup-container">
+    <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Test</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Test</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+  <div class="container mt-3">
+   <div class="popup-content" >
         <mat-tab-group>
             <mat-tab label="Test Details"> 
               <br/>
@@ -375,17 +378,16 @@
               </div> 
             </mat-tab> -->
         </mat-tab-group>
-        <app-toast></app-toast>
-      </div>
-      <div class="modal-footer">
-        <button class="close-button" (click)="close()">Close</button>
-      </div>
-    </div>
+   </div>
+     <app-toast></app-toast>
+     <br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+  </div>
 </div>
- 
-
-
-
 
 
   
