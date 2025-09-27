@@ -25,6 +25,7 @@ import { UserRequest } from '../../../../Interfaces/UserRequest';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { ToastComponent } from "../../../Toaster/toast/toast.component";
+import { AdduserComponent } from '../adduser/adduser.component';
 
 
 
@@ -192,10 +193,31 @@ export class UserMasterComponent {
     this.router.navigate(['Pages/Master/security/addUser',0]);
   }
 
-  ViewUsers(userdId:number){
+  OpenAddUserPopUp(): void {
+   this.dialog.open(AdduserComponent, {
+  width: '1382px',
+  maxWidth: '95vw',
+  height: 'auto',          // let content decide height
+  minHeight: '500px',
+  panelClass: 'no-scroll-dialog',
+  data: {}
+});
+
+
+  }
+
+  ViewUsers(userId:number){
     debugger;
     // this.router.navigate(['/edit', userId]);
-    this.router.navigate(['Pages/Master/security/addUser',userdId]);
+   // this.router.navigate(['Pages/Master/security/addUser',userdId]);
+   this.dialog.open(AdduserComponent, {
+          width: '1382px',
+          maxWidth: '95vw',
+          height: 'auto',          // let content decide height
+          minHeight: '500px',
+          panelClass: 'no-scroll-dialog',
+         data: {userId:userId}        // Pass data if needed
+       });
   }
 
   DeleteUser(userdId:number){
