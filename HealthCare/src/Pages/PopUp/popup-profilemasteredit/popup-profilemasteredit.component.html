@@ -110,9 +110,9 @@
     </div>
     </div>
     <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-6">
         <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSaveProfile()" >Save Profile</button>
-        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdateProfile()">Update</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdateProfile()">Update Profile</button>
        </div>
     </div>
     <div class="row">
@@ -172,7 +172,7 @@
       </tbody>
     </table> 
     <div calss="row" *ngIf="isUpdateMappingtVisible">
-       <button class="btn submit-button">Update Mapping</button>
+       <button class="btn update-Mapping-button" (click)="updateAllMapping()">Update Mapping</button>
     </div>
     </div>
     </div>

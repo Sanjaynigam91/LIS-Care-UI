@@ -87,4 +87,15 @@ saveTestmappingDetails(data:any){
   return this.httpClient.post(`${this.baseUrl}/SaveMappingTest`, data).pipe(delay(1000));
 }
 
+UpdateAllMappingDetails(data: any) {
+  console.log("Payload before sending:", data); // Debugging line to check the payload
+  return this.httpClient.put(
+    `${this.baseUrl}/UpdateAllMappings`,
+    data,
+    {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }
+  ).pipe(delay(1000));
+}
+
 }
