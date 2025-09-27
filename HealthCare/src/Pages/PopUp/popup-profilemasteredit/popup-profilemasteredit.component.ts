@@ -357,7 +357,7 @@ mappedTestDeleteConfirmationDialog(mappingId:any): void {
             console.log(response);
            // this.refPageService.notifyRefresh(); // used to refresh the main list page
             this.toasterService.showToast(response.responseMessage, 'success');
-            this.dialogRef.close();
+           // this.dialogRef.close();
             this.ngOnInit();       
           }
           else{
@@ -425,5 +425,50 @@ mappedTestDeleteConfirmationDialog(mappingId:any): void {
     }
     this.loaderService.hide();
   }
+
+    updateAllMapping(){
+    debugger;
+     this.loaderService.show();
+     this.mappingRequest = this.profileTestMappingResponse.map((item: any) => {
+        return {
+          profileCode: item.profileCode || "",
+          testCode: item.testCode || "",
+          partnerId: this.partnerId || "",
+          sectionName: item.sectionName || "",
+          printOrder: item.printOrder || 0,
+          reportTemplateName: item.reportTemplateName || "",
+          groupHeader: item.groupHeader || ""
+        };
+      });
+
+     if(this.mappingRequest.profileCode!=undefined || this.mappingRequest!=undefined){ 
+      debugger;
+    // Now mappingRequest contains the full list
+   // console.log( this.mappingRequest);
+     this.profileService.UpdateAllMappingDetails(this.mappingRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+           // this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+           // this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+        },
+        error: (err) => console.log(err)
+      });  
+
+
+
+    this.loaderService.hide();
+  }
+}
 
 }

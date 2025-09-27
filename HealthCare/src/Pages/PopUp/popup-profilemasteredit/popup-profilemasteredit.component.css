@@ -157,6 +157,21 @@
   
 }
 
+.update-Mapping-button {
+    background-color: indianred; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  
+  .update-Mapping-button:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
 
 
 
