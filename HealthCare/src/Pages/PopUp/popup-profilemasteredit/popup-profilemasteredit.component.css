@@ -173,7 +173,13 @@
     background-color: #17f3e1; /* Darker blue on hover */
   }
 
+.table-header thead th {
+  background-color: #17f3e1;
+  color: #000;              /* optional: text color for contrast */
+}
+.table-header:hover {
+  cursor: pointer;         /* Darker blue on hover */
 
-
+}
 
 
