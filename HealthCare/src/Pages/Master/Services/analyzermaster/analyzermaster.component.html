@@ -1,1 +1,79 @@
-<p>analyzermaster works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div class="container mt-3">
+    <div class="row" [formGroup]="AnalyzersForm">
+        <div class="col-md-3">
+        <label>Analyzer Status</label>
+        <select class="form-control"  formControlName="ddlAnalyzerStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+        </div>
+        <div class="col-md-3">
+            <label>Analyzer Name / Code</label>
+      <input class="form-control" type="AnalyzerNameOrCode" name="AnalyzerNameOrCode" placeholder="Type analyzer name or code" formControlName="AnalyzerNameOrCode">
+        </div>
+         <div class="col-md-6">
+            <div class="div-button">
+            <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Analyer</button>
+            <button mat-flat-button class="add-button">
+              <mat-icon>person</mat-icon> Add New Analyer</button> 
+          </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row" [formGroup]="searchAnalyzerForm" *ngIf="IsRecordFound">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterAnalyzer" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+    <br/>
+    <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found">
+                  No profiles found!.
+                </div>
+                <br/>
+   </div>
+  <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
+  <thead>
+    <tr>
+      <th>Sr.No.</th>
+      <th>Analyzer Name</th>
+      <th>Analyzer Code</th>
+      <th>SupplierCode</th>
+      <th>AssetCode</th>
+      <th>PurchasedValue</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of analyzerApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ item.analyzerName }}</td>
+      <td>{{ item.analyzerCode }}</td>
+      <td>{{ item.supplierCode }}</td>
+      <td>{{ item.assetCode }}</td>
+      <td>{{ item.purchaseValue }}</td>
+      <td>
+        <button class="edit-button" matTooltip="edit analyer details">
+          <mat-icon class="edit-icon">edit</mat-icon>
+        </button>
+        <button class="delete-button" matTooltip="delete analyzer">
+          <mat-icon class="delete-icon">delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table> 
+<pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>
