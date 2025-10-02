@@ -3,6 +3,7 @@ import { environment } from '../../app/environments/environments';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AnalyzerResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerResponse';
+import { SupplierResponse } from '../../Interfaces/AnalyzerMaster/SupplierResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,23 @@ export class AnalyzerService {
       .set('analyzerNameOrShortCode', analyzerNameOrShortCode.toString())
       .set('analyzerStatus',analyzerStatus.toString());
      return this.httpClient.get<AnalyzerResponse[]>(`${this.baseUrl}/GetAllAnalyzers`, {params});
+  }
+
+   getAllSuppliers(partnerId: any): Observable<SupplierResponse[]> {
+    debugger;
+    // Create HttpParams instance and append query parameters
+     let params = new HttpParams()
+      .set('partnerId', partnerId.toString());
+     return this.httpClient.get<SupplierResponse[]>(`${this.baseUrl}/GetAllSuppliers`, {params});
+  }
+
+    getAnalyzersById(partnerId: any,analyzerId:any): Observable<AnalyzerResponse[]> {
+    debugger;
+    // Create HttpParams instance and append query parameters
+     let params = new HttpParams()
+      .set('partnerId', partnerId.toString())
+      .set('analyzerId', analyzerId);
+     return this.httpClient.get<AnalyzerResponse[]>(`${this.baseUrl}/GetAnalyzerDetailById`, {params});
   }
 
 }

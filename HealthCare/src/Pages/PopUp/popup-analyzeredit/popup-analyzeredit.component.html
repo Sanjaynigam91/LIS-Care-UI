@@ -1,0 +1,129 @@
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Analyzer</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Analyzer</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+</div>
+
+ <!-- Content / Form -->
+    <div class="container mt-3" [formGroup]="editAnalyzerForm">
+    <div class="popup-content" >
+    <div class="row">
+    <div class="col-md-3">
+        <label  class="form-label">Analyzer Name</label>
+        <input type="text" formControlName="AnalyzerName" class="form-control" placeholder="Enter analyzer Name" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Analyzer Short Code</label>
+        <input type="text" formControlName="AnalyzerShortCode" class="form-control" placeholder="Enter analyzer short code" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Engineer Contact No.</label>
+        <input type="number" formControlName="EngineerContactNumber" class="form-control" placeholder="Enter engineer contact number" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Warranty End Date</label>
+        <input type="number" formControlName="WarrantyEndDate" class="form-control" placeholder="Enter warranty date" />
+    </div>
+    </div>
+     <br/>
+    <div class="row">      
+    <div class="col-md-3">
+        <label class="form-label">Supplier Code</label>
+         <select class="form-control"  formControlName="ddlSupplierCode">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of supplierApiResponse" [value]="item.supplierCode">{{item.supplierName}}</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Asset Code</label>
+        <input type="text" formControlName="AssetCode" class="form-control" placeholder="Enter asset code" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">PO Value</label>
+        <input type="number" formControlName="POValue" class="form-control" placeholder="Enter PO Value" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Analyzer Status</label>
+        <select class="form-control"  formControlName="ddlAnalyzerStatus">
+             <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-6">
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" >Save</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button">Update</button>
+       </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12" *ngIf="isAnalyzerMappingListVisible">
+    <table class="table table-bordered table-striped table-header">
+      <thead>
+        <tr>
+         <th>Analyzer Test Code </th>
+         <th>Lab Test Code </th>
+         <th>Status</th>
+         <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <!--
+          <td>{{ item.testName }}</td>
+          <td>{{ item.sectionName }}</td>
+          <td>{{ item.printOrder }}</td> -->
+           <td> 
+            <button class="edit-button" matTooltip="edit mapping details">
+            <mat-icon class="edit-icon">edit</mat-icon>
+            </button>
+            <button class="delete-button" matTooltip="delete analyzer's test">
+            <mat-icon class="delete-icon">delete</mat-icon>
+          </button></td>
+        </tr>
+        <tr>
+          <td> <input class="form-control" name="AnalyzerTestCode" type="text" formControlName="AnalyzerTestCode"  placeholder="Enter analyzer test code">
+          </td>
+          <td> 
+            <select class="form-control"  formControlName="ddlTestName">
+            <option value="">~Please Choose~</option>  
+            <option *ngFor="let item of testDataApiResponse" [value]="item.testCode">{{item.testName}}</option>
+        </select>
+        </td>
+        <td>
+            <select class="form-control"  formControlName="ddlStatus">
+             <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+        </td>
+          <td>
+          <button class="map-button" matTooltip="map analyzer's test">
+            <mat-icon class="map-icon">map</mat-icon>
+          </button>
+          </td>
+        </tr>
+      </tbody>
+    </table> 
+    <!-- <div calss="row" *ngIf="isUpdateMappingtVisible">
+       <button class="btn update-Mapping-button" (click)="updateAllMapping()">Update Mapping</button>
+    </div> -->
+    </div>
+    </div>
+    </div>
+     <app-toast></app-toast>
+<br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>
+
