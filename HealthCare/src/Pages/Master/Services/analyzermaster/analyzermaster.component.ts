@@ -116,6 +116,39 @@ export class AnalyzermasterComponent {
 
   } 
 
+
+    SearchAllAnalyzerRecords(){
+    debugger;
+    this.loaderService.show();
+    this.analyzerStatus=this.AnalyzersForm.get('ddlAnalyzerStatus')?.value;
+    this.analyzerNameOrShortCode=this.AnalyzersForm.get('AnalyzerNameOrCode')?.value;
+    this.analyzerService.getAllAnalyzers(this.partnerId,this.analyzerNameOrShortCode,this.analyzerStatus).subscribe({
+      next: (response: any) => {
+        debugger;
+
+        if (response?.status && response?.statusCode === 200) {
+          this.analyzerApiResponse = response.data; 
+          this.IsNoRecordFound = false;
+          this.IsRecordFound = true;
+          console.log(this.analyzerApiResponse);
+        } else {
+          this.IsNoRecordFound = true;
+          this.IsRecordFound = false;
+          console.warn("No Record Found!");
+        }
+
+        this.loaderService.hide();
+      },
+      error: (err) => {
+        this.IsNoRecordFound = true;
+        this.IsRecordFound = false;
+        console.error("Error while fetching profiles:", err);
+        this.loaderService.hide();
+      }
+    });
+
+  } 
+
    filterAnalyzerData(term: string) {
     debugger;
     
@@ -135,6 +168,37 @@ export class AnalyzermasterComponent {
     }
   }
 
+   analyzerDeleteConfirmationDialog(analyzerId:any): void {
+    debugger;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+      width: '250px',
+      data: { message: 'Are you sure you want to delete this Analyzer?',analyzerId: analyzerId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      debugger;
+      if (result.success) {
+        debugger;
+        // this.profileService.DeleteProfileByProfileCode(this.partnerId,result.profileCode).subscribe((response:any)=>{
+        //   debugger;
+        //  if(response.status && response.statusCode==200){
+        //   this.toasterService.showToast(response.responseMessage, 'success');
+        //   this.ngOnInit();
+        //  }
+        //  else{
+        //   this.toasterService.showToast(response.responseMessage, 'error');
+        //  }
+        //  console.log(response);
+        // }) 
+        console.log('Returned User ID:', result.userId);
+        console.log('User confirmed the action.');
+      } else {
+        debugger;
+        // User clicked 'Cancel'
+        console.log('User canceled the action.');
+      }
+    });
+  }
 
 
 }
