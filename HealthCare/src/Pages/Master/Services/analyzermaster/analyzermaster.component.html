@@ -17,7 +17,7 @@
         </div>
          <div class="col-md-6">
             <div class="div-button">
-            <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Analyer</button>
+            <button mat-flat-button class="search-button" (click)="SearchAllAnalyzerRecords()"><mat-icon>search</mat-icon>Search Analyer</button>
             <button mat-flat-button class="add-button">
               <mat-icon>person</mat-icon> Add New Analyer</button> 
           </div>
@@ -67,7 +67,7 @@
         <button class="edit-button" matTooltip="edit analyer details">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete analyzer">
+        <button class="delete-button" matTooltip="delete analyzer" (click)="analyzerDeleteConfirmationDialog(item.analyzerId)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>
