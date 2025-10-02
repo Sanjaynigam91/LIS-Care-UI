@@ -18,7 +18,7 @@
          <div class="col-md-6">
             <div class="div-button">
             <button mat-flat-button class="search-button" (click)="SearchAllAnalyzerRecords()"><mat-icon>search</mat-icon>Search Analyer</button>
-            <button mat-flat-button class="add-button">
+            <button mat-flat-button class="add-button" (click)="OpenAddAnalyzerPopUp()">
               <mat-icon>person</mat-icon> Add New Analyer</button> 
           </div>
         </div>
@@ -48,8 +48,8 @@
       <th>Sr.No.</th>
       <th>Analyzer Name</th>
       <th>Analyzer Code</th>
-      <th>SupplierCode</th>
-      <th>AssetCode</th>
+      <th>Supplier Code</th>
+      <th>Warranty End Date</th>
       <th>PurchasedValue</th>
       <th>Actions</th>
     </tr>
@@ -61,10 +61,10 @@
       <td>{{ item.analyzerName }}</td>
       <td>{{ item.analyzerCode }}</td>
       <td>{{ item.supplierCode }}</td>
-      <td>{{ item.assetCode }}</td>
+      <td>{{ item.warrantyEndDate }}</td>
       <td>{{ item.purchaseValue }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit analyer details">
+        <button class="edit-button" matTooltip="edit analyer details" (click)="ViewAnalyzerDetails(item.analyzerId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
         <button class="delete-button" matTooltip="delete analyzer" (click)="analyzerDeleteConfirmationDialog(item.analyzerId)">

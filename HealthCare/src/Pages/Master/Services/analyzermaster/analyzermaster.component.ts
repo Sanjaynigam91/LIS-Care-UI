@@ -22,6 +22,7 @@ import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { LoaderService } from '../../../../Interfaces/loader.service';
 import { AnalyzerResponse } from '../../../../Interfaces/AnalyzerMaster/AnalyzerResponse';
 import { AnalyzerService } from '../../../../auth/AnalyzerService/analyzer.service';
+import { PopupAnalyzereditComponent } from '../../../PopUp/popup-analyzeredit/popup-analyzeredit.component';
 
 @Component({
   selector: 'app-analyzermaster',
@@ -199,6 +200,31 @@ export class AnalyzermasterComponent {
       }
     });
   }
+
+  /// Open Add New Profile Page
+  
+  OpenAddAnalyzerPopUp(): void {
+    this.dialog.open(PopupAnalyzereditComponent, {
+      width: '1500px',           // slightly larger than medium
+      maxWidth: '90vw',         // responsive on smaller screens
+      height: 'auto',           // taller than medium but not full screen
+      minHeight: '400px',       // ensures minimum height
+      panelClass: 'large-dialog', // optional custom CSS
+      data: {}                  // pass data if needed
+    });
+  }
+
+   ViewAnalyzerDetails(analyzerId:string){
+      debugger;
+      this.dialog.open(PopupAnalyzereditComponent, {
+       width: '1500px',           // slightly larger than medium
+        maxWidth: '90vw',         // responsive on smaller screens
+        height: 'auto',           // taller than medium but not full screen
+        minHeight: '400px',       // ensures minimum height
+        panelClass: 'large-dialog', // optional custom CSS
+        data: {analyzerId:analyzerId}        // Pass data if needed
+      });
+    }
 
 
 }
