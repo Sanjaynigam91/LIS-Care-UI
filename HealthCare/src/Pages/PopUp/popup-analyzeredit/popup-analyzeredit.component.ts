@@ -17,11 +17,13 @@ import { AnalyzerService } from '../../../auth/AnalyzerService/analyzer.service'
 import { SupplierResponse } from '../../../Interfaces/AnalyzerMaster/SupplierResponse';
 import { AnalyzerResponse } from '../../../Interfaces/AnalyzerMaster/AnalyzerResponse';
 import { AnalyzerApiResponse } from '../../../Interfaces/AnalyzerMaster/AnalyzerApiResponse';
+import { LoaderComponent } from "../../loader/loader.component";
+import { AnalyzerMapping } from '../../../Interfaces/AnalyzerMaster/AnalyzerMappingResponse';
 
 @Component({
   selector: 'app-popup-analyzeredit',
   standalone: true,
-    imports: [ToastComponent, CommonModule, MatIcon,ReactiveFormsModule],
+    imports: [ToastComponent, CommonModule, MatIcon, ReactiveFormsModule, LoaderComponent],
   templateUrl: './popup-analyzeredit.component.html',
   styleUrl: './popup-analyzeredit.component.css'
 })
@@ -48,6 +50,7 @@ testMasterSearch:testMasterSearchRequest={
       };
 supplierApiResponse:Observable<SupplierResponse>| any;
 analyzerApiResponse:Observable<AnalyzerResponse>| any;
+analyzerMappingResponse:Observable<AnalyzerMapping>| any;
 
 constructor(public dialogRef: MatDialogRef<PopupAnalyzereditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,private authService:AuthService,
@@ -104,6 +107,7 @@ ngOnInit(): void {
       this.isAnalyzerMappingListVisible = true;
 
       this.viewAanalyzerDetails(this.data.analyzerId);
+      this.viewAanalyzerMappings(this.data.analyzerId);
       this.GetAllTestDetails();
     }
     this.getAllSupplierDetails();
@@ -181,6 +185,22 @@ this.loaderService.hide();
 
 }
 
+
+viewAanalyzerMappings(analyzerId: any) {
+  if (!analyzerId) return;
+  debugger;
+  this.loaderService.show();
+
+  this.analyzerService.getAnalyzersTestMappings(this.partnerId, analyzerId)
+  .subscribe((response: any) => {
+    if (response.status && response.data?.length) {
+      debugger;
+      this.analyzerMappingResponse = response.data; 
+    }
+  });
+this.loaderService.hide();
+
+}
 
 
 }
