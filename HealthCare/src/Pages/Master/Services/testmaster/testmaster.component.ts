@@ -274,6 +274,7 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
       height: '87vh',           // taller than medium but not full screen
       minHeight: '400px',       // ensures minimum height
       panelClass: 'large-dialog', // optional custom CSS
+      disableClose: true,  
       data: {}                  // pass data if needed
     });
   }
@@ -287,6 +288,7 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
           height: '98vh',           // taller than medium but not full screen
           minHeight: '400px',       // ensures minimum height
           panelClass: 'large-dialog', // optional custom CSS
+          disableClose: true,  
           data: {testCode:testCode}        // Pass data if needed
         });
   }

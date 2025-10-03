@@ -219,6 +219,7 @@ OpenAddProfilePopUp(): void {
     height: 'auto',            // taller than medium but not full screen
     minHeight: '400px',       // ensures minimum height
     panelClass: 'large-dialog', // optional custom CSS
+    disableClose: true,  
     data: {}                  // pass data if needed
   });
 }
@@ -231,6 +232,7 @@ OpenAddProfilePopUp(): void {
       height: '98vh',           // taller than medium but not full screen
       minHeight: '400px',       // ensures minimum height
       panelClass: 'large-dialog', // optional custom CSS
+      disableClose: true,  
       data: {profileCode:profileCode,profileApiResponse:this.profileApiResponse}        // Pass data if needed
     });
   }
