@@ -16,6 +16,7 @@ import { testMasterSearchRequest } from '../../../Interfaces/TestMaster/testMast
 import { AnalyzerService } from '../../../auth/AnalyzerService/analyzer.service';
 import { SupplierResponse } from '../../../Interfaces/AnalyzerMaster/SupplierResponse';
 import { AnalyzerResponse } from '../../../Interfaces/AnalyzerMaster/AnalyzerResponse';
+import { AnalyzerApiResponse } from '../../../Interfaces/AnalyzerMaster/AnalyzerApiResponse';
 
 @Component({
   selector: 'app-popup-analyzeredit',
@@ -25,6 +26,7 @@ import { AnalyzerResponse } from '../../../Interfaces/AnalyzerMaster/AnalyzerRes
   styleUrl: './popup-analyzeredit.component.css'
 })
 export class PopupAnalyzereditComponent {
+loading$!: Observable<boolean>;
 isAddHeaderVisible:boolean=false;
 isEditHeaderVisible:boolean=false;
 isVisible = false;
@@ -60,6 +62,9 @@ constructor(public dialogRef: MatDialogRef<PopupAnalyzereditComponent>,
       this.analyzerId=data.analyzerId;
     }
 
+  ngAfterViewInit() {
+  setTimeout(() => this.isVisible = true);
+}
 
 open(): void {
     this.isVisible = true;
@@ -69,8 +74,7 @@ open(): void {
     this.dialogRef.close();
   }
 
-
-  ngOnInit(): void{
+ngOnInit(): void {
     this.editAnalyzerForm=this.formBuilder.group({
       AnalyzerName:[''],
       AnalyzerShortCode:[''],
@@ -84,25 +88,28 @@ open(): void {
       ddlTestName:[''],
       ddlStatus:[''],
     });
-    if(this.data.analyzerId==0 || this.data.analyzerId==null){
-      this.isAddHeaderVisible=true;
-       this.isEditHeaderVisible=false;
-       this.isSubmitVisible=true;
-       this.isUpdateVisible=false;
-       this.isAnalyzerMappingListVisible=false;
-    }
-    else{
-      this.isEditHeaderVisible=true;
-      this.isAddHeaderVisible=false;
-      this.isSubmitVisible=false;
-      this.isUpdateVisible=true;
-      this.isAnalyzerMappingListVisible=true;
+
+  setTimeout(() => {  // 🔑 forces update in next CD cycle
+    if (!this.data.analyzerId) {
+      this.isAddHeaderVisible = true;
+      this.isEditHeaderVisible = false;
+      this.isSubmitVisible = true;
+      this.isUpdateVisible = false;
+      this.isAnalyzerMappingListVisible = false;
+    } else {
+      this.isEditHeaderVisible = true;
+      this.isAddHeaderVisible = false;
+      this.isSubmitVisible = false;
+      this.isUpdateVisible = true;
+      this.isAnalyzerMappingListVisible = true;
+
       this.viewAanalyzerDetails(this.data.analyzerId);
       this.GetAllTestDetails();
     }
     this.getAllSupplierDetails();
-
+  });
 }
+
 
 GetAllTestDetails(): void {
   this.loaderService.show(); // Show loader when API starts
@@ -148,74 +155,33 @@ this.loaderService.hide();
     });
 
   } 
-
-//    viewAanalyzerDetails(){
-//     debugger;
-//     this.loaderService.show();
-//  this.analyzerService.getAnalyzersById(this.partnerId, this.data.analyzerId).subscribe({
-//   next: (response: any) => {
-//     if (response?.status && response?.statusCode === 200) {
-//       this.analyzerApiResponse = response?.data || [];
-
-//       // Use microtask to defer patchValue
-//       Promise.resolve().then(() => {
-//         this.editAnalyzerForm.patchValue({
-//           AnalyzerName: response.data?.analyzerName || '',
-//           AnalyzerShortCode: response.data?.analyzerCode || '',
-//           EngineerContactNumber: response.data?.engineerContactNo || '',
-//           WarrantyEndDate: response.data?.WarrantyEndDate || '',
-//           ddlSupplierCode: response.data?.supplierCode || '',
-//           AssetCode: response.data?.assetCode || '',
-//           POValue: response.data?.purchaseValue || 0,
-//           ddlAnalyzerStatus: response.data?.analyzerStatus || 'false',
-//         });
-//       });
-//     }
-//     this.loaderService.hide();
-//   },
-//   error: (err) => {
-//     console.error(err);
-//     this.loaderService.hide();
-//   }
-// });
-
-
-//   }
-
-
-
 viewAanalyzerDetails(analyzerId: any) {
   if (!analyzerId) return;
 
   this.loaderService.show();
 
-  this.analyzerService.getAnalyzersById(this.partnerId, analyzerId).subscribe({
-    next: (response: any) => {
-      if (response?.data) {
-        // Defer update to next microtask
-        Promise.resolve().then(() => {
-          this.editAnalyzerForm.patchValue({
-            AnalyzerName: response.data.analyzerName || '',
-            AnalyzerShortCode: response.data.analyzerCode || '',
-            EngineerContactNumber: response.data.engineerContactNo || '',
-            WarrantyEndDate: response.data.WarrantyEndDate || '',
-            ddlSupplierCode: response.data.supplierCode || '',
-            AssetCode: response.data.assetCode || '',
-            POValue: response.data.purchaseValue || 0,
-            ddlAnalyzerStatus: response.data.analyzerStatus ?? false,
-          });
-
-          this.loaderService.hide();
-        });
-      } else {
-        this.loaderService.hide();
-      }
-    },
-    error: () => {
-      this.loaderService.hide();
+  this.analyzerService.getAnalyzersById(this.partnerId, analyzerId)
+  .subscribe((response: any) => {
+    if (response.status && response.data?.length) {
+      debugger;
+      const analyzer = response.data[0]; // first item in array
+      this.editAnalyzerForm.patchValue({
+        AnalyzerName: analyzer.analyzerName || '',
+        AnalyzerShortCode: analyzer.analyzerCode || '',
+        EngineerContactNumber: analyzer.engineerContactNo || '',
+        WarrantyEndDate: analyzer.warrantyEndDate || '',
+        ddlSupplierCode: analyzer.supplierCode || '',
+        AssetCode: analyzer.assetCode || '',
+        POValue: analyzer.purchaseValue || 0,
+        ddlAnalyzerStatus: analyzer.analyzerStatus ? 'true' : 'false'
+      });
     }
   });
+this.loaderService.hide();
+
 }
+
+
 
 }
 
