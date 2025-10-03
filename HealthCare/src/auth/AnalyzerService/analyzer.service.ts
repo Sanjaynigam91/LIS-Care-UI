@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AnalyzerResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerResponse';
 import { SupplierResponse } from '../../Interfaces/AnalyzerMaster/SupplierResponse';
+import { AnalyzerApiResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerApiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -40,13 +41,13 @@ export class AnalyzerService {
      return this.httpClient.get<SupplierResponse[]>(`${this.baseUrl}/GetAllSuppliers`, {params});
   }
 
-    getAnalyzersById(partnerId: any,analyzerId:any): Observable<AnalyzerResponse[]> {
+    getAnalyzersById(partnerId: any,analyzerId:any): Observable<AnalyzerApiResponse[]> {
     debugger;
     // Create HttpParams instance and append query parameters
      let params = new HttpParams()
       .set('partnerId', partnerId.toString())
       .set('analyzerId', analyzerId);
-     return this.httpClient.get<AnalyzerResponse[]>(`${this.baseUrl}/GetAnalyzerDetailById`, {params});
+     return this.httpClient.get<AnalyzerApiResponse[]>(`${this.baseUrl}/GetAnalyzerDetailById`, {params});
   }
 
 }
