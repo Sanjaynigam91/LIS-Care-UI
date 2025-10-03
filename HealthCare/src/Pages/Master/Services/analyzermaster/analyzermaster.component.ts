@@ -210,6 +210,7 @@ export class AnalyzermasterComponent {
       height: 'auto',           // taller than medium but not full screen
       minHeight: '400px',       // ensures minimum height
       panelClass: 'large-dialog', // optional custom CSS
+      disableClose: true,  
       data: {}                  // pass data if needed
     });
   }
@@ -222,7 +223,9 @@ export class AnalyzermasterComponent {
         height: '98vh',            // taller than medium but not full screen
         minHeight: '400px',       // ensures minimum height
         panelClass: 'large-dialog', // optional custom CSS
-        data: {analyzerId:analyzerId}        // Pass data if needed
+        disableClose: true,  
+        data: {analyzerId:analyzerId},        // Pass data if needed
+         
       });
     }
 
