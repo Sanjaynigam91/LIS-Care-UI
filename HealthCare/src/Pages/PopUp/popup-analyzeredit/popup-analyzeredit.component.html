@@ -75,11 +75,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <!--
+        <tr *ngFor="let item of analyzerMappingResponse">
+          
+          <td>{{ item.analyzerTestCode }}</td>
           <td>{{ item.testName }}</td>
-          <td>{{ item.sectionName }}</td>
-          <td>{{ item.printOrder }}</td> -->
+          <td>{{ item.status ? 'Active' : 'InActive' }}</td>
            <td> 
             <button class="edit-button" matTooltip="edit mapping details">
             <mat-icon class="edit-icon">edit</mat-icon>
@@ -112,13 +112,11 @@
         </tr>
       </tbody>
     </table> 
-    <!-- <div calss="row" *ngIf="isUpdateMappingtVisible">
-       <button class="btn update-Mapping-button" (click)="updateAllMapping()">Update Mapping</button>
-    </div> -->
     </div>
     </div>
     </div>
      <app-toast></app-toast>
+     <app-loader *ngIf="loading$ | async"></app-loader>
 <br/>
 <br/>
   <!-- Footer / Actions -->

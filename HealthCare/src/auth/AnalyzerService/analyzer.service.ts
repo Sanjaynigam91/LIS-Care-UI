@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AnalyzerResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerResponse';
 import { SupplierResponse } from '../../Interfaces/AnalyzerMaster/SupplierResponse';
 import { AnalyzerApiResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerApiResponse';
+import { AnalyzerMappingResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerMappingResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,15 @@ export class AnalyzerService {
       .set('partnerId', partnerId.toString())
       .set('analyzerId', analyzerId);
      return this.httpClient.get<AnalyzerApiResponse[]>(`${this.baseUrl}/GetAnalyzerDetailById`, {params});
+  }
+
+   getAnalyzersTestMappings(partnerId: any,analyzerId:any): Observable<AnalyzerMappingResponse[]> {
+    debugger;
+    // Create HttpParams instance and append query parameters
+     let params = new HttpParams()
+      .set('partnerId', partnerId.toString())
+      .set('analyzerId', analyzerId);
+     return this.httpClient.get<AnalyzerMappingResponse[]>(`${this.baseUrl}/GetAnalyzerTestMappings`, {params});
   }
 
 }

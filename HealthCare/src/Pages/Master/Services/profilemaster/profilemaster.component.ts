@@ -216,7 +216,7 @@ OpenAddProfilePopUp(): void {
   this.dialog.open(PopupProfilemastereditComponent, {
     width: '1500px',           // slightly larger than medium
     maxWidth: '90vw',         // responsive on smaller screens
-    height: '87vh',           // taller than medium but not full screen
+    height: 'auto',            // taller than medium but not full screen
     minHeight: '400px',       // ensures minimum height
     panelClass: 'large-dialog', // optional custom CSS
     data: {}                  // pass data if needed
