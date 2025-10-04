@@ -1,0 +1,44 @@
+<div class="popup-container">
+  <!-- Header -->
+    <div class="popup-header">
+    <h2>View/Edit Analyzer Mapping</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+</div>
+
+ <!-- Content / Form -->
+<div class="container mt-3" [formGroup]="editAnalyzerMappingForm">
+  <div class="popup-content" >
+  <div class="row">
+    <div class="col-md-3">
+        <label  class="form-label">Analyzer Test Code</label>
+        <input type="text" formControlName="AnalyzerTestCode" class="form-control" placeholder="Enter analyzer test code" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Lab Test Code</label>
+        <select class="form-control"  formControlName="ddlLabTestCode">
+            <option value="">~Please Choose~</option>  
+            <option *ngFor="let item of testDataApiResponse" [value]="item.testCode">{{item.testName}}</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Status</label>
+        <select class="form-control"  formControlName="ddlStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button mat-flat-button class="update-button">Update Mapping</button>
+  </div>
+  </div>
+</div>
+<app-toast></app-toast>
+     <app-loader *ngIf="loading$ | async"></app-loader>
+<br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>

@@ -236,7 +236,8 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
   testDeleteConfirmationDialog(testCode:any): void {
     debugger;
     const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
-      width: '250px',
+      width: 'auto',
+      disableClose: true,
       data: { message: 'Are you sure you want to delete this test?',testCode: testCode }
     });
 

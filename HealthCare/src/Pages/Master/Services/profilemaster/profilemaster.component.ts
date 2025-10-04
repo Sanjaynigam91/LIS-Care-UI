@@ -181,7 +181,8 @@ SearchProfileDetails() {
  profileDeleteConfirmationDialog(profileCode:any): void {
     debugger;
     const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
-      width: '250px',
+      width: 'auto',
+      disableClose: true,
       data: { message: 'Are you sure you want to delete this profile?',profileCode: profileCode }
     });
 
