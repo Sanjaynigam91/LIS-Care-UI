@@ -6,6 +6,7 @@ import { AnalyzerResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerRespon
 import { SupplierResponse } from '../../Interfaces/AnalyzerMaster/SupplierResponse';
 import { AnalyzerApiResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerApiResponse';
 import { AnalyzerMappingResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerMappingResponse';
+import { AnalyzerTestMappingResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerTestMappingResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +85,41 @@ export class AnalyzerService {
   .set('analyzerId', analyzerId)
   .set('partnerId', partnerId.toString());
  return this.httpClient.delete(`${this.baseUrl}/DeleteAnalyzer`, {params});
+}
+
+  getAnalyzersTestMappingById(mappingId:any,partnerId: any): Observable<AnalyzerTestMappingResponse[]> {
+    debugger;
+    // Create HttpParams instance and append query parameters
+     let params = new HttpParams()   
+      .set('mappingId', mappingId)
+      .set('partnerId', partnerId.toString())
+     return this.httpClient.get<AnalyzerTestMappingResponse[]>(`${this.baseUrl}/GetMappingByMappingId`, {params});
+  }
+
+  saveAnalyzerTestMapping(data:any){
+    debugger;
+    return this.httpClient.post(`${this.baseUrl}/AddTestMapping`, data).pipe(delay(1000));
+  }
+
+  updateAnalyzerTestMapping(data: any) {
+    console.log("Payload before sending:", data); // Debugging line to check the payload
+    return this.httpClient.put(
+      `${this.baseUrl}/UpdateTestMapping`,
+      data,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      }
+    ).pipe(delay(1000));
+  
+  }
+
+deleteAnalyzerTestMapping(mappingId:any,partnerId:any){
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+  .set('mappingId', mappingId)
+  .set('partnerId', partnerId.toString());
+ return this.httpClient.delete(`${this.baseUrl}/DeleteTestMapping`, {params});
 }
 
 }

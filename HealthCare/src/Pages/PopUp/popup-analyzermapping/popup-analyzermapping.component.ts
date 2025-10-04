@@ -15,6 +15,7 @@ import { LoaderService } from '../../../Interfaces/loader.service';
 import { MetadataService } from '../../../auth/metadata.service';
 import { testMasterSearchRequest } from '../../../Interfaces/TestMaster/testMasterSearchRequest';
 import { testDataSearchResponse } from '../../../Interfaces/TestMaster/testDataSearchResponse';
+import { AnalyzerTestMappingRequest } from '../../../Interfaces/AnalyzerMaster/analyzer-test-mapping-request';
 
 @Component({
   selector: 'app-popup-analyzermapping',
@@ -41,6 +42,15 @@ testMasterSearch:testMasterSearchRequest={
         deptOrDiscipline: '',
         isProcessedAt: ''
       };
+
+ analyzerMappingRequest:AnalyzerTestMappingRequest={
+   mappingId: 0,
+   analyzerId: 0,
+   analyzerTestCode: '',
+   labTestCode: '',
+   status: false,
+   partnerId: ''
+ }     
 
 
 constructor(public dialogRef: MatDialogRef<PopupAnalyzermappingComponent>,
@@ -69,9 +79,11 @@ open(): void {
         AnalyzerTestCode:[''],
         ddlLabTestCode:[''],
         ddlStatus:[''],
+        hdnAnalyzerId:0,
     });
     if(this.mappingId!=null && this.mappingId!=""){
       this.GetAllTestDetails();
+      this.viewAanalyzerTestMapping(this.mappingId);
     }
   }
 
@@ -96,6 +108,75 @@ open(): void {
   });
 this.loaderService.hide();
 }
+
+viewAanalyzerTestMapping(mappingId: any) {
+  if (!mappingId) return;
+
+  this.loaderService.show();
+
+  this.analyzerService.getAnalyzersTestMappingById(mappingId, this.partnerId)
+  .subscribe((response: any) => {
+    if (response.status && response.data?.length) {
+      debugger;
+      const analyzerMapping = response.data[0]; // first item in array
+      this.editAnalyzerMappingForm.patchValue({
+        hdnAnalyzerId: analyzerMapping.analyzerId || 0,
+        AnalyzerTestCode: analyzerMapping.analyzerTestCode || '',
+        ddlLabTestCode: analyzerMapping.labTestCode || '',
+        ddlStatus: analyzerMapping.status ? 'true' : 'false'
+      });
+    }
+  });
+this.loaderService.hide();
+
+}
+
+onUpdateAnalyzerTestmapping(){
+  debugger;
+     this.loaderService.show();
+    if(this.editAnalyzerMappingForm.value.AnalyzerTestCode==''){
+      this.toasterService.showToast('Please enter analyzer test code...', 'error');
+    } 
+    else if(this.editAnalyzerMappingForm.value.ddlLabTestCode==''){
+      this.toasterService.showToast('Please select lab test name...', 'error');
+    }
+    else if(this.editAnalyzerMappingForm.value.ddlStatus==''){
+      this.toasterService.showToast('Please select status...', 'error');
+    }
+    else{
+      debugger;
+      this.analyzerMappingRequest.mappingId=this.mappingId;
+      this.analyzerMappingRequest.analyzerId=this.editAnalyzerMappingForm.value.hdnAnalyzerId;
+      this.analyzerMappingRequest.partnerId=this.partnerId;
+      this.analyzerMappingRequest.analyzerTestCode=this.editAnalyzerMappingForm.value.AnalyzerTestCode;
+      this.analyzerMappingRequest.status=this.editAnalyzerMappingForm.value.ddlStatus==='true'?true:false;
+      this.analyzerMappingRequest.labTestCode=this.editAnalyzerMappingForm.value.ddlLabTestCode;
+      
+     this.analyzerService.updateAnalyzerTestMapping(this.analyzerMappingRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+            this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.dialogRef.close();
+         //   this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+        },
+        error: (err) => console.log(err)
+      });  
+
+
+    }
+    this.loaderService.hide();
+  }
+
 
 
 }
