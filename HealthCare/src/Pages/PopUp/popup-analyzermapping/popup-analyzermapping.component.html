@@ -10,6 +10,7 @@
   <div class="popup-content" >
   <div class="row">
     <div class="col-md-3">
+      <input type="hidden" formControlName="hdnAnalyzerId" /> 
         <label  class="form-label">Analyzer Test Code</label>
         <input type="text" formControlName="AnalyzerTestCode" class="form-control" placeholder="Enter analyzer test code" />
     </div>
@@ -29,7 +30,7 @@
         </select>
     </div>
     <div class="col-md-3">
-        <button mat-flat-button class="update-button">Update Mapping</button>
+        <button mat-flat-button class="update-button" (click)="onUpdateAnalyzerTestmapping()">Update Mapping</button>
   </div>
   </div>
 </div>

@@ -22,6 +22,7 @@ import { AnalyzerMapping } from '../../../Interfaces/AnalyzerMaster/AnalyzerMapp
 import { AnalyzerRequest } from '../../../Interfaces/AnalyzerMaster/AnalyzerRequest';
 import { PopupAnalyzermappingComponent } from '../popup-analyzermapping/popup-analyzermapping.component';
 import { ConfirmationDialogComponentComponent } from '../../confirmation-dialog-component/confirmation-dialog-component.component';
+import { AnalyzerTestMappingRequest } from '../../../Interfaces/AnalyzerMaster/analyzer-test-mapping-request';
 
 @Component({
   selector: 'app-popup-analyzeredit',
@@ -64,6 +65,15 @@ analyzerRequest:AnalyzerRequest={
   assetCode: '',
   partnerId: ''
 }
+
+ analyzerMappingRequest:AnalyzerTestMappingRequest={
+   mappingId: 0,
+   analyzerId: 0,
+   analyzerTestCode: '',
+   labTestCode: '',
+   status: false,
+   partnerId: ''
+ } 
 
 
 constructor(public dialogRef: MatDialogRef<PopupAnalyzereditComponent>,
@@ -354,30 +364,77 @@ onUpdateAnalyzer(){
           data: { message: 'Are you sure you want to delete this analyzer test mapping?',mappingId: mappingId }
         });
     
-        // dialogRef.afterClosed().subscribe(result => {
-        //   debugger;
-        //   if (result.success) {
-        //     debugger;
-        //     this.analyzerService.deleteAnalyzer(analyzerId,this.partnerId).subscribe((response:any)=>{
-        //       debugger;
-        //      if(response.status && response.statusCode==200){
-        //       this.toasterService.showToast(response.responseMessage, 'success');
-        //       this.ngOnInit();
-        //      }
-        //      else{
-        //       this.toasterService.showToast(response.responseMessage, 'error');
-        //      }
-        //      console.log(response);
-        //     }) 
-        //     console.log('Returned User ID:', result.userId);
-        //     console.log('User confirmed the action.');
-        //   } else {
-        //     debugger;
-        //     // User clicked 'Cancel'
-        //     console.log('User canceled the action.');
-        //   }
-        // });
+        dialogRef.afterClosed().subscribe(result => {
+          debugger;
+          if (result.success) {
+            debugger;
+            this.analyzerService.deleteAnalyzerTestMapping(mappingId,this.partnerId).subscribe((response:any)=>{
+              debugger;
+             if(response.status && response.statusCode==200){
+              this.toasterService.showToast(response.responseMessage, 'success');
+              this.ngOnInit();
+             }
+             else{
+              this.toasterService.showToast(response.responseMessage, 'error');
+             }
+             console.log(response);
+            }) 
+            console.log('Returned User ID:', result.userId);
+            console.log('User confirmed the action.');
+          } else {
+            debugger;
+            // User clicked 'Cancel'
+            console.log('User canceled the action.');
+          }
+        });
       }
+
+  onMapAnalyzerTest(){
+  debugger;
+     this.loaderService.show();
+    if(this.editAnalyzerForm.value.AnalyzerTestCode==''){
+      this.toasterService.showToast('Please enter analyzer test code...', 'error');
+    } 
+    else if(this.editAnalyzerForm.value.ddlTestName==''){
+      this.toasterService.showToast('Please select test name...', 'error');
+    }
+    else if(this.editAnalyzerForm.value.ddlStatus==''){
+      this.toasterService.showToast('Please select status...', 'error');
+    }
+    else{
+      debugger;
+      this.analyzerMappingRequest.mappingId=0;
+      this.analyzerMappingRequest.analyzerId=this.analyzerId;
+      this.analyzerMappingRequest.partnerId=this.partnerId;
+      this.analyzerMappingRequest.analyzerTestCode=this.editAnalyzerForm.value.AnalyzerTestCode;
+      this.analyzerMappingRequest.status=this.editAnalyzerForm.value.ddlStatus==='true'?true:false;
+      this.analyzerMappingRequest.labTestCode=this.editAnalyzerForm.value.ddlTestName;
+      
+     this.analyzerService.saveAnalyzerTestMapping(this.analyzerMappingRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+            this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+           // this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+        },
+        error: (err) => console.log(err)
+      });  
+
+
+    }
+    this.loaderService.hide();
+  }
+
 
 }
 
