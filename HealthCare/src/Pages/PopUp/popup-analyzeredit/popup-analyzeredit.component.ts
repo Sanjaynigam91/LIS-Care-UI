@@ -20,6 +20,8 @@ import { AnalyzerApiResponse } from '../../../Interfaces/AnalyzerMaster/Analyzer
 import { LoaderComponent } from "../../loader/loader.component";
 import { AnalyzerMapping } from '../../../Interfaces/AnalyzerMaster/AnalyzerMappingResponse';
 import { AnalyzerRequest } from '../../../Interfaces/AnalyzerMaster/AnalyzerRequest';
+import { PopupAnalyzermappingComponent } from '../popup-analyzermapping/popup-analyzermapping.component';
+import { ConfirmationDialogComponentComponent } from '../../confirmation-dialog-component/confirmation-dialog-component.component';
 
 @Component({
   selector: 'app-popup-analyzeredit',
@@ -329,6 +331,53 @@ onUpdateAnalyzer(){
 
   return new Date(year, month, day);
 }
+
+   ViewAnalyzerMapping(mappingId:string){
+      debugger;
+      this.dialog.open(PopupAnalyzermappingComponent, {
+        width: '1385px',           // slightly larger than medium
+        maxWidth: '90vw',         // responsive on smaller screens
+        height: '50vh',            // taller than medium but not full screen
+        minHeight: '400px',       // ensures minimum height
+        panelClass: 'large-dialog', // optional custom CSS
+        disableClose: true,  
+        data: {mappingId:mappingId},        // Pass data if needed
+         
+      });
+    }
+
+       analyzerMappingDeleteConfirmationDialog(mappingId:any): void {
+        debugger;
+        const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+          width: 'auto',
+          disableClose: true,  
+          data: { message: 'Are you sure you want to delete this analyzer test mapping?',mappingId: mappingId }
+        });
+    
+        // dialogRef.afterClosed().subscribe(result => {
+        //   debugger;
+        //   if (result.success) {
+        //     debugger;
+        //     this.analyzerService.deleteAnalyzer(analyzerId,this.partnerId).subscribe((response:any)=>{
+        //       debugger;
+        //      if(response.status && response.statusCode==200){
+        //       this.toasterService.showToast(response.responseMessage, 'success');
+        //       this.ngOnInit();
+        //      }
+        //      else{
+        //       this.toasterService.showToast(response.responseMessage, 'error');
+        //      }
+        //      console.log(response);
+        //     }) 
+        //     console.log('Returned User ID:', result.userId);
+        //     console.log('User confirmed the action.');
+        //   } else {
+        //     debugger;
+        //     // User clicked 'Cancel'
+        //     console.log('User canceled the action.');
+        //   }
+        // });
+      }
 
 }
 

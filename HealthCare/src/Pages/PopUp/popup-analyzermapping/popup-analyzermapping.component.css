@@ -1,0 +1,203 @@
+/* Container */
+.popup-container {
+  width: 1500px;          /* medium-large popup */
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Arial, sans-serif;       
+}
+
+/* Header */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 20px;
+  padding-left: 12px; /* little spacing from left */
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Content */
+.popup-content {
+  padding: 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.form-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Footer / Buttons */
+.popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.save-btn {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: #fff;
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+}
+
+ .cancel-btn:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
+
+ .submit-button {
+    background-color: green; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  
+  .submit-button:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
+
+  .update-button {
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 28px;
+  }
+  
+  .update-button:hover {
+    background-color: #17f3e1; /* Darker green for hover effect */
+  }
+  
+.delete-icon {
+  color:  #d70e6f; /* Change to your desired color */
+}
+
+
+.delete-button{
+  background-color: #d70e6f;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+
+}
+
+
+.add-icon {
+  color:  blue; /* Change to your desired color */
+}
+
+
+.add-button{
+  background-color: #17f3e1;;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.update-Mapping-button {
+    background-color: indianred; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  
+  .update-Mapping-button:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
+
+.table-header thead th {
+  background-color: #17f3e1;
+  color: #000;              /* optional: text color for contrast */
+}
+.table-header:hover {
+  cursor: pointer;         /* Darker blue on hover */
+
+}
+
+.map-button{
+  background-color: #1c93cf;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.map-icon {
+  color:  green; /* Change to your desired color */
+}
+.edit-button{
+  background-color: #1c93cf;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+
+}
+
+.edit-icon {
+  color:  green; /* Change to your desired color */
+}

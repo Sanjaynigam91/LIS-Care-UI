@@ -38,7 +38,7 @@
   }
   
   .dialog {
-    max-width: 400px;
+    max-width: 'auto';
     margin: 0;
     padding: 0;
     background-color:Tan;
@@ -76,5 +76,6 @@
 .confirm-button:active, .cancel-button:active {
     transform: scale(0.98);
 }
+
 
   

@@ -172,7 +172,8 @@ export class AnalyzermasterComponent {
    analyzerDeleteConfirmationDialog(analyzerId:any): void {
     debugger;
     const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
-      width: '250px',
+       width: 'auto',
+       disableClose: true,  
       data: { message: 'Are you sure you want to delete this Analyzer?',analyzerId: analyzerId }
     });
 
