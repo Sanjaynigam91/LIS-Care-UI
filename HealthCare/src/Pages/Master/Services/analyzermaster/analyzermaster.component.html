@@ -48,8 +48,8 @@
       <th>Sr.No.</th>
       <th>Analyzer Name</th>
       <th>Analyzer Code</th>
-      <th>Supplier Code</th>
-      <th>Warranty End Date</th>
+      <th>Supplier Name</th>
+      <th>Contact Number</th>
       <th>PurchasedValue</th>
       <th>Actions</th>
     </tr>
@@ -60,8 +60,8 @@
       <td>{{ i + 1 }}</td>
       <td>{{ item.analyzerName }}</td>
       <td>{{ item.analyzerCode }}</td>
-      <td>{{ item.supplierCode }}</td>
-      <td>{{ item.warrantyEndDate }}</td>
+      <td>{{ item.supplierName }}</td>
+      <td>{{ item.engineerContactNo }}</td>
       <td>{{ item.purchaseValue }}</td>
       <td>
         <button class="edit-button" matTooltip="edit analyer details" (click)="ViewAnalyzerDetails(item.analyzerId)">

@@ -19,6 +19,7 @@ import { AnalyzerResponse } from '../../../Interfaces/AnalyzerMaster/AnalyzerRes
 import { AnalyzerApiResponse } from '../../../Interfaces/AnalyzerMaster/AnalyzerApiResponse';
 import { LoaderComponent } from "../../loader/loader.component";
 import { AnalyzerMapping } from '../../../Interfaces/AnalyzerMaster/AnalyzerMappingResponse';
+import { AnalyzerRequest } from '../../../Interfaces/AnalyzerMaster/AnalyzerRequest';
 
 @Component({
   selector: 'app-popup-analyzeredit',
@@ -51,6 +52,17 @@ testMasterSearch:testMasterSearchRequest={
 supplierApiResponse:Observable<SupplierResponse>| any;
 analyzerApiResponse:Observable<AnalyzerResponse>| any;
 analyzerMappingResponse:Observable<AnalyzerMapping>| any;
+analyzerRequest:AnalyzerRequest={
+  analyzerId: 0,
+  analyzerName: '',
+  analyzerShortCode: '',
+  status: '',
+  supplierCode: '',
+  engineerContactNo: '',
+  assetCode: '',
+  partnerId: ''
+}
+
 
 constructor(public dialogRef: MatDialogRef<PopupAnalyzereditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,private authService:AuthService,
@@ -202,6 +214,121 @@ this.loaderService.hide();
 
 }
 
+
+onSaveAnalyzer(){
+  debugger;
+     this.loaderService.show();
+    if(this.editAnalyzerForm.value.AnalyzerName==''){
+      this.toasterService.showToast('Please enter analyzer name...', 'error');
+    } 
+    else if(this.editAnalyzerForm.value.ddlSupplierCode==''){
+      this.toasterService.showToast('Please select supplier code...', 'error');
+    }
+    else{
+      debugger;
+      this.analyzerRequest.analyzerId=0;
+      this.analyzerRequest.analyzerName=this.editAnalyzerForm.value.AnalyzerName;
+      this.analyzerRequest.partnerId=this.partnerId;
+      this.analyzerRequest.analyzerShortCode=this.editAnalyzerForm.value.AnalyzerShortCode;
+      this.analyzerRequest.status=this.editAnalyzerForm.value.ddlAnalyzerStatus;
+      this.analyzerRequest.supplierCode=this.editAnalyzerForm.value.ddlSupplierCode;
+      this.analyzerRequest.purchasedValue=this.editAnalyzerForm.value.POValue;
+      
+      const warrantyDateStr = this.editAnalyzerForm.value.WarrantyEndDate;
+      this.analyzerRequest.warrantyEndDate = warrantyDateStr
+      ? this.parseYyyyMMdd(warrantyDateStr)?.toISOString()
+      : null;
+
+      this.analyzerRequest.engineerContactNo=this.editAnalyzerForm.value.EngineerContactNumber;
+      this.analyzerRequest.assetCode=this.editAnalyzerForm.value.AssetCode;
+      
+     this.analyzerService.addAnalyzerDetails(this.analyzerRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+            this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+        },
+        error: (err) => console.log(err)
+      });  
+
+
+    }
+    this.loaderService.hide();
+  }
+
+  
+onUpdateAnalyzer(){
+  debugger;
+     this.loaderService.show();
+    if(this.editAnalyzerForm.value.AnalyzerName==''){
+      this.toasterService.showToast('Please enter analyzer name...', 'error');
+    } 
+    else if(this.editAnalyzerForm.value.ddlSupplierCode==''){
+      this.toasterService.showToast('Please select supplier code...', 'error');
+    }
+    else{
+      debugger;
+      this.analyzerRequest.analyzerId=this.analyzerId;
+      this.analyzerRequest.analyzerName=this.editAnalyzerForm.value.AnalyzerName;
+      this.analyzerRequest.partnerId=this.partnerId;
+      this.analyzerRequest.analyzerShortCode=this.editAnalyzerForm.value.AnalyzerShortCode;
+      this.analyzerRequest.status=this.editAnalyzerForm.value.ddlAnalyzerStatus;
+      this.analyzerRequest.supplierCode=this.editAnalyzerForm.value.ddlSupplierCode;
+      this.analyzerRequest.purchasedValue=this.editAnalyzerForm.value.POValue;
+      
+      const warrantyDateStr = this.editAnalyzerForm.value.WarrantyEndDate;
+      this.analyzerRequest.warrantyEndDate = warrantyDateStr
+    ? this.parseYyyyMMdd(warrantyDateStr)?.toISOString()
+    : null;
+      this.analyzerRequest.engineerContactNo=this.editAnalyzerForm.value.EngineerContactNumber;
+      this.analyzerRequest.assetCode=this.editAnalyzerForm.value.AssetCode;
+      
+     this.analyzerService.updateAnalyzerDetails(this.analyzerRequest)
+      .subscribe({
+        next: (response: any) => {
+          debugger;
+          if(response.statusCode==200 && response.status){
+            debugger;
+            console.log(response);
+            this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.dialogRef.close();
+            this.ngOnInit();       
+          }
+          else{
+            debugger;
+            console.log(response.responseMessage);
+          }
+        },
+        error: (err) => console.log(err)
+      });  
+
+
+    }
+    this.loaderService.hide();
+  }
+
+ parseYyyyMMdd(dateStr: string): Date | null {
+  debugger;
+  if (!dateStr || dateStr.length !== 8) return null;
+
+  const year = parseInt(dateStr.substring(0, 4), 10);
+  const month = parseInt(dateStr.substring(4, 6), 10) - 1; // JS months are 0-based
+  const day = parseInt(dateStr.substring(6, 8), 10);
+
+  return new Date(year, month, day);
+}
 
 }
 
