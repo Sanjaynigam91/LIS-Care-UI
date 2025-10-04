@@ -59,8 +59,8 @@
     </div>
     <div class="row">
     <div class="col-md-6">
-        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" >Save</button>
-        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button">Update</button>
+        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSaveAnalyzer()" >Save</button>
+        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdateAnalyzer()">Update</button>
        </div>
     </div>
     <div class="row">

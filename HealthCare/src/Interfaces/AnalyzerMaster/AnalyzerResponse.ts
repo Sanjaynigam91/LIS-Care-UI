@@ -9,4 +9,5 @@ export interface AnalyzerResponse {
   engineerContactNo: string;      // default ''
   assetCode: string;              // default ''
   partnerId: string;              // required
+  supplierName: string;           // default ''
 }

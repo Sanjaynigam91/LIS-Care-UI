@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../app/environments/environments';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, delay, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AnalyzerResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerResponse';
 import { SupplierResponse } from '../../Interfaces/AnalyzerMaster/SupplierResponse';
 import { AnalyzerApiResponse } from '../../Interfaces/AnalyzerMaster/AnalyzerApiResponse';
@@ -59,5 +59,31 @@ export class AnalyzerService {
       .set('analyzerId', analyzerId);
      return this.httpClient.get<AnalyzerMappingResponse[]>(`${this.baseUrl}/GetAnalyzerTestMappings`, {params});
   }
+
+  addAnalyzerDetails(data:any){
+    debugger;
+    return this.httpClient.post(`${this.baseUrl}/AddNewAnalyzer`, data).pipe(delay(1000));
+  }
+
+  updateAnalyzerDetails(data: any) {
+    console.log("Payload before sending:", data); // Debugging line to check the payload
+    return this.httpClient.put(
+      `${this.baseUrl}/UpdateAnalyzer`,
+      data,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      }
+    ).pipe(delay(1000));
+  
+  }
+
+  deleteAnalyzer(analyzerId:any,partnerId:any){
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+  .set('analyzerId', analyzerId)
+  .set('partnerId', partnerId.toString());
+ return this.httpClient.delete(`${this.baseUrl}/DeleteAnalyzer`, {params});
+}
 
 }

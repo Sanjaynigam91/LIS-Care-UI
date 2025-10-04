@@ -180,17 +180,17 @@ export class AnalyzermasterComponent {
       debugger;
       if (result.success) {
         debugger;
-        // this.profileService.DeleteProfileByProfileCode(this.partnerId,result.profileCode).subscribe((response:any)=>{
-        //   debugger;
-        //  if(response.status && response.statusCode==200){
-        //   this.toasterService.showToast(response.responseMessage, 'success');
-        //   this.ngOnInit();
-        //  }
-        //  else{
-        //   this.toasterService.showToast(response.responseMessage, 'error');
-        //  }
-        //  console.log(response);
-        // }) 
+        this.analyzerService.deleteAnalyzer(analyzerId,this.partnerId).subscribe((response:any)=>{
+          debugger;
+         if(response.status && response.statusCode==200){
+          this.toasterService.showToast(response.responseMessage, 'success');
+          this.ngOnInit();
+         }
+         else{
+          this.toasterService.showToast(response.responseMessage, 'error');
+         }
+         console.log(response);
+        }) 
         console.log('Returned User ID:', result.userId);
         console.log('User confirmed the action.');
       } else {
