@@ -34,56 +34,68 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required])
   })
 
-  UserLogin(){
+UserLogin() {
+  debugger;
+
+  // Validation checks
+  if (!this.loginForm.value.username?.trim()) {
+    this.toasterService.showToast('Please enter username', 'error');
+    return;
+  }
+
+  if (!this.loginForm.value.password?.trim()) {
+    this.toasterService.showToast('Please enter password', 'error');
+    return;
+  }
+
+  // Call API
+  this.authService.UserLogin(this.loginForm.value).subscribe({
+    next: (response) => {
       debugger;
-      if(this.loginForm.value.username==''){
-        this.toasterService.showToast('Please enter user name', 'error');
+
+      if (response.statusCode === 200 && response.status) {
+        // ✅ Success
+        this.toasterService.showToast(response.responseMessage || 'Login successful!', 'success');
+        this.alertType = 'success';
+
+        // Save to localStorage
+        localStorage.setItem('username', response.data.fullName);
+        localStorage.setItem('userId', response.data.userId.toString());
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('partnerId', response.data.partnerId);
+        localStorage.setItem('email', response.data.email);
+        localStorage.setItem('mobileNumber', response.data.mobileNumber);
+        localStorage.setItem('userLogo', response.data.userLogo);
+        localStorage.setItem('roleId', response.data.roleId);
+
+        // Update user info
+        this.currentUserSubject.next(response.data.fullName);
+
+        // Navigate to dashboard
+        this.router.navigate(['/dashboard']);
+        this.message = response.responseMessage || 'Login successful!';
+      } 
+      else {
+        // ❌ Failed login
+        this.message = response.responseMessage || 'Invalid username or password!';
+        this.alertType = 'danger';
+        this.toasterService.showToast(this.message, 'error');
       }
-      else if(this.loginForm.value.password==''){
-        this.toasterService.showToast('Please enter password', 'error');
-      }
-      else{
-         this.authService.UserLogin(this.loginForm.value)
-         .subscribe((response) => {
-        debugger;
-        if(response.statusCode==200 && response.status){
-          debugger;
-          this.toasterService.showToast('Login successful!', 'success');
-          this.alertType = 'success'; 
-          // On successful login:
-          localStorage.setItem('username', response.data.fullName);
-          localStorage.setItem('userId', response.data.userId.toString());
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('partnerId', response.data.partnerId);
-          localStorage.setItem('email', response.data.email);
-          localStorage.setItem('mobileNumber', response.data.mobileNumber);
-          localStorage.setItem('userLogo', response.data.userLogo);
-          localStorage.setItem('roleId', response.data.roleId);
-          this.currentUserSubject.next(response.data.fullName); // Save the username   
-          this.router.navigate(['/dashboard']);
-          this.message="Login successful!";
-        }
-        else{
-          debugger;
-          this.message = 'Invalid username or password!';
-          this.alertType = 'danger';
-        }
-        // if(this.authService.isLoggedIn()){
-        //   debugger;
-        //  this.router.navigate(['/admin']);
-        //  this.message="Login successful!";
-        //  this.alertType = 'success';
-        // console.log('Login successful', data);
-        // }
-        // else{
-         
-        // }
-        console.log(this.message);
-        console.log(this.alertType);
-        console.log(response);
-      });
-      }
+
+      console.log('Response:', response);
+    },
+    error: (error) => {
+      debugger;
+      // ⚠️ API error (network/server)
+      const errorMsg = error?.error?.responseMessage || 'Something went wrong. Please try again.';
+      this.toasterService.showToast(errorMsg, 'error');
+      this.alertType = 'danger';
+      this.message = errorMsg;
+      console.error('Login API error:', error);
     }
+  });
+}
+
     
   }
 
