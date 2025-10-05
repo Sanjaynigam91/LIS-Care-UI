@@ -159,10 +159,10 @@ onUpdateAnalyzerTestmapping(){
           if(response.statusCode==200 && response.status){
             debugger;
             console.log(response);
-            this.refPageService.notifyRefresh(); // used to refresh the main list page
             this.toasterService.showToast(response.responseMessage, 'success');
             this.dialogRef.close();
-         //   this.ngOnInit();       
+            this.ngOnInit();   
+             this.refPageService.notifyRefresh(); // used to refresh the main list page    
           }
           else{
             debugger;
