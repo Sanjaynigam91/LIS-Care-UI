@@ -50,7 +50,7 @@
       <th>Center Incharge</th>
       <th>Mobile Number</th>
       <th>Center Address</th>
-      <th>Sales Incharge</th>
+      <th>EmailId</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -62,12 +62,12 @@
       <td>{{ item.centerInchargeName }}</td>
       <td>{{ item.mobileNumber }}</td>
       <td>{{ item.centerAddress }}</td>
-      <td>{{ item.salesIncharge }}</td>
+      <td>{{ item.emailId }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit analyer details">
+        <button class="edit-button" matTooltip="edit center details">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete analyzer">
+        <button class="delete-button" matTooltip="delete center" (click)="centerDeleteConfirmationDialog(item.centerCode)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>
