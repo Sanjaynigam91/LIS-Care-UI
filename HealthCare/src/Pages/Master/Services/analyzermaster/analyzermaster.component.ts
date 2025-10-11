@@ -221,7 +221,7 @@ export class AnalyzermasterComponent {
       this.dialog.open(PopupAnalyzereditComponent, {
        width: '1500px',           // slightly larger than medium
         maxWidth: '90vw',         // responsive on smaller screens
-        height: '98vh',            // taller than medium but not full screen
+        height: '82vh',            // taller than medium but not full screen
         minHeight: '400px',       // ensures minimum height
         panelClass: 'large-dialog', // optional custom CSS
         disableClose: true,  
