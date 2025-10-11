@@ -20,6 +20,7 @@ import { CenterServiceService } from '../../../../auth/Center/center-service.ser
 import { MatDialog } from '@angular/material/dialog';
 import { LoaderService } from '../../../../Interfaces/loader.service';
 import { ToastService } from '../../../../auth/Toaster/toast.service';
+import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 
 @Component({
   selector: 'app-centre-master',
@@ -116,14 +117,14 @@ export class CentreMasterComponent {
     debugger;
     
     this.filteredData = this.centerApiResponse.filter((item: {
-      centerCode: any;centerName: any; centerInchargeName:any;mobileNumber:any;centerAddress:any;salesIncharge:any;
+      centerCode: any;centerName: any; centerInchargeName:any;mobileNumber:any;centerAddress:any;emailId:any;
     }) => 
       item.centerCode.toLowerCase().includes(term.toLowerCase()) ||
       item.centerName.toLowerCase().includes(term.toLowerCase()) ||
       item.centerInchargeName.toLowerCase().includes(term.toLowerCase()) ||
       item.mobileNumber.toLowerCase().includes(term.toLowerCase()) ||
       (item.centerAddress ?? '').toString().toLowerCase().includes(term.toLowerCase()) ||
-      item.salesIncharge.toLowerCase().includes(term.toLowerCase()) 
+      item.emailId.toLowerCase().includes(term.toLowerCase()) 
      );
      debugger;
     this.centerApiResponse= this.filteredData;
@@ -163,5 +164,38 @@ export class CentreMasterComponent {
     });
 
   } 
+
+     centerDeleteConfirmationDialog(centerCode:any): void {
+      debugger;
+      const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+         width: 'auto',
+         disableClose: true,  
+        data: { message: 'Are you sure you want to delete this Center?',centerCode: centerCode }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        debugger;
+        // if (result.success) {
+        //   debugger;
+        //   this.analyzerService.deleteAnalyzer(analyzerId,this.partnerId).subscribe((response:any)=>{
+        //     debugger;
+        //    if(response.status && response.statusCode==200){
+        //     this.toasterService.showToast(response.responseMessage, 'success');
+        //     this.ngOnInit();
+        //    }
+        //    else{
+        //     this.toasterService.showToast(response.responseMessage, 'error');
+        //    }
+        //    console.log(response);
+        //   }) 
+        //   console.log('Returned User ID:', result.userId);
+        //   console.log('User confirmed the action.');
+        // } else {
+        //   debugger;
+        //   // User clicked 'Cancel'
+        //   console.log('User canceled the action.');
+        // }
+      });
+    }
 
 }
