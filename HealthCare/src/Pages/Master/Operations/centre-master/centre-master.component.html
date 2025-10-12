@@ -18,7 +18,7 @@
          <div class="col-md-6">
             <div class="div-button">
             <button mat-flat-button class="search-button" (click)="SearchAllAnalyzerRecords()"><mat-icon>search</mat-icon>Search Centers</button>
-            <button mat-flat-button class="add-button">
+            <button mat-flat-button class="add-button" (click)="OpenAddCenterMasterPopUp()" >
               <mat-icon>person</mat-icon> Add New Center</button> 
           </div>
         </div>
@@ -64,7 +64,7 @@
       <td>{{ item.centerAddress }}</td>
       <td>{{ item.emailId }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit center details">
+        <button class="edit-button" matTooltip="edit center details" (click)="ViewCenterDetails(item.centerCode)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
         <button class="delete-button" matTooltip="delete center" (click)="centerDeleteConfirmationDialog(item.centerCode)">
