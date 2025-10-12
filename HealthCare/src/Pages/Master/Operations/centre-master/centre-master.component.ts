@@ -21,14 +21,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoaderService } from '../../../../Interfaces/loader.service';
 import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
+import { PopupCentermastereditComponent } from '../../../PopUp/popup-centermasteredit/popup-centermasteredit.component';
+import { A11yModule } from "@angular/cdk/a11y";
 
 @Component({
   selector: 'app-centre-master',
   standalone: true,
 imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
-      MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
-      MatFormFieldModule, MatInputModule, NgxPaginationModule,
-      ReactiveFormsModule, LoaderComponent],
+    MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
+    MatFormFieldModule, MatInputModule, NgxPaginationModule,
+    ReactiveFormsModule, LoaderComponent, A11yModule],
   templateUrl: './centre-master.component.html',
   styleUrl: './centre-master.component.css'
 })
@@ -175,27 +177,56 @@ export class CentreMasterComponent {
   
       dialogRef.afterClosed().subscribe(result => {
         debugger;
-        // if (result.success) {
-        //   debugger;
-        //   this.analyzerService.deleteAnalyzer(analyzerId,this.partnerId).subscribe((response:any)=>{
-        //     debugger;
-        //    if(response.status && response.statusCode==200){
-        //     this.toasterService.showToast(response.responseMessage, 'success');
-        //     this.ngOnInit();
-        //    }
-        //    else{
-        //     this.toasterService.showToast(response.responseMessage, 'error');
-        //    }
-        //    console.log(response);
-        //   }) 
-        //   console.log('Returned User ID:', result.userId);
-        //   console.log('User confirmed the action.');
-        // } else {
-        //   debugger;
-        //   // User clicked 'Cancel'
-        //   console.log('User canceled the action.');
-        // }
+        if (result.success) {
+          debugger;
+          this.centerService.deleteCenterDetails(centerCode,this.partnerId).subscribe((response:any)=>{
+            debugger;
+           if(response.status && response.statusCode==200){
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.ngOnInit();
+           }
+           else{
+            this.toasterService.showToast(response.responseMessage, 'error');
+           }
+           console.log(response);
+          }) 
+          console.log('Returned User ID:', result.userId);
+          console.log('User confirmed the action.');
+        } else {
+          debugger;
+          // User clicked 'Cancel'
+          console.log('User canceled the action.');
+        }
       });
     }
+
+     /// Open Add New Center Master PopUp
+      
+      OpenAddCenterMasterPopUp(): void {
+        this.dialog.open(PopupCentermastereditComponent, {
+          width: '1500px',           // slightly larger than medium
+          maxWidth: '90vw',         // responsive on smaller screens
+          height: 'auto',           // taller than medium but not full screen
+          minHeight: '400px',       // ensures minimum height
+          panelClass: 'large-dialog', // optional custom CSS
+          disableClose: true,  
+          data: {}                  // pass data if needed
+        });
+      }
+
+      // View center details
+       ViewCenterDetails(centerCode:string){
+            debugger;
+            this.dialog.open(PopupCentermastereditComponent, {
+             width: '1500px',           // slightly larger than medium
+              maxWidth: '90vw',         // responsive on smaller screens
+              height: 'auto',            // taller than medium but not full screen
+              minHeight: '400px',       // ensures minimum height
+              panelClass: 'large-dialog', // optional custom CSS
+              disableClose: true,  
+              data: {centerCode:centerCode},        // Pass data if needed
+               
+            });
+          }
 
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../app/environments/environments';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, delay, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CenterResponse } from '../../Interfaces/CenterMaster/CenterResponse';
+import { SalesInchargeResponse } from '../../Interfaces/CenterMaster/SalesInchargeResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class CenterServiceService {
     } 
   }
 
+  /// used to get all centers
    getAllCenters(partnerId: any,centerStatus:any,searchBy:any): Observable<CenterResponse[]> {
       debugger;
       // Create HttpParams instance and append query parameters
@@ -30,5 +32,51 @@ export class CenterServiceService {
         .set('searchBy',searchBy.toString());
        return this.httpClient.get<CenterResponse[]>(`${this.baseUrl}/GetAllCenters`, {params});
     }
+
+    /// used to get sales incharge details
+     getSalesInchargeDetails(partnerId: any): Observable<SalesInchargeResponse[]> {
+      debugger;
+      // Create HttpParams instance and append query parameters
+       let params = new HttpParams()
+        .set('partnerId', partnerId.toString());
+       return this.httpClient.get<SalesInchargeResponse[]>(`${this.baseUrl}/GetSalesIncharge`, {params});
+    }
+
+    /// used to get center details by center code
+     getCentersByCode(partnerId: any,centerCode:any): Observable<CenterResponse[]> {
+      debugger;
+      // Create HttpParams instance and append query parameters
+       let params = new HttpParams()
+        .set('partnerId', partnerId.toString())
+        .set('centerCode', centerCode.toString());
+       return this.httpClient.get<CenterResponse[]>(`${this.baseUrl}/GetCenterByCenterCode`, {params});
+    }
+
+    /// used to create new center details
+      addNewCenter(data:any){
+        debugger;
+        return this.httpClient.post(`${this.baseUrl}/AddNewCenter`, data).pipe(delay(1000));
+      }
+    /// used to update center details
+      updateCenterDetails(data: any) {
+          console.log("Payload before sending:", data); // Debugging line to check the payload
+          return this.httpClient.put(
+            `${this.baseUrl}/UpdateCenter`,
+            data,
+            {
+              headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+            }
+          ).pipe(delay(1000));
+        
+        }
+
+deleteCenterDetails(centerCode:any,partnerId:any){
+  debugger;
+ // Create HttpParams instance and append query parameters
+ let params = new HttpParams()
+  .set('centerCode', centerCode)
+  .set('partnerId', partnerId.toString());
+ return this.httpClient.delete(`${this.baseUrl}/DeleteCenter`, {params});
+}
 
 }
