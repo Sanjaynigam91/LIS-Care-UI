@@ -4,7 +4,7 @@
 <div class="container mt-3">
     <div class="row" [formGroup]="CenterDetailsForm">
         <div class="col-md-3">
-        <label>Center Status</label>
+        <label>Centre Status</label>
         <select class="form-control"  formControlName="ddlCenterStatus">
             <option value="">~Please Choose~</option>
             <option value="true">Active</option>
@@ -12,14 +12,14 @@
         </select>
         </div>
         <div class="col-md-3">
-            <label>Search By Center Name/ Code</label>
+            <label>Search By Centre Name/ Code</label>
       <input class="form-control" type="text" name="SeachBy" placeholder="Type center name or code" formControlName="SeachByNameOrCode"/>
          </div>
          <div class="col-md-6">
             <div class="div-button">
-            <button mat-flat-button class="search-button" (click)="SearchAllAnalyzerRecords()"><mat-icon>search</mat-icon>Search Centers</button>
+            <button mat-flat-button class="search-button" (click)="SearchAllAnalyzerRecords()"><mat-icon>search</mat-icon>Search Centres</button>
             <button mat-flat-button class="add-button" (click)="OpenAddCenterMasterPopUp()" >
-              <mat-icon>person</mat-icon> Add New Center</button> 
+              <mat-icon>person</mat-icon> Add New Centre</button> 
           </div>
         </div>
     </div>
@@ -45,11 +45,11 @@
   <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
   <thead>
     <tr>
-      <th>Center Code</th>
-      <th>Center Name</th>
-      <th>Center Incharge</th>
+      <th>Centre Code</th>
+      <th>Centre Name</th>
+      <th>Centre Incharge</th>
       <th>Mobile Number</th>
-      <th>Center Address</th>
+      <th>Centre Address</th>
       <th>EmailId</th>
       <th>Actions</th>
     </tr>
