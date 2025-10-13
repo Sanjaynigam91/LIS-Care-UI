@@ -81,9 +81,9 @@
           <td>{{ item.testName }}</td>
           <td>{{ item.status ? 'Active' : 'InActive' }}</td>
            <td> 
-            <button class="edit-button" matTooltip="edit mapping details" (click)="ViewAnalyzerMapping(item.mappingId)">
+            <!-- <button class="edit-button" matTooltip="edit mapping details" (click)="ViewAnalyzerMapping(item.mappingId)">
             <mat-icon class="edit-icon">edit</mat-icon>
-            </button>
+            </button> -->
             <button class="delete-button" matTooltip="delete analyzer's test" (click)="analyzerMappingDeleteConfirmationDialog(item.mappingId)">
             <mat-icon class="delete-icon">delete</mat-icon>
           </button></td>

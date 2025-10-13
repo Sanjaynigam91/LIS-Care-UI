@@ -214,6 +214,10 @@ export class AnalyzermasterComponent {
       disableClose: true,  
       data: {}                  // pass data if needed
     });
+
+     this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
   }
 
    ViewAnalyzerDetails(analyzerId:string){
@@ -228,6 +232,10 @@ export class AnalyzermasterComponent {
         data: {analyzerId:analyzerId},        // Pass data if needed
          
       });
+
+       this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
     }
 
 

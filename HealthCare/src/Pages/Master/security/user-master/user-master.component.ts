@@ -203,8 +203,10 @@ export class UserMasterComponent {
   data: {}
 });
 
-
-  }
+ this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
+}
 
   ViewUsers(userId:number){
     debugger;
@@ -218,6 +220,10 @@ export class UserMasterComponent {
           panelClass: 'no-scroll-dialog',
          data: {userId:userId}        // Pass data if needed
        });
+
+    this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
   }
 
   DeleteUser(userdId:number){

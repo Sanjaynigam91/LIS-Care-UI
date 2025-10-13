@@ -325,7 +325,8 @@ else {
           debugger;
           console.log(response);
           this.toasterService.showToast('User data updated successfully!', 'success');
-          this.router.navigate(['/Pages/Master/security/UserMaster']);
+           this.dialogRef.close();
+          //this.router.navigate(['/Pages/Master/security/UserMaster']);
         }
         else{
           debugger;

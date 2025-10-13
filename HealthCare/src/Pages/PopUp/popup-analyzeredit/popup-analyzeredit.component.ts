@@ -354,6 +354,12 @@ onUpdateAnalyzer(){
         data: {mappingId:mappingId},        // Pass data if needed
          
       });
+
+       this.dialog.afterAllClosed.subscribe(() => {
+        debugger;
+        this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
+
     }
 
        analyzerMappingDeleteConfirmationDialog(mappingId:any): void {

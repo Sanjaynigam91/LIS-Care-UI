@@ -278,6 +278,10 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
       disableClose: true,  
       data: {}                  // pass data if needed
     });
+
+   this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
   }
 
   /// View the Test Details
@@ -291,6 +295,10 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
           panelClass: 'large-dialog', // optional custom CSS
           disableClose: true,  
           data: {testCode:testCode}        // Pass data if needed
+        });
+
+      this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
         });
   }
 
