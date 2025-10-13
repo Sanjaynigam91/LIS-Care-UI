@@ -212,6 +212,11 @@ export class CentreMasterComponent {
           disableClose: true,  
           data: {}                  // pass data if needed
         });
+
+        this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
+
       }
 
       // View center details
@@ -224,9 +229,12 @@ export class CentreMasterComponent {
               minHeight: '400px',       // ensures minimum height
               panelClass: 'large-dialog', // optional custom CSS
               disableClose: true,  
-              data: {centerCode:centerCode},        // Pass data if needed
-               
+              data: {centerCode:centerCode},        // Pass data if needed   
             });
-          }
+
+          this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
+      }
 
 }

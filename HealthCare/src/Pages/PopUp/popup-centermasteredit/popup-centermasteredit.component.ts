@@ -245,11 +245,11 @@ createNewCenter(){
        this.centerRequest.modifiedBy=this.loggedInUserId;
 
     this.centerService.addNewCenter(this.centerRequest)
-  .subscribe({
+    .subscribe({
     next: (response: any) => {
       if (response.statusCode === 200 && response.status) {
-        this.toasterService.showToast(response.responseMessage, 'success');
         this.refPageService.notifyRefresh(); // used to refresh the main list page
+        this.toasterService.showToast(response.responseMessage, 'success');
         this.dialogRef.close();
       } else {
         this.toasterService.showToast(response.responseMessage, 'error');
@@ -323,33 +323,35 @@ createNewCenter(){
       this.centerRequest.alternateContactNo=this.editCenterForm.value.AlternateContactNumber;
       this.centerRequest.emailId=this.editCenterForm.value.CenterEmailId;
       this.centerRequest.rateType=this.editCenterForm.value.ddlRateType;
-      this.centerRequest.centerStatus=this.editCenterForm.value.ddlCenterStatus; 
+       this.centerRequest.centerStatus = JSON.parse(this.editCenterForm.value.ddlCenterStatus.toLowerCase());
       this.centerRequest.introducedBy=this.editCenterForm.value.IntroducedBy; 
       this.centerRequest.creditLimit=this.editCenterForm.value.CreditLimit;
-      this.centerRequest.isAutoBarcode=this.editCenterForm.value.ddlAutoBarcode;
+      this.centerRequest.isAutoBarcode=JSON.parse(this.editCenterForm.value.ddlAutoBarcode.toLowerCase());
       this.centerRequest.partnerId=this.partnerId; 
       this.centerRequest.createdBy=this.loggedInUserId; 
       this.centerRequest.modifiedBy=this.loggedInUserId;
 
-     this.centerService.updateCenterDetails(this.centerRequest)
-      .subscribe({
-        next: (response: any) => {
-          debugger;
-          if(response.statusCode==200 && response.status){
-            debugger;
-            console.log(response);
-            this.refPageService.notifyRefresh(); // used to refresh the main list page
-            this.toasterService.showToast(response.responseMessage, 'success');
-            this.dialogRef.close();
-            this.ngOnInit();       
-          }
-          else{
-            debugger;
-            console.log(response.responseMessage);
-          }
-        },
-        error: (err) => console.log(err)
-      });  
+      this.centerService.updateCenterDetails(this.centerRequest)
+    .subscribe({
+    next: (response: any) => {
+      if (response.statusCode === 200 && response.status) {
+        this.refPageService.notifyRefresh(); // used to refresh the main list page
+        this.toasterService.showToast(response.responseMessage, 'success');
+        this.dialogRef.close();
+      } else {
+        this.toasterService.showToast(response.responseMessage, 'error');
+      }
+    },
+    error: (err) => {
+      // Handle backend business error even on 404
+      if (err.error && err.error.responseMessage) {
+        this.toasterService.showToast(err.error.responseMessage, 'error');
+      } else {
+        this.toasterService.showToast('Something went wrong. Please try again.', 'error');
+      }
+      console.error(err);
+    }
+  });
 
 
     }

@@ -161,8 +161,8 @@ onUpdateAnalyzerTestmapping(){
             console.log(response);
             this.toasterService.showToast(response.responseMessage, 'success');
             this.dialogRef.close();
-            this.ngOnInit();   
-             this.refPageService.notifyRefresh(); // used to refresh the main list page    
+           // this.ngOnInit();   
+           //  this.refPageService.notifyRefresh(); // used to refresh the main list page    
           }
           else{
             debugger;

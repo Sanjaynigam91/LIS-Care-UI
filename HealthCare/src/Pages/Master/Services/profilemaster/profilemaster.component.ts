@@ -223,6 +223,10 @@ OpenAddProfilePopUp(): void {
     disableClose: true,  
     data: {}                  // pass data if needed
   });
+
+  this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
 }
 
  ViewProfileDetails(profileCode:string){
@@ -236,6 +240,10 @@ OpenAddProfilePopUp(): void {
       disableClose: true,  
       data: {profileCode:profileCode,profileApiResponse:this.profileApiResponse}        // Pass data if needed
     });
+
+     this.dialog.afterAllClosed.subscribe(() => {
+          this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
   }
 
 
