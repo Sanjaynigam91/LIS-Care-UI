@@ -36,7 +36,6 @@ imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
 })
 export class CentreMasterComponent {
   router  =  inject(Router);
-
     loading$!: Observable<boolean>;
     partnerId: string |any;
     centerStatus:string|any;

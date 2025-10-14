@@ -1,1 +1,107 @@
-<p>centre-spl-rates works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div class="container mt-3" [formGroup]="CentreSpecialRateForm">
+  <div class="row align-items-end">
+    <div class="col-md-3">
+      <label>Search By Centre</label>
+      <select class="form-control" formControlName="ddlCentres">
+        <option value="">~Please Choose~</option>
+         <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label>Mapping Type</label>
+      <select class="form-control" formControlName="ddlMappingType">
+        <option value="">~Please Choose~</option>
+        <option value="RetrieveConfirmedRates">Already Applied</option>
+        <option value="RetrieveSpecificRates">Pending</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label>Test / Profile Name</label>
+      <input class="form-control" type="text" placeholder="Enter test or profile name" formControlName="testPrrofile"/>
+    </div>
+
+    <div class="col-md-4 text-end">
+      <button mat-flat-button class="search-button">
+        <mat-icon>search</mat-icon> Search Rates
+      </button>
+      <button mat-flat-button class="export-button">
+        <mat-icon>file_download</mat-icon> Export Rates
+      </button>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row align-items-end no-gap">
+    <div class="col-md-2">
+      <label>Apply Discount</label>
+      <input class="form-control" type="text" placeholder="Enter Discount %" formControlName="testProfileDiscount"/>
+    </div>
+
+    <div class="col-md-4">
+      <button mat-flat-button class="discount-button">
+        <mat-icon>percent</mat-icon> Apply Discount
+      </button>
+      <button mat-flat-button class="save-button">
+        <mat-icon>save</mat-icon> Save Rates
+      </button>
+    </div>
+
+    <div class="col-md-3">
+      <label>Import Rates <mat-icon class="required-icon">*</mat-icon></label>
+      <input type="file" formControlName="importRatesFileName" class="form-control-file"/>
+    </div>
+
+    <div class="col-md-3 text-end">
+      <button mat-flat-button class="import-button">
+        <mat-icon>folder_open</mat-icon> Import Rates
+      </button>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row" *ngIf="IsRecordFound">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+      <input class="form-control" formControlName="filterCentreRates" placeholder="Search..." />
+    </div>
+      <br/>
+      <br/>
+      <br/>
+<table class="table table-bordered table-striped" *ngIf="IsRecordFound">
+  <thead>
+    <tr>
+      <th>Test Code</th>
+      <th>Test Name</th>
+      <th>MRP Rate</th>
+      <th>Agreed rate</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of centerApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <td>{{ item.centerCode }}</td>
+      <td>{{ item.centerName }}</td>
+      <td>{{ item.centerInchargeName }}</td>
+      <td>
+         <input class="form-control" formControlName="testAgreedRate" placeholder="Enter agreed rate.." />
+      </td>
+    </tr>
+  </tbody>
+</table> 
+  </div>
+
+  <div *ngIf="IsNoRecordFound" class="row tbl-div mt-3">
+    <div class="form-group form-control NoRecord-Found">No profiles found!</div>
+  </div>
+
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+
+<app-loader *ngIf="loading$ | async"></app-loader>
