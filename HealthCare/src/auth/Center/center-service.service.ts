@@ -79,4 +79,16 @@ deleteCenterDetails(centerCode:any,partnerId:any){
  return this.httpClient.delete(`${this.baseUrl}/DeleteCenter`, {params});
 }
 
+/// used to get all centers
+   getCentreCustomRate(optype:any,centerCode:any,partnerId:any,testCode:any): Observable<CenterResponse[]> {
+      debugger;
+      // Create HttpParams instance and append query parameters
+       let params = new HttpParams()
+        .set('optype', optype.toString())
+        .set('centerCode', centerCode.toString())
+        .set('partnerId', partnerId.toString())
+        .set('testCode',testCode.toString());
+       return this.httpClient.get<CenterResponse[]>(`${this.baseUrl}/GetCentreCustomRates`, {params});
+    }
+
 }
