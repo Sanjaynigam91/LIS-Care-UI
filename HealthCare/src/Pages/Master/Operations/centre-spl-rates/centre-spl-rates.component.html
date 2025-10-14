@@ -26,10 +26,10 @@
     </div>
 
     <div class="col-md-4 text-end">
-      <button mat-flat-button class="search-button">
+      <button mat-flat-button class="search-button" (click)="loadAllCentresCustomRate()">
         <mat-icon>search</mat-icon> Search Rates
       </button>
-      <button mat-flat-button class="export-button">
+      <button mat-flat-button class="export-button" (click)="exportToExcel()">
         <mat-icon>file_download</mat-icon> Export Rates
       </button>
     </div>
@@ -85,10 +85,10 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let item of centerApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
-      <td>{{ item.centerCode }}</td>
-      <td>{{ item.centerName }}</td>
-      <td>{{ item.centerInchargeName }}</td>
+    <tr *ngFor="let item of centerCustomRateResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <td>{{ item.testCode }}</td>
+      <td>{{ item.testName }}</td>
+      <td>{{ item.mrp }}</td>
       <td>
          <input class="form-control" formControlName="testAgreedRate" placeholder="Enter agreed rate.." />
       </td>
@@ -103,5 +103,5 @@
 
   <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>
-
+<app-toast></app-toast>
 <app-loader *ngIf="loading$ | async"></app-loader>
