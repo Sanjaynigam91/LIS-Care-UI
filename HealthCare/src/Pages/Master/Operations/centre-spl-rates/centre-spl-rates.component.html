@@ -54,11 +54,11 @@
 
     <div class="col-md-3">
       <label>Import Rates <mat-icon class="required-icon">*</mat-icon></label>
-      <input type="file" formControlName="importRatesFileName" class="form-control-file"/>
+      <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" #fileInput />
     </div>
 
     <div class="col-md-3 text-end">
-      <button mat-flat-button class="import-button">
+      <button mat-flat-button class="import-button" (click)="uploadCenterRates()">
         <mat-icon>folder_open</mat-icon> Import Rates
       </button>
     </div>
