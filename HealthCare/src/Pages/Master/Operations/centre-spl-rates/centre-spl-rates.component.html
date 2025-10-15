@@ -44,10 +44,10 @@
     </div>
 
     <div class="col-md-4">
-      <button mat-flat-button class="discount-button">
+      <button mat-flat-button class="discount-button" (click)="applyDiscount()">
         <mat-icon>percent</mat-icon> Apply Discount
       </button>
-      <button mat-flat-button class="save-button">
+      <button mat-flat-button class="save-button" (click)="updateAllTestRates()">
         <mat-icon>save</mat-icon> Save Rates
       </button>
     </div>
@@ -66,7 +66,7 @@
 
   <br/>
 
-  <div class="row" *ngIf="IsRecordFound">
+  <div class="row"  *ngIf="IsRecordFound">
     <div class="col-md-9"></div>
     <div class="col-md-3">
       <input class="form-control" formControlName="filterCentreRates" placeholder="Search..." />
@@ -74,27 +74,32 @@
       <br/>
       <br/>
       <br/>
-<table class="table table-bordered table-striped" *ngIf="IsRecordFound">
-  <thead>
-    <tr>
-      <th>Test Code</th>
-      <th>Test Name</th>
-      <th>MRP Rate</th>
-      <th>Agreed Rate</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let item of centerCustomRateResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
-      <td>{{ item.testCode }}</td>
-      <td>{{ item.testName }}</td>
-      <td>{{ item.mrp }}</td>
-      <td>
-         <input class="form-control" formControlName="testAgreedRate" placeholder="Enter agreed rate.." />
-      </td>
-    </tr>
-  </tbody>
-</table> 
+<div formArrayName="testAgreedRate">
+    <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
+      <thead>
+        <tr>
+          <th>Test Code</th>
+          <th>Test Name</th>
+          <th>MRP</th>
+          <th>Agreed Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of centerCustomRateResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+          <td>{{ item.testCode }}</td>
+          <td>{{ item.testName }}</td>
+          <td>{{ item.mrp }}</td>
+          <td>
+            <input
+              type="text"
+              class="form-control"
+              [formControlName]="i"
+              placeholder="Agreed Rate"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
 
   <div *ngIf="IsNoRecordFound" class="row tbl-div mt-3">

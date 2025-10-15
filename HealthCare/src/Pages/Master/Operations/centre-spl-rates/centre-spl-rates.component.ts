@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,6 +24,8 @@ import { CenterResponse } from '../../../../Interfaces/CenterMaster/CenterRespon
 import { CentreCustomRateResponse } from '../../../../Interfaces/CenterMaster/CentreCustomRateResponse';
 import * as XLSX from 'xlsx';
 import { ToastComponent } from "../../../Toaster/toast/toast.component";
+import { forkJoin } from 'rxjs';
+import { CenterRatesRequest } from '../../../../Interfaces/CenterMaster/center-rates-request';
 
 
 @Component({
@@ -61,35 +63,58 @@ export class CentreSplRatesComponent {
     testCode:string|any; // To store the test code when we are going to edit the center details
     filterRates: any[] = []; // Data array for the table
     amountForDiscount:any;
+    centerRatesRequest:CenterRatesRequest={
+      centerCode: '',
+      partnerId: '',
+      testCode: '',
+      billRate: ''
+    }
 
-      constructor(private centerService: CenterServiceService,private formBuilder: FormBuilder,
-        public dialog: MatDialog,private loaderService: LoaderService,private toasterService: ToastService){
-          this.loading$ = this.loaderService.loading$;
-          this.partnerId= localStorage.getItem('partnerId');
-          /// Started to search the tests details by using test terms
-             this.CentreSpecialRateForm = this.formBuilder.group({
-              ddlCentres: [''],
-              ddlMappingType: [''],
-              testPrrofile: [''],
-              testProfileDiscount: [''],
-              importRatesFileName: [''],
-              filterCentreRates: [''],
-              testAgreedRate: [''],
-              rates: this.formBuilder.array([]),
-            });
-         
-          this.CentreSpecialRateForm.get('filterCentreRates')?.valueChanges.subscribe(value => {
-           this.filterCenterCustomRates(value);
-          });
-          /// Ended to search the tests details by using test terms
-        }
+  constructor(
+  private centerService: CenterServiceService,
+  private formBuilder: FormBuilder,
+  public dialog: MatDialog,
+  private loaderService: LoaderService,
+  private toasterService: ToastService
+) {
+  this.loading$ = this.loaderService.loading$;
+  this.partnerId = localStorage.getItem('partnerId');
+}
 
    /// Initialize the component and load all centers
-    ngOnInit(): void {
-    this.IsRecordFound=false;
-    this.LoadAllCentres();
+  ngOnInit(): void {
+  this.IsRecordFound = false;
+   this.loggedInUserId=localStorage.getItem('userId');
+  // ✅ Define all form controls once here
+  this.CentreSpecialRateForm = this.formBuilder.group({
+    ddlCentres: [''],
+    ddlMappingType: [''],
+    testPrrofile: [''],
+    testProfileDiscount: [''],
+    importRatesFileName: [''],
+    filterCentreRates: [''], // <-- keep this here!
+    testAgreedRate: this.formBuilder.array([]) // FormArray for agreed rates
+  });
 
-    }
+  // ✅ Subscribe after form initialized
+  this.CentreSpecialRateForm.get('filterCentreRates')?.valueChanges.subscribe(value => {
+    this.filterCenterCustomRates(value);
+  });
+
+  this.LoadAllCentres();
+
+}
+/// used to initilize Agreed Rate from Array
+  initAgreedRateFormArray(): void {
+  const agreedRateArray = this.CentreSpecialRateForm.get('testAgreedRate') as FormArray;
+  agreedRateArray.clear();
+
+  if (Array.isArray(this.centerCustomRateResponse) && this.centerCustomRateResponse.length > 0) {
+    this.centerCustomRateResponse.forEach((item: any) => {
+      agreedRateArray.push(new FormControl(item.agreedRate || ''));
+    });
+  }
+}
 
     /// used to load all the centers based on the search criteria
     LoadAllCentres(){
@@ -138,6 +163,25 @@ this.loaderService.hide();
           this.centerCustomRateResponse = response.data;
           this.IsNoRecordFound = false;
           this.IsRecordFound=true;
+          this.initAgreedRateFormArray();
+          if(this.optype=='RetrieveConfirmedRates')
+          {
+            debugger;
+            const agreedRateArray = this.CentreSpecialRateForm.get('testAgreedRate') as FormArray;
+            this.centerCustomRateResponse.forEach((item: any, index: number) => {
+             const customRate = item.customRate && item.customRate !== '' ? parseFloat(item.customRate) : 0;
+              if (customRate > 0) {
+               item.agreedRate = customRate.toFixed(2);
+                // ✅ Update corresponding FormControl for this test
+                agreedRateArray.at(index).setValue(item.agreedRate);
+              } else {
+                item.agreedRate = '0.00';
+                agreedRateArray.at(index).setValue(item.agreedRate);
+              }
+            });
+          }
+          
+
           console.log(this.centerCustomRateResponse);
         } else {
           this.IsNoRecordFound = true;
@@ -224,5 +268,79 @@ filterCenterCustomRates(term: string) {
     this.loadAllCentresCustomRate();
   }
 }
+
+/// used to apply the test rates discounts
+applyDiscount(): void {
+  debugger;
+  const discount = parseFloat(this.CentreSpecialRateForm.value.testProfileDiscount) || 0;
+  const agreedRateArray = this.CentreSpecialRateForm.get('testAgreedRate') as FormArray;
+
+  this.centerCustomRateResponse.forEach((item: any, index: number) => {
+    const mrp = item.mrp && item.mrp !== '' ? parseFloat(item.mrp) : 0;
+
+    if (mrp > 0) {
+      const discountedAmount = mrp - (mrp * (discount / 100));
+      item.agreedRate = discountedAmount.toFixed(2);
+
+      // ✅ Update corresponding FormControl for this test
+      agreedRateArray.at(index).setValue(item.agreedRate);
+    } else {
+      item.agreedRate = '0.00';
+      agreedRateArray.at(index).setValue(item.agreedRate);
+    }
+  });
+}
+
+updateAllTestRates(): void {
+  debugger;
+  this.loaderService.show();
+  const discount = parseFloat(this.CentreSpecialRateForm.value.testProfileDiscount) || 0;
+
+  const requests = this.centerCustomRateResponse.map((item: any) => {
+    const mrp = item.mrp ? parseFloat(item.mrp) : 0;
+    const discountedAmount = mrp - (mrp * (discount / 100));
+    const agreedRate = discountedAmount.toFixed(2);
+
+    this.centerCode=this.CentreSpecialRateForm.get('ddlCentres')?.value;
+  // ✅ Check for missing data
+    if (!this.centerCode || !this.partnerId || !item.testCode) {
+      const message = `Missing required data for item: ${JSON.stringify(item)}`;
+      this.toasterService.showToast(message, 'error');
+      return null;
+    }
+
+
+    this.centerRatesRequest = {
+      centerCode: this.centerCode,
+      partnerId: this.partnerId,
+      testCode: item.testCode,
+      billRate: agreedRate,
+      createdBy:this.loggedInUserId,
+      updatedBy:this.loggedInUserId
+    };
+
+    console.log('Sending payload:', this.centerRatesRequest);
+    return this.centerService.updateTestRate(this.centerRatesRequest);
+  }).filter((req: null) => req !== null); // remove any null entries
+
+  if (requests.length === 0) {
+    this.toasterService.showToast('No valid test data found', 'error');
+    return;
+  }
+
+  forkJoin(requests).subscribe({
+    next: (responses) => {
+      console.log('✅ All updates complete:', responses);
+      this.toasterService.showToast('All test rates updated successfully', 'success');
+    },
+    error: (err) => {
+      console.error('❌ One or more updates failed:', err);
+      this.toasterService.showToast('Some test updates failed,test mrp should not be zero', 'error');
+    }
+  });
+  this.loaderService.hide();
+}
+
+
 
 }

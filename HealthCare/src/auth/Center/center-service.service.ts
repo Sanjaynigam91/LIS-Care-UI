@@ -91,4 +91,13 @@ deleteCenterDetails(centerCode:any,partnerId:any){
        return this.httpClient.get<CenterResponse[]>(`${this.baseUrl}/GetCentreCustomRates`, {params});
     }
 
+     /// used to update center's test rates
+    updateTestRate(payload: any): Observable<any> {
+    return this.httpClient.put(`${this.baseUrl}/UpdateCenterRates`, payload, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+
+
 }
