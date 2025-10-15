@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -69,6 +69,8 @@ export class CentreSplRatesComponent {
       testCode: '',
       billRate: ''
     }
+    @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
+    excelData: any[] = [];
 
   constructor(
   private centerService: CenterServiceService,
@@ -341,6 +343,90 @@ updateAllTestRates(): void {
   this.loaderService.hide();
 }
 
+ // ✅ Read Excel File
+  onFileSelected(event: any) {
+     const file = event.target.files[0];
+    if (!file) return;
+    else {
+      const reader = new FileReader();
+      reader.readAsBinaryString(file);
+      reader.onload = (e: any) => {
+        const wb = XLSX.read(e.target.result, { type: 'binary' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        this.excelData = XLSX.utils.sheet_to_json(ws);
+        console.log('Excel Data:', this.excelData);
+      };
+    }
+  }
+
+  uploadCenterRates() {
+    debugger;
+  if (!this.excelData || this.excelData.length === 0) {
+    this.toasterService.showToast('Please select an Excel file first.', 'error');
+    return;
+  }
+
+  const results: { testCode: string; status: string; message: string }[] = [];
+
+  this.excelData.forEach((row: any) => {
+    // Map Excel columns to API request
+    const centerRatesRequest: CenterRatesRequest = {
+      centerCode: this.centerCode,
+      partnerId: this.partnerId,
+      testCode: row.testCode?.toString().trim(), // Adjust according to Excel headers
+      billRate: row.customRate?.toString().trim(),
+      createdBy: this.loggedInUserId,
+      updatedBy: this.loggedInUserId,
+    };
+
+    console.log('Sending payload:', centerRatesRequest);
+
+    // Call API for each row
+    this.centerService.ImportCenterRates(centerRatesRequest).subscribe({
+      next: (res: any) => {
+        debugger;
+        // Assuming API returns { isSuccess: boolean, errorMsg: string }
+        if (res.isSuccess) {
+          results.push({
+            testCode: centerRatesRequest.testCode,
+            status: 'Success',
+            message: res.errorMsg || 'Rate updated successfully',
+            
+          });
+        } else {
+          results.push({
+            testCode: centerRatesRequest.testCode,
+            status: 'Failed',
+            message: res.errorMsg || 'Error updating rate',
+          });
+        }
+      },
+      error: (err) => {
+        results.push({
+          testCode: centerRatesRequest.testCode,
+          status: 'Failed',
+          message: err.message || 'Server error',
+        });
+      },
+    });
+  });
+
+  // Optionally, after all rows processed, show a summary
+  setTimeout(() => {
+    console.table(results); // Shows status of each row in console
+    const successCount = results.filter(r => r.status === 'Success').length;
+    const failCount = results.filter(r => r.status === 'Failed').length;
+    this.toasterService.showToast('Import completed. Success.', 'success');
+  
+  }, 3000); // delay to allow all API calls to complete (simplest approach)
+
+   // ✅ After import, reset file input
+  if (this.fileInput) {
+    this.fileInput.nativeElement.value = '';
+  }
+  this.excelData = [];
+}
 
 
 }

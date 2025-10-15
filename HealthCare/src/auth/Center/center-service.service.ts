@@ -98,6 +98,10 @@ deleteCenterDetails(centerCode:any,partnerId:any){
   });
 }
 
-
+/// used to import Center rates
+      ImportCenterRates(data:any){
+        debugger;
+        return this.httpClient.post(`${this.baseUrl}/ImportCenterRates`, data).pipe(delay(1000));
+      }
 
 }
