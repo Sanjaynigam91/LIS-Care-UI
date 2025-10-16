@@ -65,7 +65,7 @@
           <td><button class="edit-button" matTooltip="edit clinic details">
             <mat-icon class="edit-icon">edit</mat-icon>
             </button>
-            <button class="delete-button" matTooltip="delete clinic">
+            <button class="delete-button" matTooltip="delete clinic" (click)="clinicDeleteConfirmationDialog(item.clinicId)">
             <mat-icon class="delete-icon">delete</mat-icon>
             </button>
         </td>
