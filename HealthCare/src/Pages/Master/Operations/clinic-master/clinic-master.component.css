@@ -1,0 +1,138 @@
+/* --- General Styles --- */
+mat-icon {
+  font-size: 22px;
+  color: #000;
+}
+
+/* --- Buttons --- */
+button[mat-flat-button] {
+  border-radius: 6px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  margin-left: 10px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+/* Search Button (Purple Theme) */
+.search-button {
+  background-color: #7b1fa2; /* medium purple */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-button:hover {
+  background-color: #6a1b9a; /* darker purple on hover */
+  transform: translateY(-1px);
+}
+
+.search-button:focus {
+  outline: none;
+  background-color: #4a148c; /* deep purple focus color */
+  box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.4); /* purple glow */
+  transform: scale(1.03);
+}
+
+/* Save Button (Hoki Blue Theme) */
+.save-button {
+  background-color: #5B9BD5; /* Hoki Blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.save-button:hover {
+  background-color: #4A90E2; /* Slightly deeper blue on hover */
+  transform: translateY(-1px);
+}
+
+.save-button:focus {
+  outline: none;
+  background-color: #2F7DC1; /* Darker focus blue */
+  box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.4); /* Soft blue glow */
+  transform: scale(1.03);
+}
+
+
+/* --- Table Styling --- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  color: black;
+  background-color: #17f3e1;
+  padding: 10px;
+  cursor: pointer;
+}
+td {
+  padding: 8px;
+  vertical-align: middle;
+}
+
+/* --- Action Buttons --- */
+.edit-button,
+.delete-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.edit-icon {
+  color: green;
+}
+.delete-icon {
+  color: #d70e6f;
+}
+
+/* --- Pagination Controls --- */
+pagination-controls {
+  display: flex;
+  justify-content: right;
+  margin-top: 10px;
+}
+pagination-controls .page-item {
+  margin: 0 5px;
+}
+
+/* --- No Record Found --- */
+.NoRecord-Found {
+  margin-bottom: 200px;
+  background-color: black;
+  color: red;
+  text-align: center;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* --- Form Controls --- */
+label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.form-control {
+  height: 38px;
+}
+
+/* --- Table Wrapper --- */
+.tbl-div {
+  margin-top: 20px;
+}

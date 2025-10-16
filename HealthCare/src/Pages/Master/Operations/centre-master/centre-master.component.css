@@ -216,42 +216,34 @@ pagination-controls {
     margin-bottom: 10px;
   }
 
-    /* search.component.css or styles.css */
-.search-button {
-  background-color: #4CAF50; /* Green background */
-  color: white; /* White text */
-  border: none; /* Remove default border */
-  padding: 10px 20px; /* Add padding */
-  text-align: center; /* Center text */
-  text-decoration: none; /* Remove underline */
-  display: inline-block; /* Inline block for layout */
-  font-size: 16px; /* Font size */
-  margin: 4px 4px; /* Margins for spacing */
-  cursor: pointer; /* Pointer cursor on hover */
+/* Save Button (Hoki Blue Theme) */
+.add-button {
+  background-color: #5B9BD5; /* Hoki Blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
 }
 
-/* Add hover effect */
-.search-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+.add-button:hover {
+  background-color: #4A90E2; /* Slightly deeper blue on hover */
+  transform: translateY(-1px);
 }
 
-  /* add.component.css or styles.css */
-  .add-button {
-    background-color: #007bff; /* Green background */
-    color: white; /* White text */
-    border: none; /* Remove default border */
-    padding: 10px 20px; /* Add padding */
-    text-align: center; /* Center text */
-    text-decoration: none; /* Remove underline */
-    display: inline-block; /* Inline block for layout */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-  }
+.add-button:focus {
+  outline: none;
+  background-color: #2F7DC1; /* Darker focus blue */
+  box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.4); /* Soft blue glow */
+  transform: scale(1.03);
+}
 
-  /* Add hover effect */
-  .add-button:hover {
-    background-color: #007bff; /* Darker green on hover */
-  }
 
 .div-button{
   margin-top: 15px;
@@ -287,3 +279,31 @@ pagination-controls {
   border: 2px solid #ef4444; /* red border */
 }
 
+/* Search Button (Purple Theme) */
+.search-button {
+  background-color: #7b1fa2; /* medium purple */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  margin-right:10px;
+}
+
+.search-button:hover {
+  background-color: #6a1b9a; /* darker purple on hover */
+  transform: translateY(-1px);
+}
+
+.search-button:focus {
+  outline: none;
+  background-color: #4a148c; /* deep purple focus color */
+  box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.4); /* purple glow */
+  transform: scale(1.03);
+}

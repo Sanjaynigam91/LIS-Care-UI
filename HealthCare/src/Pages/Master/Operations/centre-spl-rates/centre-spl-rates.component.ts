@@ -295,7 +295,6 @@ applyDiscount(): void {
 
 updateAllTestRates(): void {
   debugger;
-  this.loaderService.show();
   const discount = parseFloat(this.CentreSpecialRateForm.value.testProfileDiscount) || 0;
 
   const requests = this.centerCustomRateResponse.map((item: any) => {
@@ -340,7 +339,6 @@ updateAllTestRates(): void {
       this.toasterService.showToast('Some test updates failed,test mrp should not be zero', 'error');
     }
   });
-  this.loaderService.hide();
 }
 
  // ✅ Read Excel File

@@ -25,7 +25,7 @@
       <input class="form-control" type="text" placeholder="Enter test or profile name" formControlName="testPrrofile"/>
     </div>
 
-    <div class="col-md-4 text-end">
+    <div class="col-md-4">
       <button mat-flat-button class="search-button" (click)="loadAllCentresCustomRate()">
         <mat-icon>search</mat-icon> Search Rates
       </button>
@@ -52,12 +52,12 @@
       </button>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
       <label>Import Rates <mat-icon class="required-icon">*</mat-icon></label>
       <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" #fileInput />
     </div>
 
-    <div class="col-md-3 text-end">
+    <div class="col-md-2">
       <button mat-flat-button class="import-button" (click)="uploadCenterRates()">
         <mat-icon>folder_open</mat-icon> Import Rates
       </button>
@@ -99,6 +99,7 @@
         </tr>
       </tbody>
     </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
   </div>
   </div>
 
@@ -106,7 +107,7 @@
     <div class="form-group form-control NoRecord-Found">No profiles found!</div>
   </div>
 
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  
 </div>
 <app-toast></app-toast>
 <app-loader *ngIf="loading$ | async"></app-loader>
