@@ -24,6 +24,7 @@ import { LoaderService } from '../../../../Interfaces/loader.service';
 import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { ClinicResponse } from '../../../../Interfaces/ClinicMaster/clinic-response';
 import { ClinicServiceService } from '../../../../auth/ClinicMaster/clinic-service.service';
+import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 
 @Component({
   selector: 'app-clinic-master',
@@ -196,6 +197,40 @@ filterClinics(term: string) {
     this.LoadAllClinics();
   }
 }
+
+
+     clinicDeleteConfirmationDialog(clinicId:any): void {
+      debugger;
+      const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+         width: 'auto',
+         disableClose: true,  
+        data: { message: 'Are you sure you want to delete this Clinic?',clinicId: clinicId }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        debugger;
+        if (result.success) {
+          debugger;
+          // this.centerService.deleteCenterDetails(centerCode,this.partnerId).subscribe((response:any)=>{
+          //   debugger;
+          //  if(response.status && response.statusCode==200){
+          //   this.toasterService.showToast(response.responseMessage, 'success');
+          //   this.ngOnInit();
+          //  }
+          //  else{
+          //   this.toasterService.showToast(response.responseMessage, 'error');
+          //  }
+          //  console.log(response);
+          // }) 
+          console.log('Returned User ID:', result.userId);
+          console.log('User confirmed the action.');
+        } else {
+          debugger;
+          // User clicked 'Cancel'
+          console.log('User canceled the action.');
+        }
+      });
+    }
 
 
 }
