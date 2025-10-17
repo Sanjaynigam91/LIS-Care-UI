@@ -66,7 +66,6 @@ jobs:
       - name: Deploy Angular app to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-        app-name: dev-lis-care-web
-        slot-name: production
-        package: ./HealthCare/dist/health-care/
-
+          app-name: dev-lis-care-web
+          slot-name: production
+          package: ./dist
