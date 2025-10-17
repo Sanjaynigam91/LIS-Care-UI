@@ -24,17 +24,15 @@ jobs:
         with:
           node-version: '18'
 
-      # Move to HealthCare folder (where your Angular project is)
-      - name: Change directory
-        run: cd HealthCare
-
-      # Install dependencies
+      # Install dependencies in HealthCare folder
       - name: Install dependencies
         run: npm ci
+        working-directory: HealthCare
 
-      # Build Angular app
+      # Build Angular app in HealthCare folder
       - name: Build Angular app
         run: npm run build -- --configuration production
+        working-directory: HealthCare
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,6 +40,7 @@ jobs:
     if: github.ref == 'refs/heads/main'  # Deploy only on main branch
 
     steps:
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
