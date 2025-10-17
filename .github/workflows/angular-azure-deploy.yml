@@ -3,8 +3,8 @@ name: Angular CI/CD
 on:
   push:
     branches:
-      - developement
-      - main
+      - developement   # build only for dev
+      - main           # build + deploy for main
   pull_request:
     branches:
       - developement
@@ -15,18 +15,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Install dependencies
       - name: Install dependencies
         run: npm ci
         working-directory: HealthCare
 
+      # Build Angular project
       - name: Build Angular app
         run: npm run build -- --configuration production
         working-directory: HealthCare
@@ -34,12 +38,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'   # deploy only on main branch
 
     steps:
+      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Azure login using Service Principal
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -51,9 +57,10 @@ jobs:
               "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
             }
 
+      # Deploy contents of browser folder directly to Azure Web App
       - name: Deploy Angular app to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: dev-lis-care-web
           slot-name: production
-          package: ./HealthCare/dist/health-care/
+          package: ./HealthCare/dist/health-care/browser
