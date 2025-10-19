@@ -22,7 +22,7 @@ import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
 @Component({
   selector: 'app-design-dialog',
   standalone: true,
-  imports: [MatIconModule, MatCardActions,
+  imports: [MatIconModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, 
     MatInputModule, ToastComponent, LoaderComponent,CommonModule],
   templateUrl: './design-dialog.component.html',
