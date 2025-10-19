@@ -1,25 +1,24 @@
-/* styles.css or component-specific stylesheet */
-.mat-menu-item {
-    padding: 12px 24px;
-  }
-  
-  .mat-menu {
-    background: linear-gradient(90deg, #17f3e1, #0fbfb4); /* Modern gradient */
-    color: #000;
-    
-  }
-  /* styles.css or your component's CSS file */
-
-.mat-menu-panel {
-  background-color: #17f3e1; /* Change this to your desired color */
+/* Main menu wrapper */
+.main-menu {
+    background: linear-gradient(90deg, #00C7B7, #00C7B7); /* Gradient background */
+    color: #ffffff;
+    padding: 8px; /* Optional spacing */
 }
 
-.mat-menu-panel .mat-menu-content {
-  background-color: #17f3e1; /* Change this to your desired submenu color */
-  color: black;
+/* Top-level buttons */
+.main-menu button[mat-button] {
+    color: #ffffff;
+    font-weight: 500;
 }
 
-/* Parent Menu Text Color */
-.mat-menu-panel {
-  color: #ffffff; /* Replace with your desired color */
+
+/* Top-level buttons */
+.main-menu button[mat-menu-item] {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+::ng-deep .main-menu button[mat-menu-item] .mat-icon {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
