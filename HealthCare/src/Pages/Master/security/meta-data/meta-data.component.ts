@@ -33,8 +33,8 @@ import { RefreshPageService } from '../../../../auth/Shared/refresh-page.service
   standalone: true,
   imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
-    MatFormFieldModule, MatInputModule, MatSort, NgxPaginationModule,
-    ReactiveFormsModule, ConfirmationDialogComponentComponent, ReactiveFormsModule, LoaderComponent, ToastComponent],
+    MatFormFieldModule, MatInputModule, NgxPaginationModule,
+    ReactiveFormsModule, ReactiveFormsModule, LoaderComponent, ToastComponent],
   templateUrl: './meta-data.component.html',
   styleUrl: './meta-data.component.css'
 })
