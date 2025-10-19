@@ -4,7 +4,7 @@
   }
   
   .mat-menu {
-    background: #17f3e1;
+    background: linear-gradient(90deg, #17f3e1, #0fbfb4); /* Modern gradient */
     color: #000;
     
   }
@@ -23,5 +23,3 @@
 .mat-menu-panel {
   color: #ffffff; /* Replace with your desired color */
 }
-
-  
