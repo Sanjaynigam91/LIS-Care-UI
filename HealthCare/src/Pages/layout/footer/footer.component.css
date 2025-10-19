@@ -1,9 +1,16 @@
   
-  footer {
-    background-color: #17f3e1; /* Replace with your desired color */
-    /* margin-top: 400px;Optional background color */
-    
-  }
+/* Footer */
+footer {
+  background-color: #004C70;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  border-top: 3px solid #00C7B7;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
   
   .footer-content {
     text-align: center; /* Centers text within the content div */

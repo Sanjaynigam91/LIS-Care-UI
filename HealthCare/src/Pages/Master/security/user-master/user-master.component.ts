@@ -216,7 +216,7 @@ export class UserMasterComponent {
           width: '1382px',
           maxWidth: '95vw',
           height: 'auto',          // let content decide height
-          minHeight: '500px',
+          maxHeight: '600px',
           panelClass: 'no-scroll-dialog',
          data: {userId:userId}        // Pass data if needed
        });

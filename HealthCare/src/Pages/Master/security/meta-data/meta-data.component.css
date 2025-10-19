@@ -135,14 +135,32 @@ th {
 }
 
 
-.add-button{
-  background-color: #17f3e1;;
-  margin-right: 2px;
-  border: none; /* Removes the border */
-  background: none; /* Optional: remove the background if needed */
-  
+/* Save Button (Hoki Blue Theme) */
+.add-button {
+  background-color: #5B9BD5; /* Hoki Blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
+.add-button:hover {
+  background-color: #4A90E2; /* Slightly deeper blue on hover */
+  transform: translateY(-1px);
+}
+
+.add-button:focus {
+  outline: none;
+  background-color: #2F7DC1; /* Darker focus blue */
+  box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.4); /* Soft blue glow */
+  transform: scale(1.03);
+}
 .table-header{
   color: black; /* Optional: Change text color for better contrast */
   padding: 10px; /* Optional: Adjust padding as needed */

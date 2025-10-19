@@ -272,8 +272,8 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
     this.dialog.open(LabtesteditComponent, {
       width: '1500px',           // slightly larger than medium
       maxWidth: '90vw',         // responsive on smaller screens
-      height: '87vh',           // taller than medium but not full screen
-      minHeight: '400px',       // ensures minimum height
+      height: 'auto',           // taller than medium but not full screen
+      maxHeight:"800px",       // ensures maximum height
       panelClass: 'large-dialog', // optional custom CSS
       disableClose: true,  
       data: {}                  // pass data if needed
@@ -290,8 +290,8 @@ this.testService.SearchTests(this.testMasterSearch).subscribe(
        this.dialog.open(LabtesteditComponent, {
          width: '1500px',           // slightly larger than medium
           maxWidth: '90vw',         // responsive on smaller screens
-          height: '98vh',           // taller than medium but not full screen
-          minHeight: '400px',       // ensures minimum height
+          height: 'auto',           // taller than medium but not full screen
+          maxHeight:"800px",       // ensures maximum height
           panelClass: 'large-dialog', // optional custom CSS
           disableClose: true,  
           data: {testCode:testCode}        // Pass data if needed

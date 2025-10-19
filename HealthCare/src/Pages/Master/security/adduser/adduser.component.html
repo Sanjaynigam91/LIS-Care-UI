@@ -110,10 +110,10 @@
       <mat-card-actions class="card-title">
         <section>
           <div class="example-button-row">
-            <button *ngIf="isSaveVisible" mat-flat-button color="primary" (click)="onSubmit()">
-             Save</button>
-             <button *ngIf="isUpdateVisible" mat-flat-button color="primary" (click)="onUpdateSubmit()">
-              Update</button>
+            <button *ngIf="isSaveVisible" class="lis-button save-button"  (click)="onSubmit()">
+              <mat-icon>save</mat-icon>Save</button>
+             <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="onUpdateSubmit()">
+             <mat-icon>update</mat-icon> Update</button>
           </div>
         </section>
   </mat-card-actions>
