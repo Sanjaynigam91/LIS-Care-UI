@@ -1,209 +1,141 @@
-
-  <!-- Menu 1 -->
+<!-- Import Material Icons -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<div class="mat-menu">
-<button mat-button [matMenuTriggerFor]="menu1"> Dashboard</button>
-<mat-menu class="mat-menu" #menu1="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item (click)="onMenuItemClick('dashboard')">
-    <mat-icon>dashboard</mat-icon> Dashboard
-  </button>
-</div>
-</mat-menu>
 
-<!-- Menu 2 -->
-<button [disabled]="isFrontDeskMenuDisabled" mat-button [matMenuTriggerFor]="menu2">Front Desk</button>
-<mat-menu #menu2="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item (click)="onMenuItemClick('searchpatients')">
-    <mat-icon>search</mat-icon> Search Patients
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('patientregistration')">
-    <mat-icon>person_add</mat-icon> Patient Registration
-  </button>
-  <button  mat-menu-item (click)="onMenuItemClick('patientssummary')">
-    <mat-icon>list</mat-icon> Patients Summary
-  </button>
-  <button  mat-menu-item (click)="onMenuItemClick('barcodeeditor')">
-    <mat-icon>edit</mat-icon> Barcode Editor
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('rejectionsummary')">
-    <mat-icon>report_problem</mat-icon> Rejection Summary
-  </button>
-</div>
-</mat-menu>
+<div class="main-menu">
+  <!-- Menu 1 -->
+  <button mat-button [matMenuTriggerFor]="menu1">Dashboard</button>
+  <mat-menu #menu1="matMenu">
+    <div class="main-menu">
+    <button mat-menu-item (click)="onMenuItemClick('dashboard')">
+      <mat-icon>dashboard</mat-icon> Dashboard
+    </button>
+    </div>
+  </mat-menu>
 
+  <!-- Menu 2 -->
+  <button [disabled]="isFrontDeskMenuDisabled" mat-button [matMenuTriggerFor]="menu2">Front Desk</button>
+  <mat-menu #menu2="matMenu">
+    <div class="main-menu">
+   <button mat-menu-item (click)="onMenuItemClick('searchpatients')">
+      <mat-icon>search</mat-icon> Search Patients
+    </button>
+    <button mat-menu-item (click)="onMenuItemClick('patientregistration')">
+      <mat-icon>person_add</mat-icon> Patient Registration
+    </button>
+    <button mat-menu-item (click)="onMenuItemClick('patientssummary')">
+      <mat-icon>list</mat-icon> Patients Summary
+    </button>
+    <button mat-menu-item (click)="onMenuItemClick('barcodeeditor')">
+      <mat-icon>edit</mat-icon> Barcode Editor
+    </button>
+    <button mat-menu-item (click)="onMenuItemClick('rejectionsummary')">
+      <mat-icon>report_problem</mat-icon> Rejection Summary
+    </button>
+     </div>
+  </mat-menu>
 
-<!-- Menu 3 -->
-<button [disabled]="isSampleMenuDisabled" mat-button [matMenuTriggerFor]="menu3">Sample Management</button>
-<mat-menu #menu3="matMenu">
-  <div class="mat-menu">
-  <button [disabled]="isSCMenuDisabled" mat-menu-item (click)="onMenuItemClick('samplecollection')">
-    <mat-icon>collections</mat-icon> Sample Collection
-  </button>
-  <button [disabled]="isSampleAccessionDisabled" mat-menu-item (click)="onMenuItemClick('sampleaccession')">
-    <mat-icon>assignment</mat-icon> Sample Accession
-  </button>
-  <button [disabled]="isBulkImportDisabled"  mat-menu-item (click)="onMenuItemClick('bulkimport')">
-    <mat-icon>import_export</mat-icon> Bulk Import 
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('trackstatus')">
-    <mat-icon>track_changes</mat-icon> Track Status
-  </button>
-</div>
-</mat-menu>
+  <!-- Menu 3 -->
+  <button [disabled]="isSampleMenuDisabled" mat-button [matMenuTriggerFor]="menu3">Sample Management</button>
+  <mat-menu #menu3="matMenu">
+    <div class="main-menu">
+    <button [disabled]="isSCMenuDisabled" mat-menu-item (click)="onMenuItemClick('samplecollection')">
+      <mat-icon>collections</mat-icon> Sample Collection
+    </button>
+    <button [disabled]="isSampleAccessionDisabled" mat-menu-item (click)="onMenuItemClick('sampleaccession')">
+      <mat-icon>assignment</mat-icon> Sample Accession
+    </button>
+    <button [disabled]="isBulkImportDisabled" mat-menu-item (click)="onMenuItemClick('bulkimport')">
+      <mat-icon>import_export</mat-icon> Bulk Import
+    </button>
+    <button mat-menu-item (click)="onMenuItemClick('trackstatus')">
+      <mat-icon>track_changes</mat-icon> Track Status
+    </button>
+    </div>
+  </mat-menu>
 
-<!-- Menu 4 -->
-<button [disabled]="isReportsMenuDisabled" mat-button [matMenuTriggerFor]="menu4">Reporting Management</button>
-<mat-menu #menu4="matMenu">
-  <div class="mat-menu">
-  <button [disabled]="isOutLabSelectionDisabled" mat-menu-item (click)="onMenuItemClick('outLabselection')">
-    <mat-icon>radio_button_checked</mat-icon> OutLab Selection
-  </button>
-  <button [disabled]="isReportsEntryDisabled" mat-menu-item (click)="onMenuItemClick('reportsentry')">
-    <mat-icon>input</mat-icon> Reports Entry
-  </button>
-  <button [disabled]="isQuickReportsEntryDisabled"  mat-menu-item (click)="onMenuItemClick('quickreportsentry')">
-    <mat-icon>note_add</mat-icon> Quick Reports Entry
-  </button>
-  <button [disabled]="isOutLabEntryDispabled" mat-menu-item (click)="onMenuItemClick('outlabreportsentry')">
-    <mat-icon>receipt_long</mat-icon> OutLab Reports Entry
-  </button>
-  <button [disabled]="isRejectTestDisabled" mat-menu-item (click)="onMenuItemClick('rejecttests')">
-    <mat-icon>cancel</mat-icon> Reject Tests
-  </button>
-  <button [disabled]="isPrintReportsDisabled" mat-menu-item (click)="onMenuItemClick('printreports')">
-    <mat-icon>print</mat-icon> Print Reports
-  </button>
-  <button [disabled]="isOutLabUpload" mat-menu-item (click)="onMenuItemClick('outLabupload')">
-    <mat-icon>cloud_upload</mat-icon> OutLab Upload
-  </button>
-</div>
-</mat-menu>
+  <!-- Menu 4 -->
+  <button [disabled]="isReportsMenuDisabled" mat-button [matMenuTriggerFor]="menu4">Reporting Management</button>
+  <mat-menu #menu4="matMenu">
+    <div class="main-menu">
+   <button [disabled]="isOutLabSelectionDisabled"mat-menu-item (click)="onMenuItemClick('outLabselection')">
+      <mat-icon>radio_button_checked</mat-icon> OutLab Selection
+    </button>
+    <button [disabled]="isReportsEntryDisabled" mat-menu-item (click)="onMenuItemClick('reportsentry')">
+      <mat-icon>input</mat-icon> Reports Entry
+    </button>
+    <button [disabled]="isQuickReportsEntryDisabled" mat-menu-item (click)="onMenuItemClick('quickreportsentry')">
+      <mat-icon>note_add</mat-icon> Quick Reports Entry
+    </button>
+    <button [disabled]="isOutLabEntryDispabled" mat-menu-item (click)="onMenuItemClick('outlabreportsentry')">
+      <mat-icon>receipt_long</mat-icon> OutLab Reports Entry
+    </button>
+    <button [disabled]="isRejectTestDisabled" mat-menu-item (click)="onMenuItemClick('rejecttests')">
+      <mat-icon>cancel</mat-icon> Reject Tests
+    </button>
+    <button [disabled]="isPrintReportsDisabled" mat-menu-item (click)="onMenuItemClick('printreports')">
+      <mat-icon>print</mat-icon> Print Reports
+    </button>
+    <button [disabled]="isOutLabUpload" mat-menu-item (click)="onMenuItemClick('outLabupload')">
+      <mat-icon>cloud_upload</mat-icon> OutLab Upload
+    </button>
+    </div>
+  </mat-menu>
 
-<!-- Parent Menu for Masters for FrontDesk -->
-<button [disabled]="isMasterMenuDisabled" mat-button [matMenuTriggerFor]="parentMenu">Masters</button>
-<!-- Parent Menu -->
-<mat-menu #parentMenu="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item [matMenuTriggerFor]="Services"><mat-icon>build</mat-icon> Services</button>
-  <button mat-menu-item [matMenuTriggerFor]="Operations"><mat-icon>settings</mat-icon> Operations</button>
-  <button mat-menu-item [matMenuTriggerFor]="Security"><mat-icon>security</mat-icon> Security & Metadata</button>
-  </div>
-</mat-menu>
+  <!-- Masters Menu -->
+  <button [disabled]="isMasterMenuDisabled" mat-button [matMenuTriggerFor]="parentMenu">Masters</button>
+  <mat-menu #parentMenu="matMenu">
+    <div class="main-menu">
+    <button mat-menu-item [matMenuTriggerFor]="Services"><mat-icon>build</mat-icon> Services</button>
+    <button mat-menu-item [matMenuTriggerFor]="Operations"><mat-icon>settings</mat-icon> Operations</button>
+    <button mat-menu-item [matMenuTriggerFor]="Security"><mat-icon>security</mat-icon> Security & Metadata</button>
+    </div>
+  </mat-menu>
 
-<!-- Child Menus -->
-<mat-menu #Services="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item (click)="onMenuItemClick('testmaster')">
-    <mat-icon>assessment</mat-icon> Test Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('profilemaster')">
-    <mat-icon>assessment</mat-icon> Profile Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('analyzermaster')">
-    <mat-icon>device_hub</mat-icon> Analyzer Master
-  </button>
-  </div>
-</mat-menu>
+  <!-- Child Menus -->
+  <mat-menu #Services="matMenu">
+    <div class="main-menu">
+    <button mat-menu-item (click)="onMenuItemClick('testmaster')"><mat-icon>assessment</mat-icon> Test Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('profilemaster')"><mat-icon>assessment</mat-icon> Profile Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('analyzermaster')"><mat-icon>device_hub</mat-icon> Analyzer Master</button>
+    </div>
+  </mat-menu>
 
-<mat-menu #Operations="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item (click)="onMenuItemClick('CentreMaster')">
-    <mat-icon>location_city</mat-icon> Centre Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('CentreSplRates')">
-    <mat-icon>rate_review</mat-icon> Centre Spl Rates
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('ClinicMaster')">
-    <mat-icon>local_hospital</mat-icon> Clinic Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('ClientMaster')">
-    <mat-icon>people</mat-icon> Client Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('ClientSplRates')">
-    <mat-icon>star</mat-icon> Client Spl Rates
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('OutLabMaster')">
-    <mat-icon>store</mat-icon> OutLab Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('EmployeeMaster')">
-    <mat-icon>assessment</mat-icon> Employee Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('BarcodeManager')">
-    <mat-icon>qr_code</mat-icon> Barcode Manager
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('ProjectMaster')">
-    <mat-icon>work</mat-icon> Project Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('CentreBlocked')">
-    <mat-icon>do_not_disturb</mat-icon> Centre Blocked
-  </button>
-  </div>
-</mat-menu>
+  <mat-menu #Operations="matMenu">
+     <div class="main-menu">
+    <button mat-menu-item (click)="onMenuItemClick('CentreMaster')"><mat-icon>location_city</mat-icon> Centre Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('CentreSplRates')"><mat-icon>rate_review</mat-icon> Centre Spl Rates</button>
+    <button mat-menu-item (click)="onMenuItemClick('ClinicMaster')"><mat-icon>local_hospital</mat-icon> Clinic Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('ClientMaster')"><mat-icon>people</mat-icon> Client Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('ClientSplRates')"><mat-icon>star</mat-icon> Client Spl Rates</button>
+    <button mat-menu-item (click)="onMenuItemClick('OutLabMaster')"><mat-icon>store</mat-icon> OutLab Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('EmployeeMaster')"><mat-icon>assessment</mat-icon> Employee Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('BarcodeManager')"><mat-icon>qr_code</mat-icon> Barcode Manager</button>
+    <button mat-menu-item (click)="onMenuItemClick('ProjectMaster')"><mat-icon>work</mat-icon> Project Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('CentreBlocked')"><mat-icon>do_not_disturb</mat-icon> Centre Blocked</button>
+     </div>
+  </mat-menu>
 
-<mat-menu #Security="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item (click)="onMenuItemClick('UserMaster')">
-    <mat-icon>person</mat-icon> User Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('MetaData')">
-    <mat-icon>data_usage</mat-icon> Meta Data
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('UserRoleMaster')">
-    <mat-icon>badge</mat-icon> User Role Master
-  </button>
-  <!-- <button mat-menu-item (click)="onMenuItemClick('LisPageMaster')">
-    <mat-icon>list</mat-icon> LIS Page Master
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('GlobalRolesAccess')">
-    <mat-icon>public</mat-icon> Global Roles Access
-  </button> -->
-  <button mat-menu-item (click)="onMenuItemClick('SampleCollectionPlace')">
-    <mat-icon>location_on</mat-icon> Sample Collection Place
-  </button>
-  </div>
-</mat-menu>
+  <mat-menu #Security="matMenu">
+     <div class="main-menu">
+     <button mat-menu-item (click)="onMenuItemClick('UserMaster')"><mat-icon>person</mat-icon> User Master</button>
+    <button  mat-menu-item (click)="onMenuItemClick('MetaData')"><mat-icon>data_usage</mat-icon> Meta Data</button>
+    <button mat-menu-item (click)="onMenuItemClick('UserRoleMaster')"><mat-icon>badge</mat-icon> User Role Master</button>
+    <button mat-menu-item (click)="onMenuItemClick('SampleCollectionPlace')"><mat-icon>location_on</mat-icon> Sample Collection Place</button>
+     </div>   
+  </mat-menu>
 
-<!-- Menu 5 for frontDesk -->
-<button [disabled]="isAccountMenuDisabled" mat-button [matMenuTriggerFor]="menu5">Account Management</button>
-<mat-menu #menu5="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item (click)="onMenuItemClick('BillingSummary')">
-    <mat-icon>attach_money</mat-icon> Billing Summary
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('AccountsReceivables')">
-    <mat-icon>account_balance_wallet</mat-icon> Accounts Receivables
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('ClientLedger')">
-    <mat-icon>receipt_long</mat-icon> Client Ledger
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('ProfitBillingSummary')">
-    <mat-icon>trending_up</mat-icon> Profit Billing Summary
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('OutlabBillingSummary')">
-    <mat-icon>store</mat-icon> Outlab Billing Summary
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('TestWiseSummary')">
-    <mat-icon>assessment</mat-icon> Test Wise Summary
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('FranchiseeBilling')">
-    <mat-icon>business</mat-icon> Franchisee Billing
-  </button>
-  </div>
-</mat-menu>
-
-<!-- Menu 6 -->
-<!-- <button mat-button [matMenuTriggerFor]="menu6">Communication</button>
-<mat-menu #menu6="matMenu">
-  <div class="mat-menu">
-  <button mat-menu-item (click)="onMenuItemClick('Inbox')">
-    <mat-icon>inbox</mat-icon> Inbox
-  </button>
-  <button mat-menu-item (click)="onMenuItemClick('Sent')">
-    <mat-icon>send</mat-icon> Sent
-  </button>
-  </div>
-</mat-menu> -->
+  <!-- Menu 5 -->
+  <button [disabled]="isAccountMenuDisabled" mat-button [matMenuTriggerFor]="menu5">Account Management</button>
+  <mat-menu #menu5="matMenu">
+     <div class="main-menu">
+    <button mat-menu-item (click)="onMenuItemClick('BillingSummary')"><mat-icon>attach_money</mat-icon> Billing Summary</button>
+    <button mat-menu-item (click)="onMenuItemClick('AccountsReceivables')"><mat-icon>account_balance_wallet</mat-icon> Accounts Receivables</button>
+    <button mat-menu-item (click)="onMenuItemClick('ClientLedger')"><mat-icon>receipt_long</mat-icon> Client Ledger</button>
+    <button mat-menu-item (click)="onMenuItemClick('ProfitBillingSummary')"><mat-icon>trending_up</mat-icon> Profit Billing Summary</button>
+    <button mat-menu-item (click)="onMenuItemClick('OutlabBillingSummary')"><mat-icon>store</mat-icon> Outlab Billing Summary</button>
+    <button mat-menu-item (click)="onMenuItemClick('TestWiseSummary')"><mat-icon>assessment</mat-icon> Test Wise Summary</button>
+    <button mat-menu-item (click)="onMenuItemClick('FranchiseeBilling')"><mat-icon>business</mat-icon> Franchisee Billing</button>
+     </div>
+  </mat-menu>
 
 </div>
