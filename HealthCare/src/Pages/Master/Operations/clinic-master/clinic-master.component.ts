@@ -25,6 +25,7 @@ import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { ClinicResponse } from '../../../../Interfaces/ClinicMaster/clinic-response';
 import { ClinicServiceService } from '../../../../auth/ClinicMaster/clinic-service.service';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
+import { PopupClinicrmastereditComponent } from '../../../PopUp/popup-clinicrmasteredit/popup-clinicrmasteredit.component';
 
 @Component({
   selector: 'app-clinic-master',
@@ -231,6 +232,42 @@ filterClinics(term: string) {
         }
       });
     }
+
+    /// Open Add New Clinic Master PopUp
+       OpenAddClinicMasterPopUp(): void {
+            this.dialog.open(PopupClinicrmastereditComponent, {
+              width: '1500px',           // slightly larger than medium
+              maxWidth: '90vw',         // responsive on smaller screens
+              height: 'auto',           // taller than medium but not full screen
+              minHeight: '400px',       // ensures minimum height
+              panelClass: 'large-dialog', // optional custom CSS
+              disableClose: true,  
+              data: {}                  // pass data if needed
+            });
+    
+            this.dialog.afterAllClosed.subscribe(() => {
+              this.ngOnInit(); // Refresh the list after the dialog is closed
+            });
+    
+          }
+
+       // View Clinic details
+      ViewClinicDetails(clinicId:number){
+       debugger;
+            this.dialog.open(PopupClinicrmastereditComponent, {
+            width: '1500px',           // slightly larger than medium
+            maxWidth: '90vw',         // responsive on smaller screens
+            height: 'auto',            // taller than medium but not full screen
+            minHeight: '400px',       // ensures minimum height
+            panelClass: 'large-dialog', // optional custom CSS
+            disableClose: true,  
+            data: {clinicId:clinicId},        // Pass data if needed   
+            });
+          
+        this.dialog.afterAllClosed.subscribe(() => {
+        this.ngOnInit(); // Refresh the list after the dialog is closed
+        });
+      }
 
 
 }
