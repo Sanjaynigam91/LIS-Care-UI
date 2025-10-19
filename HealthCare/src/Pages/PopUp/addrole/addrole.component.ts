@@ -24,9 +24,9 @@ import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
 @Component({
   selector: 'app-addrole',
   standalone: true,
-  imports: [MatIconModule, MatCardActions,
+  imports: [MatIconModule,
     MatFormFieldModule, MatIconModule, MatSelectModule, FormsModule, 
-    MatInputModule, ToastComponent, LoaderComponent,CommonModule],
+    MatInputModule, ToastComponent,CommonModule],
   templateUrl: './addrole.component.html',
   styleUrl: './addrole.component.css'
 })

@@ -95,8 +95,10 @@
         </select>
     </div>
     <div class="col-md-6">
-        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="createNewCenter()">Create New Center</button>
-        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="UpdateCenter()">Update Center</button>
+        <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="createNewCenter()">
+            <mat-icon>save</mat-icon>Create New Center</button>
+        <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="UpdateCenter()">
+              <mat-icon>update</mat-icon>Update Center</button>
        </div>
     </div>
     </div>

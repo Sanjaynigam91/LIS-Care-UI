@@ -185,8 +185,10 @@
                 <textarea class="form-control" name="ReferralRangesComments" formControlName="ReferralRangesComments" rows="4" cols="30" required></textarea>
               </div>
               <div class="col-md-2">
-                <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSubmit()" >Submit</button>
-                <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onEditTest()" >Update</button>
+                <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="onSubmit()" > 
+                  <mat-icon>save</mat-icon>Submit</button>
+                <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="onEditTest()" >
+                  <mat-icon>update</mat-icon>Update</button>
               </div>
             </div>
               </div>  
