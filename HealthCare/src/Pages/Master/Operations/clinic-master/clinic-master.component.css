@@ -77,8 +77,8 @@ button[mat-flat-button] {
   border-collapse: collapse;
 }
 th {
-  color: black;
-  background-color: #17f3e1;
+  background: linear-gradient(90deg, #00C7B7, #00C7B7); /* Gradient background */
+  color: #000;
   padding: 10px;
   cursor: pointer;
 }

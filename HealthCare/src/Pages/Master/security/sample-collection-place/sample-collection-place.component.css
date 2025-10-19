@@ -91,7 +91,7 @@ section {
 th {
   color: black; /* Optional: Change text color for better contrast */
   padding: 10px; /* Optional: Adjust padding as needed */
-  background-color: #17f3e1;
+  background: linear-gradient(90deg, #00C7B7, #00C7B7); /* Gradient background */
   cursor: pointer;
 }
 
