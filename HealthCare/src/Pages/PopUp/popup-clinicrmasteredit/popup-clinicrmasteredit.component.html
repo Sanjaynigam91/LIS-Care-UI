@@ -1,1 +1,97 @@
-<p>popup-clinicrmasteredit works!</p>
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Clinic</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Clinic</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+</div>
+
+ <!-- Content / Form -->
+    <div class="container mt-3" [formGroup]="editClinicMasterForm">
+    <div class="popup-content" >
+    <div class="row">
+    <div class="col-md-2">
+        <label  class="form-label">Clinic Code</label>
+        <input type="text" formControlName="ClinicCode" class="form-control" placeholder="Enter clinic code" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Clinic Name<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ClinicName" class="form-control" placeholder="Enter clinic name" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Clinic Incharge<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ClinicIncharge" class="form-control" placeholder="Enter clinic incharge name" />
+    </div>
+    <div class="col-md-3">
+         <label class="form-label">Email Address<mat-icon class="matIcon">*</mat-icon></label>
+         <input type="text" formControlName="ClinicEmailId" class="form-control" placeholder="Enter email address" />
+    </div>
+    </div>
+     <br/>
+    <div class="row"> 
+    <div class="col-md-3">
+        <label class="form-label">Mobile Number<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ClinicMobileNumber" class="form-control" placeholder="Enter mobile number" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Alternate Contact Number</label>
+        <input type="text" formControlName="AlternateContactNumber" class="form-control" placeholder="Enter alternate number" />
+    </div>     
+    <div class="col-md-3">
+        <label class="form-label">Clinic Doctor Code<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ClinicDoctorCode" class="form-control" placeholder="Enter clinic doctor code" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Centre<mat-icon class="matIcon">*</mat-icon></label>
+        <select class="form-control"  formControlName="ddlCentre">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
+        </select>
+    </div>
+    
+    </div>
+    <br/>
+    <div class="row">      
+    <div class="col-md-3">
+        <label class="form-label">Address<mat-icon class="matIcon">*</mat-icon></label>
+          <input type="text" formControlName="Address" class="form-control" placeholder="Enter address" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Rate Type<mat-icon class="matIcon">*</mat-icon></label>
+         <select class="form-control"  formControlName="ddlRateType">
+            <option value="">~Please Choose~</option>
+            <option value="Credit">Credit</option>
+            <option value="Cash">Cash</option>
+            <option value="NEFT">NEFT</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+         <label  class="form-label">Centre Status<mat-icon class="matIcon">*</mat-icon></label>
+         <select class="form-control"  formControlName="ddlStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+    </div>
+     <div class="col-md-3">
+        <button *ngIf="isSubmitVisible" class="lis-button save-button">
+            <mat-icon>save</mat-icon>Create New Clinic</button>
+        <button *ngIf="isUpdateVisible" class="lis-button update-button">
+              <mat-icon>update</mat-icon>Update Clinic</button>
+       </div>
+    </div>
+    </div>
+    </div>
+     <app-toast></app-toast>
+     <app-loader *ngIf="loading$ | async"></app-loader>
+<br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>
+

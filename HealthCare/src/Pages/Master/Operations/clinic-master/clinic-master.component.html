@@ -27,7 +27,7 @@
       <button mat-flat-button class="search-button" (click)="onSearch()">
         <mat-icon>search</mat-icon> Search Clinic
       </button>
-    <button mat-flat-button class="save-button">
+    <button mat-flat-button class="save-button" (click)="OpenAddClinicMasterPopUp()">
         <mat-icon>add</mat-icon> Add New Clinic
       </button>
     </div>
@@ -62,7 +62,7 @@
           <td>{{ item.mobileNumber }}</td>
            <td>{{ item.emailId }}</td>
            <td>{{ item.clinicAddress }}</td>
-          <td><button class="edit-button" matTooltip="edit clinic details">
+          <td><button class="edit-button" matTooltip="edit clinic details" (click)="ViewClinicDetails(item.clinicId)" >
             <mat-icon class="edit-icon">edit</mat-icon>
             </button>
             <button class="delete-button" matTooltip="delete clinic" (click)="clinicDeleteConfirmationDialog(item.clinicId)">
