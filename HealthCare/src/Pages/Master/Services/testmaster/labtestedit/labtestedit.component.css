@@ -67,21 +67,6 @@
     background-color: #17f3e1; /* Darker blue on hover */
   }
 
-  .update-button {
-    background-color: #28a745; /* Green color */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 28px;
-  }
-  
-  .update-button:hover {
-    background-color: #17f3e1; /* Darker green for hover effect */
-  }
-
   .mat-form{
     margin-left: 30px;
     margin-top: 10px;
@@ -486,7 +471,7 @@ pagination-controls {
 }
 
  .cancel-btn:hover {
-    background-color: #17f3e1; /* Darker blue on hover */
+    background-color:gray; /* Darker blue on hover */
   }
 
  .submit-button {
@@ -562,6 +547,69 @@ pagination-controls {
   .update-Mapping-button:hover {
     background-color: #17f3e1; /* Darker blue on hover */
   }
+
+    /* ===== BASE BUTTON STYLE ===== */
+.lis-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  outline: none; /* remove default browser outline */
+}
+
+/* ===== SAVE BUTTON ===== */
+.save-button {
+  background-color: #00796b; /* Teal – Primary */
+}
+.save-button:hover {
+  background-color: #00695c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.save-button:focus {
+  background-color: #00695c;
+  box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.3); /* soft teal ring */
+}
+
+/* ===== UPDATE BUTTON ===== */
+.update-button {
+  background-color: #0288d1; /* Modern blue */
+}
+.update-button:hover {
+  background-color: #0277bd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.update-button:focus {
+  background-color: #0277bd;
+  box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.3); /* blue focus ring */
+}
+
+/* ===== ACTIVE STATE (Click) ===== */
+.lis-button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* ===== DISABLED STATE ===== */
+.lis-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ===== ICON STYLING ===== */
+.lis-button mat-icon,
+.lis-button i {
+  font-size: 18px;
+}
 
 
 

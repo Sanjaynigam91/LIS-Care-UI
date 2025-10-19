@@ -111,10 +111,13 @@
     </div>
     <div class="row">
     <div class="col-md-6">
-        <button *ngIf="isSubmitVisible" mat-flat-button class="submit-button" (click)="onSaveProfile()" >Save Profile</button>
-        <button *ngIf="isUpdateVisible" mat-flat-button class="update-button" (click)="onUpdateProfile()">Update Profile</button>
+        <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="onSaveProfile()" >
+           <mat-icon>save</mat-icon>Save Profile</button>
+        <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="onUpdateProfile()">
+          <mat-icon>update</mat-icon>Update Profile</button>
        </div>
     </div>
+    <br>
     <div class="row">
     <div class="col-md-12" *ngIf="isProfileMappingListVisible">
     <table class="table table-bordered table-striped table-header">
