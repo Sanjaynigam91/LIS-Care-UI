@@ -14,7 +14,7 @@
     <div class="popup-content" >
     <div class="row">
     <div class="col-md-2">
-        <label  class="form-label">Clinic Code</label>
+        <label  class="form-label">Clinic Code<mat-icon class="matIcon"></mat-icon></label>
         <input type="text" formControlName="ClinicCode" class="form-control" placeholder="Enter clinic code" />
     </div>
     <div class="col-md-4">
@@ -22,7 +22,7 @@
         <input type="text" formControlName="ClinicName" class="form-control" placeholder="Enter clinic name" />
     </div>
     <div class="col-md-3">
-        <label  class="form-label">Clinic Incharge<mat-icon class="matIcon">*</mat-icon></label>
+        <label  class="form-label">Clinic Incharge<mat-icon class="matIcon"></mat-icon></label>
         <input type="text" formControlName="ClinicIncharge" class="form-control" placeholder="Enter clinic incharge name" />
     </div>
     <div class="col-md-3">
@@ -37,7 +37,7 @@
         <input type="text" formControlName="ClinicMobileNumber" class="form-control" placeholder="Enter mobile number" />
     </div>
     <div class="col-md-3">
-        <label class="form-label">Alternate Contact Number</label>
+        <label class="form-label">Alternate Contact Number<mat-icon class="matIcon"></mat-icon></label>
         <input type="text" formControlName="AlternateContactNumber" class="form-control" placeholder="Enter alternate number" />
     </div>     
     <div class="col-md-3">
@@ -56,7 +56,7 @@
     <br/>
     <div class="row">      
     <div class="col-md-3">
-        <label class="form-label">Address<mat-icon class="matIcon">*</mat-icon></label>
+        <label class="form-label">Address<mat-icon class="matIcon"></mat-icon></label>
           <input type="text" formControlName="Address" class="form-control" placeholder="Enter address" />
     </div>
     <div class="col-md-3">
@@ -77,9 +77,9 @@
         </select>
     </div>
      <div class="col-md-3">
-        <button *ngIf="isSubmitVisible" class="lis-button save-button">
+        <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="createNewClinic()">
             <mat-icon>save</mat-icon>Create New Clinic</button>
-        <button *ngIf="isUpdateVisible" class="lis-button update-button">
+        <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="updateClinic()">
               <mat-icon>update</mat-icon>Update Clinic</button>
        </div>
     </div>

@@ -212,17 +212,17 @@ filterClinics(term: string) {
         debugger;
         if (result.success) {
           debugger;
-          // this.centerService.deleteCenterDetails(centerCode,this.partnerId).subscribe((response:any)=>{
-          //   debugger;
-          //  if(response.status && response.statusCode==200){
-          //   this.toasterService.showToast(response.responseMessage, 'success');
-          //   this.ngOnInit();
-          //  }
-          //  else{
-          //   this.toasterService.showToast(response.responseMessage, 'error');
-          //  }
-          //  console.log(response);
-          // }) 
+          this.clinicService.deleteClinicDetails(clinicId,this.partnerId).subscribe((response:any)=>{
+            debugger;
+           if(response.status && response.statusCode==200){
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.ngOnInit();
+           }
+           else{
+            this.toasterService.showToast(response.responseMessage, 'error');
+           }
+           console.log(response);
+          }) 
           console.log('Returned User ID:', result.userId);
           console.log('User confirmed the action.');
         } else {
