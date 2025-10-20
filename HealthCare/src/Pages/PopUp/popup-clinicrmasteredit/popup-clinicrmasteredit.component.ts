@@ -14,6 +14,9 @@ import { TestService } from '../../../auth/TestMasterService/test.service';
 import { LoaderService } from '../../../Interfaces/loader.service';
 import { MetadataService } from '../../../auth/metadata.service';
 import { CenterResponse } from '../../../Interfaces/CenterMaster/CenterResponse';
+import { ClinicRequest } from '../../../Interfaces/ClinicMaster/clinic-request';
+import { ClinicServiceService } from '../../../auth/ClinicMaster/clinic-service.service';
+import { ClinicResponse } from '../../../Interfaces/ClinicMaster/clinic-response';
 
 @Component({
   selector: 'app-popup-clinicrmasteredit',
@@ -37,13 +40,31 @@ clinicId:number|any;
 centerStatus:string|any;
 SeachByNameOrCode:string|any;
 centerApiResponse:Observable<CenterResponse>| any;
+clinicRequest:ClinicRequest={
+  clinicId: 0,
+  clinicCode: '',
+  clinicName: '',
+  clinicIncharge: '',
+  emailId: '',
+  mobileNumber: '',
+  alterContactNumber: '',
+  clinicDoctorCode: '',
+  centerCode: '',
+  clinicAddress: '',
+  rateType: '',
+  clinicStatus: false,
+  createdBy: '',
+  updatedBy: '',
+  partnerId: ''
+}
+clinicApiResponse:Observable<ClinicResponse>|any;
 
 constructor(public dialogRef: MatDialogRef<PopupClinicrmastereditComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any,private authService:AuthService,
+      @Inject(MAT_DIALOG_DATA) public data: any,
       private toasterService: ToastService,private centerService:CenterServiceService,
       private refPageService:RefreshPageService,private formBuilder: FormBuilder,
-      private testService:TestService,private loaderService: LoaderService,
-      private metaService:MetadataService,public dialog: MatDialog, private zone: NgZone
+      private testService:TestService,private loaderService: LoaderService
+      ,public dialog: MatDialog,private clinicServic:ClinicServiceService
     ){
       this.partnerId= localStorage.getItem('partnerId');
       this.loggedInUserId=localStorage.getItem('userId');
@@ -69,6 +90,7 @@ constructor(public dialogRef: MatDialogRef<PopupClinicrmastereditComponent>,
           ddlRateType:[''],
           Address:[''],
           ddlStatus:[''],
+          ClinicDoctorCode:['']
         });
     
          setTimeout(() => {  // 🔑 forces update in next CD cycle
@@ -84,7 +106,7 @@ constructor(public dialogRef: MatDialogRef<PopupClinicrmastereditComponent>,
           this.isSubmitVisible = false;
           this.isUpdateVisible = true;
          
-       //   this.getCenterDetailsbyCode();
+          this.getClinicById(this.clinicId);
         }
       this.LoadAllCentres();
       });
@@ -122,6 +144,189 @@ open(): void {
         this.loaderService.hide();
       }
     });
+    this.loaderService.hide();
+  }
+
+  // Used to get Clinic Details by Id
+  getClinicById(clinicId:number){
+    debugger;
+    this.clinicServic.getClinicById(clinicId,this.partnerId).subscribe({
+      next: (response: any) => {
+        debugger;
+        if (response?.status && response?.statusCode === 200) {
+        this.clinicApiResponse = response.data; 
+        const clinic = response.data[0]; // first item in array
+        this.editClinicMasterForm.patchValue({
+        ClinicCode: clinic.clinicCode || '',
+        ClinicName: clinic.clinicName || '',
+        ClinicIncharge: clinic.clinicIncharge || '',
+        ClinicEmailId: clinic.emailId || '',
+        ClinicMobileNumber: clinic.mobileNumber || '',
+        AlternateContactNumber: clinic.alternateContactNo || '',
+        ClinicDoctorCode: clinic.clinicDoctorCode||'',
+        ddlCentre: clinic.centerCode ||'',
+        Address: clinic.clinicAddress || '',
+        ddlRateType: clinic.rateType || 0,
+        ddlStatus: clinic.clinicStatus ? 'true' : 'false',
+      });
+          console.log(this.clinicApiResponse);
+        } else {
+          console.warn("No Record Found!");
+        }
+
+        this.loaderService.hide();
+      },
+      error: (err) => {
+        console.error("Error while fetching profiles:", err);
+        this.loaderService.hide();
+      }
+    });
+    this.loaderService.hide();
+  }
+
+/// used to create new clinic details
+createNewClinic(){
+  debugger;
+     this.loaderService.show();
+    if(this.editClinicMasterForm.value.ClinicName==''){
+      this.toasterService.showToast('Please enter clinic name...', 'error');
+    }
+     else if (this.editClinicMasterForm.value.ClinicEmailId == '') {
+    this.toasterService.showToast('Please enter email address...', 'error');
+    }
+    else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.editClinicMasterForm.value.ClinicEmailId)) {
+      this.toasterService.showToast('Please enter a valid email address...', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ClinicMobileNumber==''){
+      this.toasterService.showToast('Please enter mobile number...', 'error');
+    }
+    else if (!/^[6-9][0-9]{9}$/.test(this.editClinicMasterForm.value.ClinicMobileNumber)) {
+      this.toasterService.showToast('Please enter a valid 10-digit mobile number...', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ClinicDoctorCode==''){
+      this.toasterService.showToast('Please enter clinic doctor code...', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ddlCentre==''){
+      this.toasterService.showToast('Please select the centre..', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ddlRateType==''){
+      this.toasterService.showToast('Please select the rate type..', 'error');
+    }
+    else{
+      debugger;
+      this.clinicRequest.clinicName=this.editClinicMasterForm.value.ClinicName;
+      this.clinicRequest.clinicIncharge=this.editClinicMasterForm.value.ClinicIncharge;
+      this.clinicRequest.emailId=this.editClinicMasterForm.value.ClinicEmailId;
+      this.clinicRequest.mobileNumber=this.editClinicMasterForm.value.ClinicMobileNumber;
+      this.clinicRequest.alterContactNumber=this.editClinicMasterForm.value.AlternateContactNumber;
+      this.clinicRequest.clinicDoctorCode=this.editClinicMasterForm.value.ClinicDoctorCode;
+      this.clinicRequest.centerCode=this.editClinicMasterForm.value.ddlCentre;
+      this.clinicRequest.clinicAddress=this.editClinicMasterForm.value.Address;
+      this.clinicRequest.rateType=this.editClinicMasterForm.value.ddlRateType;
+      this.clinicRequest.clinicStatus = JSON.parse(this.editClinicMasterForm.value.ddlStatus.toLowerCase());
+      this.clinicRequest.partnerId=this.partnerId; 
+      this.clinicRequest.createdBy=this.loggedInUserId; 
+
+    this.clinicServic.addNewClinic(this.clinicRequest)
+    .subscribe({
+    next: (response: any) => {
+      if (response.statusCode === 200 && response.status) {
+        this.refPageService.notifyRefresh(); // used to refresh the main list page
+        this.toasterService.showToast(response.responseMessage, 'success');
+        this.dialogRef.close();
+      } else {
+        this.toasterService.showToast(response.responseMessage, 'error');
+      }
+    },
+    error: (err) => {
+      // Handle backend business error even on 404
+      if (err.error && err.error.responseMessage) {
+        this.toasterService.showToast(err.error.responseMessage, 'error');
+      } else {
+        this.toasterService.showToast('Something went wrong. Please try again.', 'error');
+      }
+      console.error(err);
+    }
+  });
+
+
+
+    }
+    this.loaderService.hide();
+  }
+
+  /// used to create new clinic details
+updateClinic(){
+  debugger;
+     this.loaderService.show();
+    if(this.editClinicMasterForm.value.ClinicName==''){
+      this.toasterService.showToast('Please enter clinic name...', 'error');
+    }
+     else if (this.editClinicMasterForm.value.ClinicEmailId == '') {
+    this.toasterService.showToast('Please enter email address...', 'error');
+    }
+    else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.editClinicMasterForm.value.ClinicEmailId)) {
+      this.toasterService.showToast('Please enter a valid email address...', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ClinicMobileNumber==''){
+      this.toasterService.showToast('Please enter mobile number...', 'error');
+    }
+    else if (!/^[6-9][0-9]{9}$/.test(this.editClinicMasterForm.value.ClinicMobileNumber)) {
+      this.toasterService.showToast('Please enter a valid 10-digit mobile number...', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ClinicDoctorCode==''){
+      this.toasterService.showToast('Please enter clinic doctor code...', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ddlCentre==''){
+      this.toasterService.showToast('Please select the centre..', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ddlRateType==''){
+      this.toasterService.showToast('Please select the rate type..', 'error');
+    }
+    else if(this.editClinicMasterForm.value.ddlStatus==''){
+      this.toasterService.showToast('Please select the status..', 'error');
+    }
+    else{
+      debugger;
+      this.clinicRequest.clinicId=this.clinicId;
+      this.clinicRequest.clinicName=this.editClinicMasterForm.value.ClinicName;
+      this.clinicRequest.clinicIncharge=this.editClinicMasterForm.value.ClinicIncharge;
+      this.clinicRequest.emailId=this.editClinicMasterForm.value.ClinicEmailId;
+      this.clinicRequest.mobileNumber=this.editClinicMasterForm.value.ClinicMobileNumber;
+      this.clinicRequest.alterContactNumber=this.editClinicMasterForm.value.AlternateContactNumber;
+      this.clinicRequest.clinicDoctorCode=this.editClinicMasterForm.value.ClinicDoctorCode;
+      this.clinicRequest.centerCode=this.editClinicMasterForm.value.ddlCentre;
+      this.clinicRequest.clinicAddress=this.editClinicMasterForm.value.Address;
+      this.clinicRequest.rateType=this.editClinicMasterForm.value.ddlRateType;
+      this.clinicRequest.clinicStatus = JSON.parse(this.editClinicMasterForm.value.ddlStatus.toLowerCase());
+      this.clinicRequest.partnerId=this.partnerId; 
+      this.clinicRequest.createdBy=this.loggedInUserId; 
+
+    this.clinicServic.updateClinicDetails(this.clinicRequest)
+    .subscribe({
+    next: (response: any) => {
+      if (response.statusCode === 200 && response.status) {
+        this.refPageService.notifyRefresh(); // used to refresh the main list page
+        this.toasterService.showToast(response.responseMessage, 'success');
+        this.dialogRef.close();
+      } else {
+        this.toasterService.showToast(response.responseMessage, 'error');
+      }
+    },
+    error: (err) => {
+      // Handle backend business error even on 404
+      if (err.error && err.error.responseMessage) {
+        this.toasterService.showToast(err.error.responseMessage, 'error');
+      } else {
+        this.toasterService.showToast('Something went wrong. Please try again.', 'error');
+      }
+      console.error(err);
+    }
+  });
+
+
+
+    }
     this.loaderService.hide();
   }
 
