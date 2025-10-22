@@ -43,6 +43,4 @@ export class ClientService {
                return this.httpClient.get<ClientResponse[]>(`${this.baseUrl}/GetClientById`, {params});
             }
 
-
-
 }

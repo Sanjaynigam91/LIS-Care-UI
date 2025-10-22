@@ -177,6 +177,7 @@ router  =  inject(Router);
     }
   }
 
+  // Used to delete client by Id
     clientDeleteConfirmationDialog(clientId:any): void {
         debugger;
         const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
