@@ -22,7 +22,8 @@ export class ConfirmationDialogComponentComponent {
   mappingId:any;// used to delete mapped test from profile master edit page
   analyzerId:any;// used to delete analyzer from analyzer master page
   centerCode:any;// used to delete center from center master page
-  clinicId:any;// used to delete clinci from clinic master page
+  clinicId:any;// used to delete clinic from clinic master page
+  clientId:any;// used to delete client from client master page 
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponentComponent>,
@@ -40,6 +41,7 @@ export class ConfirmationDialogComponentComponent {
     this.mappingId=data.mappingId;
     this.centerCode=data.centerCode
     this.clinicId=data.clinicId;
+    this.clientId=data.clientId;
   }
 
   onConfirm(): void {
