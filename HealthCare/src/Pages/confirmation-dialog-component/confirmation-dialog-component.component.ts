@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } fro
   templateUrl: './confirmation-dialog-component.component.html',
   styleUrl: './confirmation-dialog-component.component.css'
 })
+
 export class ConfirmationDialogComponentComponent {
   message!: string;
   userId:any; // used for delete user data
