@@ -1,5 +1,5 @@
 export interface ClientRequest {
-  clientId: string; // Guid as string
+  clientId?: string | null; // ✅ optional or null allowed
   partnerId: string;
   clientCode: string;
   clientName: string;

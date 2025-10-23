@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../app/environments/environments';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, delay, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ClientResponse } from '../../Interfaces/ClientMaster/client-response';
 
 @Injectable({
@@ -42,5 +42,32 @@ export class ClientService {
                 .set('partnerId', partnerId.toString());
                return this.httpClient.get<ClientResponse[]>(`${this.baseUrl}/GetClientById`, {params});
             }
+
+       /// used to create new center details
+          addNewClient(data:any){
+            debugger;
+            return this.httpClient.post(`${this.baseUrl}/AddNewClient`, data).pipe(delay(1000));
+          }
+        /// used to update center details
+          updateClientDetails(data: any) {
+              console.log("Payload before sending:", data); // Debugging line to check the payload
+              return this.httpClient.put(
+                `${this.baseUrl}/UpdateClient`,
+                data,
+                {
+                  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+                }
+              ).pipe(delay(1000));
+            
+            }
+          
+          deleteClientDetails(clientId:any,partnerId:any){
+            debugger;
+          // Create HttpParams instance and append query parameters
+          let params = new HttpParams()
+            .set('clientId', clientId)
+            .set('partnerId', partnerId.toString());
+          return this.httpClient.delete(`${this.baseUrl}/DeleteClient`, {params});
+          }        
 
 }
