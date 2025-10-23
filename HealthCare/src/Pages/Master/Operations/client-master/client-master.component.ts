@@ -24,17 +24,21 @@ import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { ClientService } from '../../../../auth/ClientMaster/client.service';
 import { ClientResponse } from '../../../../Interfaces/ClientMaster/client-response';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
+import { PopupClientmastereditComponent } from '../../../PopUp/popup-clientmasteredit/popup-clientmasteredit.component';
 
 @Component({
   selector: 'app-client-master',
   standalone: true,
- imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
-     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
-     MatFormFieldModule, MatInputModule, NgxPaginationModule,
-     ReactiveFormsModule, LoaderComponent, A11yModule],
+  imports: [
+    MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+    MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule,
+    MatSortModule, MatFormFieldModule, MatInputModule, NgxPaginationModule,
+    ReactiveFormsModule, LoaderComponent, A11yModule
+  ],
   templateUrl: './client-master.component.html',
-  styleUrl: './client-master.component.css'
+  styleUrls: ['./client-master.component.css']   // ✅ corrected
 })
+
 export class ClientMasterComponent {
 router  =  inject(Router);
     loading$!: Observable<boolean>;
@@ -177,6 +181,7 @@ router  =  inject(Router);
     }
   }
 
+  // Used to delete client by Id
     clientDeleteConfirmationDialog(clientId:any): void {
         debugger;
         const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
@@ -189,17 +194,17 @@ router  =  inject(Router);
           debugger;
           if (result.success) {
             debugger;
-            // this.centerService.deleteCenterDetails(clientId,this.partnerId).subscribe((response:any)=>{
-            //   debugger;
-            //  if(response.status && response.statusCode==200){
-            //   this.toasterService.showToast(response.responseMessage, 'success');
-            //   this.ngOnInit();
-            //  }
-            //  else{
-            //   this.toasterService.showToast(response.responseMessage, 'error');
-            //  }
-            //  console.log(response);
-            // }) 
+            this.clientService.deleteClientDetails(clientId,this.partnerId).subscribe((response:any)=>{
+              debugger;
+             if(response.status && response.statusCode==200){
+              this.toasterService.showToast(response.responseMessage, 'success');
+              this.ngOnInit();
+             }
+             else{
+              this.toasterService.showToast(response.responseMessage, 'error');
+             }
+             console.log(response);
+            }) 
             console.log('Returned User ID:', result.userId);
             console.log('User confirmed the action.');
           } else {
@@ -209,6 +214,43 @@ router  =  inject(Router);
           }
         });
       }
+
+        /// Open Add New Client Master PopUp
+            
+            OpenAddClientMasterPopUp(): void {
+              this.dialog.open(PopupClientmastereditComponent, {
+                width: '1500px',           // slightly larger than medium
+                maxWidth: '90vw',         // responsive on smaller screens
+                height: 'auto',           // taller than medium but not full screen
+                minHeight: '400px',       // ensures minimum height
+                panelClass: 'large-dialog', // optional custom CSS
+                disableClose: true,  
+                data: {}                  // pass data if needed
+              });
+      
+              this.dialog.afterAllClosed.subscribe(() => {
+                this.ngOnInit(); // Refresh the list after the dialog is closed
+              });
+      
+            }
+      
+            // View client details
+             ViewClientDetails(clientId:string){
+                  debugger;
+                  this.dialog.open(PopupClientmastereditComponent, {
+                   width: '1500px',           // slightly larger than medium
+                    maxWidth: '90vw',         // responsive on smaller screens
+                    height: 'auto',            // taller than medium but not full screen
+                    minHeight: '400px',       // ensures minimum height
+                    panelClass: 'large-dialog', // optional custom CSS
+                    disableClose: true,  
+                    data: {clientId:clientId},        // Pass data if needed   
+                  });
+      
+                this.dialog.afterAllClosed.subscribe(() => {
+                this.ngOnInit(); // Refresh the list after the dialog is closed
+              });
+            }
 
 
 }

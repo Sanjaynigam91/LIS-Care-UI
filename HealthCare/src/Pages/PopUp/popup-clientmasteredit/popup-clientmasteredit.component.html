@@ -1,0 +1,90 @@
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Client</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Client</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+</div>
+
+ <!-- Content / Form -->
+    <div class="container mt-3" [formGroup]="editClientMasterForm">
+    <div class="popup-content" >
+    <div class="row">
+    <div class="col-md-4">
+        <label  class="form-label">Client Name<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ClientName" class="form-control" placeholder="Enter client name" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Speciality<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="Speciality" class="form-control" placeholder="Enter speciality" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Registration Number<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="RegistrationNumber" class="form-control" placeholder="Enter registration number" />
+    </div>
+    <div class="col-md-2">
+         <label class="form-label">Client Type<mat-icon class="matIcon">*</mat-icon></label>
+         <select class="form-control"  formControlName="ddlClientType">
+            <option value="">~Please Choose~</option>
+            <option value="CLINIC">CLINIC</option>
+            <option value="DOCTOR">DOCTOR</option>
+            <option value="HOSPITAL">HOSPITAL</option>
+            <option value="LAB">LAB</option>
+        </select>
+    </div>
+    </div>
+     <br/>
+    <div class="row"> 
+    <div class="col-md-3">
+        <label class="form-label">Email<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="EmailId" class="form-control" placeholder="Enter email address" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Mobile Number<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="MobileNumber" class="form-control" placeholder="Enter mobile number" />
+    </div>     
+    <div class="col-md-3">
+        <label class="form-label">Address<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="Address" class="form-control" placeholder="Enter client address" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Centre<mat-icon class="matIcon">*</mat-icon></label>
+        <select class="form-control"  formControlName="ddlCentre">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
+        </select>
+    </div>
+    
+    </div>
+    <br/>
+    <div class="row">      
+    <div class="col-md-4">
+         <label  class="form-label">Client Status<mat-icon class="matIcon">*</mat-icon></label>
+         <select class="form-control"  formControlName="ddlStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+    </div>
+     <div class="col-md-8">
+        <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="createNewClient()">
+            <mat-icon>save</mat-icon>Create New Client</button>
+        <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="updateClient()">
+              <mat-icon>update</mat-icon>Update Client</button>
+       </div>
+    </div>
+    </div>
+    </div>
+     <app-toast></app-toast>
+     <app-loader *ngIf="loading$ | async"></app-loader>
+<br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>
+
