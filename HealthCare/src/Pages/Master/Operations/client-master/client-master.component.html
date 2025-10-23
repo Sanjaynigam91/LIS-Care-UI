@@ -26,7 +26,7 @@
          <div class="col-md-4">
             <div class="div-button">
             <button mat-flat-button class="search-button" (click)="onSearch()"><mat-icon>search</mat-icon>Search Client</button>
-            <button mat-flat-button class="add-button">
+            <button mat-flat-button class="add-button" (click)="OpenAddClientMasterPopUp()">
               <mat-icon>add</mat-icon> Add New Client</button> 
           </div>
         </div>
@@ -72,7 +72,7 @@
       <td>{{ item.mobileNumber }}</td>
       <td>{{ item.licenseNumber }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit client details">
+        <button class="edit-button" matTooltip="edit client details" (click)="ViewClientDetails(item.clientId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
         <button class="delete-button" matTooltip="delete client" (click)="clientDeleteConfirmationDialog(item.clientId)">
