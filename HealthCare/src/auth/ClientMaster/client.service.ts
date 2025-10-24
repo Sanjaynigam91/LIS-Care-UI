@@ -3,6 +3,7 @@ import { environment } from '../../app/environments/environments';
 import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ClientResponse } from '../../Interfaces/ClientMaster/client-response';
+import { ClientCustomRateResponse } from '../../Interfaces/ClientMaster/client-custom-rate-response';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +69,18 @@ export class ClientService {
             .set('clientId', clientId)
             .set('partnerId', partnerId.toString());
           return this.httpClient.delete(`${this.baseUrl}/DeleteClient`, {params});
-          }        
+          }
+          
+          /// used to get all clients custom rates
+             getClientCustomRate(optype:any,clientCode:any,partnerId:any,testCode:any): Observable<ClientCustomRateResponse[]> {
+                debugger;
+                // Create HttpParams instance and append query parameters
+                 let params = new HttpParams()
+                  .set('optype', optype.toString())
+                  .set('clientCode', clientCode.toString())
+                  .set('partnerId', partnerId.toString())
+                  .set('testCode',testCode.toString());
+                 return this.httpClient.get<ClientCustomRateResponse[]>(`${this.baseUrl}/GetClientCustomRates`, {params});
+              }
 
 }

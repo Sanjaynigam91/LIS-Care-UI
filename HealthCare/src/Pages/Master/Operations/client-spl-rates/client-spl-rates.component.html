@@ -1,1 +1,113 @@
-<p>client-spl-rates works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div class="container mt-3" [formGroup]="ClientSpecialRateForm">
+  <div class="row align-items-end">
+    <div class="col-md-3">
+      <label>Search By Client</label>
+      <select class="form-control" formControlName="ddlClients">
+        <option value="">~Please Choose~</option>
+         <option *ngFor="let item of clientApiResponse" [value]="item.clientCode">{{item.clientName}}</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label>Mapping Type</label>
+      <select class="form-control" formControlName="ddlMappingType">
+        <option value="">~Please Choose~</option>
+        <option value="RetrieveClientConfirmedRates">Already Applied</option>
+        <option value="RetrieveClientSpecificRates">Pending</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label>Test / Profile Name</label>
+      <input class="form-control" type="text" placeholder="Enter test or profile name" formControlName="testPrrofile"/>
+    </div>
+
+    <div class="col-md-4">
+      <button mat-flat-button class="search-button" (click)="loadAllClientCustomRate()">
+        <mat-icon>search</mat-icon> Search Rates
+      </button>
+      <button mat-flat-button class="export-button" (click)="exportToExcel()">
+        <mat-icon>file_download</mat-icon> Export Rates
+      </button>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row align-items-end no-gap">
+    <div class="col-md-2">
+      <label>Apply Discount</label>
+      <input class="form-control" type="text" placeholder="Enter Discount %" formControlName="testProfileDiscount"/>
+    </div>
+
+    <div class="col-md-4">
+      <button mat-flat-button class="discount-button" (click)="applyDiscount()">
+        <mat-icon>percent</mat-icon> Apply Discount
+      </button>
+      <button mat-flat-button class="save-button" (click)="updateAllTestRates()">
+        <mat-icon>save</mat-icon> Save Rates
+      </button>
+    </div>
+
+    <div class="col-md-4">
+      <label>Import Rates <mat-icon class="required-icon">*</mat-icon></label>
+      <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls" #fileInput />
+    </div>
+
+    <div class="col-md-2">
+      <button mat-flat-button class="import-button" (click)="uploadCenterRates()">
+        <mat-icon>folder_open</mat-icon> Import Rates
+      </button>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row"  *ngIf="IsRecordFound">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+      <input class="form-control" formControlName="filterCentreRates" placeholder="Search..." />
+    </div>
+      <br/>
+      <br/>
+      <br/>
+<div formArrayName="testAgreedRate">
+    <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
+      <thead>
+        <tr>
+          <th>Test Code</th>
+          <th>Test Name</th>
+          <th>MRP</th>
+          <th>Agreed Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of clientCustomRateResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+          <td>{{ item.testCode }}</td>
+          <td>{{ item.testName }}</td>
+          <td>{{ item.mrp }}</td>
+          <td>
+            <input
+              type="text"
+              class="form-control"
+              [formControlName]="i"
+              placeholder="Agreed Rate"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+  </div>
+
+  <div *ngIf="IsNoRecordFound" class="row tbl-div mt-3">
+    <div class="form-group form-control NoRecord-Found">No profiles found!</div>
+  </div>
+
+  
+</div>
+<app-toast></app-toast>
+<app-loader *ngIf="loading$ | async"></app-loader>

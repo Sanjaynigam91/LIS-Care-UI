@@ -94,14 +94,11 @@ router  =  inject(Router);
 
         /// used to load all the centers based on the search criteria
     LoadAllCentres(){
-    debugger;
     this.loaderService.show();
     this.centerStatus='';
     this.SeachByNameOrCode='';
     this.centerService.getAllCenters(this.partnerId,this.centerStatus,this.SeachByNameOrCode).subscribe({
       next: (response: any) => {
-        debugger;
-
         if (response?.status && response?.statusCode === 200) {
           this.centerApiResponse = response.data; 
           this.IsNoRecordFound = false;
@@ -125,15 +122,12 @@ router  =  inject(Router);
 
         /// used to load all the centers based on the search criteria
     LoadClients(){
-    debugger;
     this.loaderService.show();
     this.clientStatus = this.ClientForm?.value?.ddlClientStatus ?? '';
     this.searchBy = this.ClientForm?.value?.SeachDrNameOrMobileNumber ?? '';
     this.centerCode = this.ClientForm?.value?.ddlCenter ?? '';
     this.clientService.getAllClients(this.clientStatus,this.partnerId,this.searchBy,this.centerCode).subscribe({
       next: (response: any) => {
-        debugger;
-
         if (response?.status && response?.statusCode === 200) {
           this.clientApiResponse = response.data; 
           this.IsNoRecordFound = false;
@@ -162,8 +156,7 @@ router  =  inject(Router);
     this.LoadClients();
   }
 
-    filterClientData(term: string) {
-    debugger;  
+    filterClientData(term: string) {  
     this.filteredData = this.clientApiResponse.filter((item: {
       clientType: any;clientName: any; centerName:any;speciality:any;mobileNumber:any;licenseNumber:any;
     }) => 
@@ -174,7 +167,6 @@ router  =  inject(Router);
       (item.mobileNumber ?? '').toString().toLowerCase().includes(term.toLowerCase()) ||
       item.licenseNumber.toLowerCase().includes(term.toLowerCase()) 
      );
-     debugger;
     this.clientApiResponse= this.filteredData;
     if(term==""){
       this.ngOnInit();
@@ -183,7 +175,6 @@ router  =  inject(Router);
 
   // Used to delete client by Id
     clientDeleteConfirmationDialog(clientId:any): void {
-        debugger;
         const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
            width: 'auto',
            disableClose: true,  
@@ -191,11 +182,8 @@ router  =  inject(Router);
         });
     
         dialogRef.afterClosed().subscribe(result => {
-          debugger;
           if (result.success) {
-            debugger;
             this.clientService.deleteClientDetails(clientId,this.partnerId).subscribe((response:any)=>{
-              debugger;
              if(response.status && response.statusCode==200){
               this.toasterService.showToast(response.responseMessage, 'success');
               this.ngOnInit();
