@@ -370,7 +370,7 @@ updateAllTestRates(): void {
   this.excelData.forEach((row: any) => {
     // Map Excel columns to API request
     const centerRatesRequest: CenterRatesRequest = {
-      centerCode: this.centerCode,
+      centerCode: row.centerCode?.toString().trim(),
       partnerId: this.partnerId,
       testCode: row.testCode?.toString().trim(), // Adjust according to Excel headers
       billRate: row.customRate?.toString().trim(),

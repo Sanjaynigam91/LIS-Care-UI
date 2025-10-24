@@ -83,4 +83,17 @@ export class ClientService {
                  return this.httpClient.get<ClientCustomRateResponse[]>(`${this.baseUrl}/GetClientCustomRates`, {params});
               }
 
+            /// used to update client's test rates
+          updateClientTestRate(payload: any): Observable<any> {
+          return this.httpClient.put(`${this.baseUrl}/UpdateClientTestRates`, payload, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }      
+      
+      /// used to import client rates
+      ImportClientRates(data:any){
+        debugger;
+        return this.httpClient.post(`${this.baseUrl}/ImportClientRates`, data).pipe(delay(1000));
+      }
+
 }
