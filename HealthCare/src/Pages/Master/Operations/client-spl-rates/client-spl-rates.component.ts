@@ -28,6 +28,7 @@ import { forkJoin } from 'rxjs';
 import { CenterRatesRequest } from '../../../../Interfaces/CenterMaster/center-rates-request';
 import { ClientResponse } from '../../../../Interfaces/ClientMaster/client-response';
 import { ClientService } from '../../../../auth/ClientMaster/client.service';
+import { ClientCustomRateResponse } from '../../../../Interfaces/ClientMaster/client-custom-rate-response';
 
 @Component({
   selector: 'app-client-spl-rates',
@@ -59,6 +60,7 @@ router  =  inject(Router);
     ClientSpecialRateForm!:FormGroup;
     clientApiResponse:Observable<ClientResponse>| any;
     centerCustomRateResponse:Observable<CentreCustomRateResponse>| any; 
+    clientCustomRateResponse:Observable<ClientCustomRateResponse>|any;
     optype:string=''; // To check the operation type i.e. Add or Edit 
     centerCode:string|any; // To store the center code when we are going to edit the center details
     testCode:string|any; // To store the test code when we are going to edit the center details
@@ -114,8 +116,8 @@ router  =  inject(Router);
   const agreedRateArray = this.ClientSpecialRateForm.get('testAgreedRate') as FormArray;
   agreedRateArray.clear();
 
-  if (Array.isArray(this.centerCustomRateResponse) && this.centerCustomRateResponse.length > 0) {
-    this.centerCustomRateResponse.forEach((item: any) => {
+  if (Array.isArray(this.clientCustomRateResponse) && this.clientCustomRateResponse.length > 0) {
+    this.clientCustomRateResponse.forEach((item: any) => {
       agreedRateArray.push(new FormControl(item.agreedRate || ''));
     });
   }
@@ -154,25 +156,25 @@ this.loaderService.hide();
   }
 
 /// used to load all the center special rates based on the search criteria
-    loadAllCentresCustomRate(){
+    loadAllClientCustomRate(){
     debugger;
     this.loaderService.show();
     this.optype=this.ClientSpecialRateForm.get('ddlMappingType')?.value;
     this.clientCode=this.ClientSpecialRateForm.get('ddlClients')?.value;
     this.testCode=this.ClientSpecialRateForm.get('testPrrofile')?.value;
-    this.centerService.getCentreCustomRate(this.optype,this.clientCode,this.partnerId,this.testCode).subscribe({
+    this.clientService.getClientCustomRate(this.optype,this.clientCode,this.partnerId,this.testCode).subscribe({
       next: (response: any) => {
         debugger;
         if (response?.status && response?.statusCode === 200) {
-          this.centerCustomRateResponse = response.data;
+          this.clientCustomRateResponse = response.data;
           this.IsNoRecordFound = false;
           this.IsRecordFound=true;
           this.initAgreedRateFormArray();
-          if(this.optype=='RetrieveConfirmedRates')
+          if(this.optype=='RetrieveClientConfirmedRates')
           {
             debugger;
             const agreedRateArray = this.ClientSpecialRateForm.get('testAgreedRate') as FormArray;
-            this.centerCustomRateResponse.forEach((item: any, index: number) => {
+            this.clientCustomRateResponse.forEach((item: any, index: number) => {
              const customRate = item.customRate && item.customRate !== '' ? parseFloat(item.customRate) : 0;
               if (customRate > 0) {
                item.agreedRate = customRate.toFixed(2);
@@ -186,7 +188,7 @@ this.loaderService.hide();
           }
           
 
-          console.log(this.centerCustomRateResponse);
+          console.log(this.clientCustomRateResponse);
         } else {
           this.IsNoRecordFound = true;
             this.IsRecordFound=false;
@@ -210,25 +212,25 @@ this.loaderService.hide();
   exportToExcel(): void {
     debugger;
   this.optype=this.ClientSpecialRateForm.get('ddlMappingType')?.value;
-  this.centerCode=this.ClientSpecialRateForm.get('ddlClients')?.value;
+  this.clientCode=this.ClientSpecialRateForm.get('ddlClients')?.value;
   this.testCode=this.ClientSpecialRateForm.get('testPrrofile')?.value;
-  this.centerService.getCentreCustomRate(this.optype, this.centerCode, this.partnerId, this.testCode)
+  this.clientService.getClientCustomRate(this.optype, this.clientCode, this.partnerId, this.testCode)
   .subscribe({
     next: (response: any) => {
       debugger;
       if (response?.status && response?.statusCode === 200) {
-        this.centerCustomRateResponse = response.data;
+        this.clientCustomRateResponse = response.data;
         this.IsNoRecordFound = false;
         this.IsRecordFound = true;
-        console.log(this.centerCustomRateResponse);
+        console.log(this.clientCustomRateResponse);
 
-        if (!this.centerCustomRateResponse || this.centerCustomRateResponse.length === 0) {
+        if (!this.clientCustomRateResponse || this.clientCustomRateResponse.length === 0) {
             alert('No data available for export. Please load the data first.');
             return;
           }
 
         // ✅ Auto export to Excel
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.centerCustomRateResponse);
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.clientCustomRateResponse);
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'ClientSpecialRates');
       XLSX.writeFile(wb, 'ClientCustomRates.xlsx');
@@ -254,7 +256,7 @@ filterCenterCustomRates(term: string) {
   debugger;
   const searchTerm = term ? term.toLowerCase() : '';
   
-  this.filterRates = this.centerCustomRateResponse.filter((item: any) => {
+  this.filterRates = this.clientCustomRateResponse.filter((item: any) => {
     const testCode = (item.testCode || '').toString().toLowerCase();
     const testName = (item.testName || '').toString().toLowerCase();
     const mrp = (item.mrp || '').toString().toLowerCase();
@@ -266,10 +268,10 @@ filterCenterCustomRates(term: string) {
     );
   });
 
-  this.centerCustomRateResponse = this.filterRates;
+  this.clientCustomRateResponse = this.filterRates;
 
   if (!term) {
-    this.loadAllCentresCustomRate();
+    this.loadAllClientCustomRate();
   }
 }
 
@@ -279,7 +281,7 @@ applyDiscount(): void {
   const discount = parseFloat(this.ClientSpecialRateForm.value.testProfileDiscount) || 0;
   const agreedRateArray = this.ClientSpecialRateForm.get('testAgreedRate') as FormArray;
 
-  this.centerCustomRateResponse.forEach((item: any, index: number) => {
+  this.clientCustomRateResponse.forEach((item: any, index: number) => {
     const mrp = item.mrp && item.mrp !== '' ? parseFloat(item.mrp) : 0;
 
     if (mrp > 0) {

@@ -15,8 +15,8 @@
       <label>Mapping Type</label>
       <select class="form-control" formControlName="ddlMappingType">
         <option value="">~Please Choose~</option>
-        <option value="RetrieveConfirmedRates">Already Applied</option>
-        <option value="RetrieveSpecificRates">Pending</option>
+        <option value="RetrieveClientConfirmedRates">Already Applied</option>
+        <option value="RetrieveClientSpecificRates">Pending</option>
       </select>
     </div>
 
@@ -26,7 +26,7 @@
     </div>
 
     <div class="col-md-4">
-      <button mat-flat-button class="search-button" (click)="loadAllCentresCustomRate()">
+      <button mat-flat-button class="search-button" (click)="loadAllClientCustomRate()">
         <mat-icon>search</mat-icon> Search Rates
       </button>
       <button mat-flat-button class="export-button" (click)="exportToExcel()">
@@ -85,7 +85,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of centerCustomRateResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+        <tr *ngFor="let item of clientCustomRateResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
           <td>{{ item.testCode }}</td>
           <td>{{ item.testName }}</td>
           <td>{{ item.mrp }}</td>
