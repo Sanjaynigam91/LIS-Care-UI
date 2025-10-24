@@ -29,6 +29,7 @@ import { CenterRatesRequest } from '../../../../Interfaces/CenterMaster/center-r
 import { ClientResponse } from '../../../../Interfaces/ClientMaster/client-response';
 import { ClientService } from '../../../../auth/ClientMaster/client.service';
 import { ClientCustomRateResponse } from '../../../../Interfaces/ClientMaster/client-custom-rate-response';
+import { ClientRatesRequest } from '../../../../Interfaces/ClientMaster/client-rates-request';
 
 @Component({
   selector: 'app-client-spl-rates',
@@ -67,12 +68,13 @@ router  =  inject(Router);
     filterRates: any[] = []; // Data array for the table
     amountForDiscount:any;
     clientCode:any;
-    centerRatesRequest:CenterRatesRequest={
-      centerCode: '',
+    clientRateRequest:ClientRatesRequest={
+      clientCode: '',
       partnerId: '',
       testCode: '',
       billRate: ''
     }
+
     @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
     excelData: any[] = [];
 
@@ -301,22 +303,22 @@ updateAllTestRates(): void {
   debugger;
   const discount = parseFloat(this.ClientSpecialRateForm.value.testProfileDiscount) || 0;
 
-  const requests = this.centerCustomRateResponse.map((item: any) => {
+  const requests = this.clientCustomRateResponse.map((item: any) => {
     const mrp = item.mrp ? parseFloat(item.mrp) : 0;
     const discountedAmount = mrp - (mrp * (discount / 100));
     const agreedRate = discountedAmount.toFixed(2);
 
-    this.centerCode=this.ClientSpecialRateForm.get('ddlCentres')?.value;
+    this.clientCode=this.ClientSpecialRateForm.get('ddlClients')?.value;
   // ✅ Check for missing data
-    if (!this.centerCode || !this.partnerId || !item.testCode) {
+    if (!this.clientCode || !this.partnerId || !item.testCode) {
       const message = `Missing required data for item: ${JSON.stringify(item)}`;
       this.toasterService.showToast(message, 'error');
       return null;
     }
 
 
-    this.centerRatesRequest = {
-      centerCode: this.centerCode,
+    this.clientRateRequest = {
+      clientCode: this.clientCode,
       partnerId: this.partnerId,
       testCode: item.testCode,
       billRate: agreedRate,
@@ -324,8 +326,8 @@ updateAllTestRates(): void {
       updatedBy:this.loggedInUserId
     };
 
-    console.log('Sending payload:', this.centerRatesRequest);
-    return this.centerService.updateTestRate(this.centerRatesRequest);
+    console.log('Sending payload:', this.clientRateRequest);
+    return this.clientService.updateClientTestRate(this.clientRateRequest);
   }).filter((req: null) => req !== null); // remove any null entries
 
   if (requests.length === 0) {
@@ -362,7 +364,7 @@ updateAllTestRates(): void {
     }
   }
 
-  uploadCenterRates() {
+  uploadClientRates() {
     debugger;
   if (!this.excelData || this.excelData.length === 0) {
     this.toasterService.showToast('Please select an Excel file first.', 'error');
@@ -373,8 +375,8 @@ updateAllTestRates(): void {
 
   this.excelData.forEach((row: any) => {
     // Map Excel columns to API request
-    const centerRatesRequest: CenterRatesRequest = {
-      centerCode: this.centerCode,
+    const clientRatesRequest: ClientRatesRequest = {
+      clientCode: row.clientCode?.toString().trim(),
       partnerId: this.partnerId,
       testCode: row.testCode?.toString().trim(), // Adjust according to Excel headers
       billRate: row.customRate?.toString().trim(),
@@ -382,23 +384,23 @@ updateAllTestRates(): void {
       updatedBy: this.loggedInUserId,
     };
 
-    console.log('Sending payload:', centerRatesRequest);
+    console.log('Sending payload:', clientRatesRequest);
 
     // Call API for each row
-    this.centerService.ImportCenterRates(centerRatesRequest).subscribe({
+    this.clientService.ImportClientRates(clientRatesRequest).subscribe({
       next: (res: any) => {
         debugger;
         // Assuming API returns { isSuccess: boolean, errorMsg: string }
         if (res.isSuccess) {
           results.push({
-            testCode: centerRatesRequest.testCode,
+            testCode: clientRatesRequest.testCode,
             status: 'Success',
             message: res.errorMsg || 'Rate updated successfully',
             
           });
         } else {
           results.push({
-            testCode: centerRatesRequest.testCode,
+            testCode: clientRatesRequest.testCode,
             status: 'Failed',
             message: res.errorMsg || 'Error updating rate',
           });
@@ -406,7 +408,7 @@ updateAllTestRates(): void {
       },
       error: (err) => {
         results.push({
-          testCode: centerRatesRequest.testCode,
+          testCode: clientRatesRequest.testCode,
           status: 'Failed',
           message: err.message || 'Server error',
         });
