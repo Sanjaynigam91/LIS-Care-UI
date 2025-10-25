@@ -62,7 +62,7 @@ open(): void {
 
    ngOnInit(): void {
   this.editOutLabForm=this.formBuilder.group({
-      LabCode:[''],
+      LabCode:[{ value: '', disabled: true }],
       LabName:[''],
       ContactPerson:[''],
       MobileNumber:  [
