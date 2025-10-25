@@ -1,1 +1,79 @@
-<p>out-lab-master works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div class="container mt-3">
+    <div class="row" [formGroup]="outlabForm">
+        <div class="col-md-3">
+        <label>Lab Status</label>
+        <select class="form-control"  formControlName="ddllabStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+        </div>
+        <div class="col-md-3">
+            <label>Search By Lab Name/ Code</label>
+      <input class="form-control" type="text" name="SeachBy" placeholder="Type lab name or code" formControlName="SeachByNameOrCode"/>
+         </div>
+         <div class="col-md-6">
+            <div class="div-button">
+            <button mat-flat-button class="search-button" (click)="SearchAllOutLabs()"><mat-icon>search</mat-icon>Search Out Lab</button>
+            <button mat-flat-button class="add-button" >
+              <mat-icon>add</mat-icon> Add New Lab</button> 
+          </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row" [formGroup]="searchOutlabForm" *ngIf="IsRecordFound">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterOutlabs" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+    <br/>
+    <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found">
+                  No profiles found!.
+                </div>
+                <br/>
+   </div>
+  <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
+  <thead>
+    <tr>
+      <th>Lab Code</th>
+      <th>Lab Name</th>
+      <th>Contact Person</th>
+      <th>Mobile Number</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of outLabApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <td>{{ item.labCode }}</td>
+      <td>{{ item.labName }}</td>
+      <td>{{ item.contactPerson }}</td>
+      <td>{{ item.mobileNumber }}</td>
+      <td>{{ item.email }}</td>
+      <td>
+        <button class="edit-button" matTooltip="edit out lab details">
+          <mat-icon class="edit-icon">edit</mat-icon>
+        </button>
+        <button class="delete-button" matTooltip="delete out lab" (click)="outLabDeleteConfirmationDialog(item.labCode)">
+          <mat-icon class="delete-icon">delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table> 
+<pagination-controls (pageChange)="p = $event" *ngIf="IsRecordFound"></pagination-controls>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>
+
+
