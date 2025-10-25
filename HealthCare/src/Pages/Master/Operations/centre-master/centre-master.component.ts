@@ -134,7 +134,7 @@ export class CentreMasterComponent {
     }
   }
 
-     SearchAllAnalyzerRecords(){
+    SearchAllCenterRecords(){
     debugger;
     this.loaderService.show();
     this.centerStatus=this.CenterDetailsForm.get('ddlCenterStatus')?.value;
