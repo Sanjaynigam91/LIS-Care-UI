@@ -25,6 +25,7 @@ import { PopupCentermastereditComponent } from '../../../PopUp/popup-centermaste
 import { A11yModule } from "@angular/cdk/a11y";
 import { OutLabService } from '../../../../auth/OutLab/out-lab.service';
 import { OutLabResponse } from '../../../../Interfaces/OutLab/out-lab-response';
+import { PopupOutLabeditComponent } from '../../../PopUp/popup-out-labedit/popup-out-labedit.component';
 
 
 @Component({
@@ -193,6 +194,42 @@ export class OutLabMasterComponent {
         }
       });
     }
+
+      /// Open Add New out lab Master PopUp
+                OpenOutLabMasterPopUp(): void {
+                  this.dialog.open(PopupOutLabeditComponent, {
+                    width: '1500px',           // slightly larger than medium
+                    maxWidth: '90vw',         // responsive on smaller screens
+                    height: 'auto',           // taller than medium but not full screen
+                    minHeight: '400px',       // ensures minimum height
+                    panelClass: 'large-dialog', // optional custom CSS
+                    disableClose: true,  
+                    data: {}                  // pass data if needed
+                  });
+          
+                  this.dialog.afterAllClosed.subscribe(() => {
+                    this.ngOnInit(); // Refresh the list after the dialog is closed
+                  });
+          
+                }
+          
+                // View client details
+                 ViewOutLabDetails(labCode:any){
+                      debugger;
+                      this.dialog.open(PopupOutLabeditComponent, {
+                       width: '1500px',           // slightly larger than medium
+                        maxWidth: '90vw',         // responsive on smaller screens
+                        height: 'auto',            // taller than medium but not full screen
+                        minHeight: '400px',       // ensures minimum height
+                        panelClass: 'large-dialog', // optional custom CSS
+                        disableClose: true,  
+                        data: {labCode:labCode},        // Pass data if needed   
+                      });
+          
+                    this.dialog.afterAllClosed.subscribe(() => {
+                    this.ngOnInit(); // Refresh the list after the dialog is closed
+                  });
+                }
 
 
 

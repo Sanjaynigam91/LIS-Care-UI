@@ -1,0 +1,70 @@
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Out lab</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Out Lab</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+</div>
+
+ <!-- Content / Form -->
+    <div class="container mt-3" [formGroup]="editOutLabForm">
+    <div class="popup-content" >
+    <div class="row">
+    <div class="col-md-2">
+        <label  class="form-label">Lab Code</label>
+        <input type="text" formControlName="LabCode" class="form-control" placeholder="Enter lab code" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Lab Name</label>
+        <input type="text" formControlName="LabName" class="form-control" placeholder="Enter lab name" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Contact Person</label>
+        <input type="text" formControlName="ContactPerson" class="form-control" placeholder="Enter contact person name" />
+    </div>
+    <div class="col-md-3">
+         <label class="form-label">Mobile Number</label>
+        <input type="text" formControlName="MobileNumber" class="form-control" placeholder="Enter mobile number" />
+    </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="row">      
+    <div class="col-md-3">
+        <label class="form-label">Email Address</label>
+          <input type="text" formControlName="EmailId" class="form-control" placeholder="Enter email address" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Introduced By</label>
+        <input type="text" formControlName="IntroducedBy" class="form-control" placeholder="Enter introduced by" />
+    </div>
+    <div class="col-md-2">
+         <label  class="form-label">Status</label>
+         <select class="form-control"  formControlName="ddlLabStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+    </div>
+     <div class="col-md-4">
+        <button *ngIf="isSubmitVisible" class="lis-button save-button">
+            <mat-icon>save</mat-icon>Create New Lab</button>
+        <button *ngIf="isUpdateVisible" class="lis-button update-button">
+              <mat-icon>update</mat-icon>Update Lab</button>
+       </div>
+    </div>
+    </div>
+    </div>
+     <app-toast></app-toast>
+     <app-loader *ngIf="loading$ | async"></app-loader>
+<br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>
+
