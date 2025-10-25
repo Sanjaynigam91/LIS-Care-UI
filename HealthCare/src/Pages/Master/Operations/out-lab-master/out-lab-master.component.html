@@ -18,7 +18,7 @@
          <div class="col-md-6">
             <div class="div-button">
             <button mat-flat-button class="search-button" (click)="SearchAllOutLabs()"><mat-icon>search</mat-icon>Search Out Lab</button>
-            <button mat-flat-button class="add-button" >
+            <button mat-flat-button class="add-button" (click)="OpenOutLabMasterPopUp()" >
               <mat-icon>add</mat-icon> Add New Lab</button> 
           </div>
         </div>
@@ -62,7 +62,7 @@
       <td>{{ item.mobileNumber }}</td>
       <td>{{ item.email }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit out lab details">
+        <button class="edit-button" matTooltip="edit out lab details" (click)="ViewOutLabDetails(item.labCode)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
         <button class="delete-button" matTooltip="delete out lab" (click)="outLabDeleteConfirmationDialog(item.labCode)">
