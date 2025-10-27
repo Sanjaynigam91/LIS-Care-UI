@@ -162,6 +162,7 @@ export class OutLabMasterComponent {
     }
   }
 
+  /// Used to dlete Out Lab details
     outLabDeleteConfirmationDialog(labCode:any): void {
       debugger;
       const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
@@ -174,17 +175,17 @@ export class OutLabMasterComponent {
         debugger;
         if (result.success) {
           debugger;
-          // this.centerService.deleteCenterDetails(centerCode,this.partnerId).subscribe((response:any)=>{
-          //   debugger;
-          //  if(response.status && response.statusCode==200){
-          //   this.toasterService.showToast(response.responseMessage, 'success');
-          //   this.ngOnInit();
-          //  }
-          //  else{
-          //   this.toasterService.showToast(response.responseMessage, 'error');
-          //  }
-          //  console.log(response);
-          // }) 
+          this.outLabService.deleteOutLabDetails(labCode,this.partnerId).subscribe((response:any)=>{
+            debugger;
+           if(response.status && response.statusCode==200){
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.ngOnInit();
+           }
+           else{
+            this.toasterService.showToast(response.responseMessage, 'error');
+           }
+           console.log(response);
+          }) 
           console.log('Returned User ID:', result.userId);
           console.log('User confirmed the action.');
         } else {

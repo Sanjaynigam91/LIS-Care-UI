@@ -7,4 +7,5 @@ export interface OutLabResponse {
   contactPerson: string;
   labStatus: boolean;
   partnerId: string;
+  introducedBy:string;
 }
