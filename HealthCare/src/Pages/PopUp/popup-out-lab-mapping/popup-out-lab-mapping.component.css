@@ -1,3 +1,55 @@
+/* Filter Button (golden yellow) */
+.filter-button {
+  background-color: #d6af3a; /* golden yellow */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+  margin-right: 30px;
+}
+
+.filter-button:hover {
+  background-color: #c49b2e; /* slightly darker gold on hover */
+}
+
+.filter-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(214, 175, 58, 0.4);
+}
+
+/* Save Button (Hoki Blue Theme) */
+.update-button {
+  background-color: #5B9BD5; /* Hoki Blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.update-button:hover {
+  background-color: #4A90E2; /* Slightly deeper blue on hover */
+  transform: translateY(-1px);
+}
+
+.update-button:focus {
+  outline: none;
+  background-color: #2F7DC1; /* Darker focus blue */
+  box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.4); /* Soft blue glow */
+  transform: scale(1.03);
+}
+
 /* Container */
 .popup-container {
   width: 1500px;          /* medium-large popup */

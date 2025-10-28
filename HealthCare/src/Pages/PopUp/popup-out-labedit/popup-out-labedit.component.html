@@ -14,19 +14,19 @@
     <div class="popup-content" >
     <div class="row">
     <div class="col-md-2">
-        <label  class="form-label">Lab Code</label>
+        <label  class="form-label">Lab Code<mat-icon class="matIcon"></mat-icon></label>
         <input type="text" formControlName="LabCode" class="form-control" placeholder="Enter lab code" />
     </div>
     <div class="col-md-4">
-        <label class="form-label">Lab Name</label>
+        <label class="form-label">Lab Name<mat-icon class="matIcon">*</mat-icon></label>
         <input type="text" formControlName="LabName" class="form-control" placeholder="Enter lab name" />
     </div>
     <div class="col-md-3">
-        <label  class="form-label">Contact Person</label>
+        <label  class="form-label">Contact Person<mat-icon class="matIcon"></mat-icon></label>
         <input type="text" formControlName="ContactPerson" class="form-control" placeholder="Enter contact person name" />
     </div>
     <div class="col-md-3">
-         <label class="form-label">Mobile Number</label>
+         <label class="form-label">Mobile Number<mat-icon class="matIcon">*</mat-icon></label>
         <input type="text" formControlName="MobileNumber" class="form-control" placeholder="Enter mobile number" />
     </div>
     </div>
@@ -34,15 +34,15 @@
     <br/>
     <div class="row">      
     <div class="col-md-3">
-        <label class="form-label">Email Address</label>
+        <label class="form-label">Email Address<mat-icon class="matIcon">*</mat-icon></label>
           <input type="text" formControlName="EmailId" class="form-control" placeholder="Enter email address" />
     </div>
     <div class="col-md-3">
-        <label class="form-label">Introduced By</label>
+        <label class="form-label">Introduced By<mat-icon class="matIcon"></mat-icon></label>
         <input type="text" formControlName="IntroducedBy" class="form-control" placeholder="Enter introduced by" />
     </div>
     <div class="col-md-2">
-         <label  class="form-label">Status</label>
+         <label  class="form-label">Status<mat-icon class="matIcon">*</mat-icon></label>
          <select class="form-control"  formControlName="ddlLabStatus">
             <option value="">~Please Choose~</option>
             <option value="true">Active</option>
@@ -50,9 +50,9 @@
         </select>
     </div>
      <div class="col-md-4">
-        <button *ngIf="isSubmitVisible" class="lis-button save-button">
+        <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="createNewOutLab()">
             <mat-icon>save</mat-icon>Create New Lab</button>
-        <button *ngIf="isUpdateVisible" class="lis-button update-button">
+        <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="updateOutLab()">
               <mat-icon>update</mat-icon>Update Lab</button>
        </div>
     </div>

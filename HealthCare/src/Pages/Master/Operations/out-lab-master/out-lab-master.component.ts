@@ -26,6 +26,7 @@ import { A11yModule } from "@angular/cdk/a11y";
 import { OutLabService } from '../../../../auth/OutLab/out-lab.service';
 import { OutLabResponse } from '../../../../Interfaces/OutLab/out-lab-response';
 import { PopupOutLabeditComponent } from '../../../PopUp/popup-out-labedit/popup-out-labedit.component';
+import { PopupOutLabMappingComponent } from '../../../PopUp/popup-out-lab-mapping/popup-out-lab-mapping.component';
 
 
 @Component({
@@ -162,6 +163,7 @@ export class OutLabMasterComponent {
     }
   }
 
+  /// Used to dlete Out Lab details
     outLabDeleteConfirmationDialog(labCode:any): void {
       debugger;
       const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
@@ -174,17 +176,17 @@ export class OutLabMasterComponent {
         debugger;
         if (result.success) {
           debugger;
-          // this.centerService.deleteCenterDetails(centerCode,this.partnerId).subscribe((response:any)=>{
-          //   debugger;
-          //  if(response.status && response.statusCode==200){
-          //   this.toasterService.showToast(response.responseMessage, 'success');
-          //   this.ngOnInit();
-          //  }
-          //  else{
-          //   this.toasterService.showToast(response.responseMessage, 'error');
-          //  }
-          //  console.log(response);
-          // }) 
+          this.outLabService.deleteOutLabDetails(labCode,this.partnerId).subscribe((response:any)=>{
+            debugger;
+           if(response.status && response.statusCode==200){
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.ngOnInit();
+           }
+           else{
+            this.toasterService.showToast(response.responseMessage, 'error');
+           }
+           console.log(response);
+          }) 
           console.log('Returned User ID:', result.userId);
           console.log('User confirmed the action.');
         } else {
@@ -213,7 +215,7 @@ export class OutLabMasterComponent {
           
                 }
           
-                // View client details
+                // View out lab details
                  ViewOutLabDetails(labCode:any){
                       debugger;
                       this.dialog.open(PopupOutLabeditComponent, {
@@ -230,6 +232,24 @@ export class OutLabMasterComponent {
                     this.ngOnInit(); // Refresh the list after the dialog is closed
                   });
                 }
+
+              // View out lab mapping details
+                 ViewOutLabMapping(labCode:any){
+                      debugger;
+                      this.dialog.open(PopupOutLabMappingComponent, {
+                       width: '1500px',           // slightly larger than medium
+                        maxWidth: '90vw',         // responsive on smaller screens
+                        height: 'auto',            // taller than medium but not full screen
+                        minHeight: '350px',       // ensures minimum height
+                        panelClass: 'large-dialog', // optional custom CSS
+                        disableClose: true,  
+                        data: {labCode:labCode},        // Pass data if needed   
+                      });
+          
+                    this.dialog.afterAllClosed.subscribe(() => {
+                    this.ngOnInit(); // Refresh the list after the dialog is closed
+                  });
+                }     
 
 
 
