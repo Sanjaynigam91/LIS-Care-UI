@@ -307,3 +307,14 @@ pagination-controls {
   box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.4); /* purple glow */
   transform: scale(1.03);
 }
+
+.outlab-button {
+  background-color: #1c93cf;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+}
+
+.outlab-icon {
+  color: #095a7c;       /* 095a7c icon inside the blue button */
+}
