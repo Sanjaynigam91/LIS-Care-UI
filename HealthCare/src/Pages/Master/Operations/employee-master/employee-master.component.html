@@ -25,8 +25,8 @@
          </div> 
          <div class="col-md-4">
             <div class="div-button">
-            <button mat-flat-button class="search-button"><mat-icon>search</mat-icon>Search Employee</button>
-            <button mat-flat-button class="add-button">
+            <button mat-flat-button class="search-button" (click)="onSearch()"><mat-icon>search</mat-icon>Search Employee</button>
+            <button mat-flat-button class="add-button" (click)="OpenAddEmployeePopUp()">
               <mat-icon>add</mat-icon> Add New Employee</button> 
           </div>
         </div>
@@ -53,33 +53,33 @@
   <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
   <thead>
     <tr>
-      <th>Client Type</th>
-      <th>Client Name</th>
-      <th>Center Name</th>
-      <th>Speciality</th>
+      <th>Employee Id</th>
+      <th>Employee Name</th>
       <th>Mobile Number</th>
-      <th>LicenseNumber</th>
+      <th>Email</th>
+      <th>Department</th>
+      <th>Designation</th>
       <th>Actions</th>
     </tr>
   </thead>
 
   <tbody>
-    <!-- <tr *ngFor="let item of clientApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
-      <td>{{ item.clientType }}</td>
-      <td>{{ item.clientName }}</td>
-      <td>{{ item.centerName }}</td>
-      <td>{{ item.speciality }}</td>
+    <tr *ngFor="let item of employeeApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <td>{{ item.employeeId }}</td>
+      <td>{{ item.employeeName }}</td>
       <td>{{ item.mobileNumber }}</td>
-      <td>{{ item.licenseNumber }}</td>
+      <td>{{ item.emailId }}</td>
+      <td>{{ item.department }}</td>
+      <td>{{ item.designation }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit employee details">
+        <button class="edit-button" matTooltip="edit employee details" (click)="ViewCenterDetails(item.employeeId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete employee">
+        <button class="delete-button" matTooltip="delete employee" (click)="employeeDeleteConfirmationDialog(item.employeeId)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>
-    </tr> -->
+    </tr>
   </tbody>
 </table> 
 <pagination-controls *ngIf="IsRecordFound" (pageChange)="p = $event"></pagination-controls>

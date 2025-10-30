@@ -26,6 +26,7 @@ export class ConfirmationDialogComponentComponent {
   clinicId:any;// used to delete clinic from clinic master page
   clientId:any;// used to delete client from client master page 
   labCode:any;// used to dlete outlab from out lab master page
+  empId:any;//used to delete employee from employee master page
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponentComponent>,
@@ -45,6 +46,7 @@ export class ConfirmationDialogComponentComponent {
     this.clinicId=data.clinicId;
     this.clientId=data.clientId;
     this.labCode=data.labCode;
+    this.empId=data.empId;
   }
 
   onConfirm(): void {

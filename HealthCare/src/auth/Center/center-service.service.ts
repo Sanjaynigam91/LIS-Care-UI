@@ -70,14 +70,14 @@ export class CenterServiceService {
         
         }
 
-deleteCenterDetails(centerCode:any,partnerId:any){
-  debugger;
- // Create HttpParams instance and append query parameters
- let params = new HttpParams()
-  .set('centerCode', centerCode)
-  .set('partnerId', partnerId.toString());
- return this.httpClient.delete(`${this.baseUrl}/DeleteCenter`, {params});
-}
+      deleteCenterDetails(centerCode:any,partnerId:any){
+        debugger;
+      // Create HttpParams instance and append query parameters
+      let params = new HttpParams()
+        .set('centerCode', centerCode)
+        .set('partnerId', partnerId.toString());
+      return this.httpClient.delete(`${this.baseUrl}/DeleteCenter`, {params});
+      }
 
 /// used to get all centers
    getCentreCustomRate(optype:any,centerCode:any,partnerId:any,testCode:any): Observable<CenterResponse[]> {
