@@ -1,0 +1,126 @@
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Employee</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+
+  <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Employee</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+
+  <!-- Content / Form -->
+  <div class="container mt-3" [formGroup]="employeEditForm">
+    <div class="popup-content">
+      <div class="row">
+        <div class="col-md-2">
+          <label class="form-label">Employee Code<mat-icon class="matIcon"></mat-icon></label>
+          <input type="text" formControlName="EmployeeId" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Employee Name<mat-icon class="matIcon">*</mat-icon></label>
+          <input type="text" formControlName="EmployeeName" class="form-control" placeholder="Enter employee name" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Email<mat-icon class="matIcon">*</mat-icon></label>
+          <input type="email" formControlName="EmailId" class="form-control" placeholder="Enter email address" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Date of Joining<mat-icon class="matIcon">*</mat-icon></label>
+          <input type="date" formControlName="DateOfJoining" class="form-control" placeholder="Select date of joining" />
+        </div>
+      </div>
+
+      <br />
+
+      <div class="row">
+        <div class="col-md-3">
+          <label class="form-label">Contact Number<mat-icon class="matIcon"></mat-icon></label>
+          <input type="text" formControlName="ContactNumber" class="form-control" placeholder="Enter contact number" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Mobile Number<mat-icon class="matIcon">*</mat-icon></label>
+          <input type="text" formControlName="MobileNumber" class="form-control" placeholder="Enter mobile number" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Department<mat-icon class="matIcon">*</mat-icon></label>
+          <select class="form-control" formControlName="ddlDepartment">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of empoyeeDeptResponse" [value]="item.itemType">
+              {{ item.itemDescription }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Designation<mat-icon class="matIcon">*</mat-icon></label>
+          <select class="form-control" formControlName="ddlDesignation">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of empoyeeDeginationResponse" [value]="item.itemType">
+              {{ item.itemDescription }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <br />
+
+      <div class="row">
+        <div class="col-md-3">
+          <label class="form-label">Qualification<mat-icon class="matIcon"></mat-icon></label>
+          <input type="text" formControlName="Qualification" class="form-control" placeholder="Enter qualification" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Employee Status<mat-icon class="matIcon">*</mat-icon></label>
+          <select class="form-control" formControlName="ddlEmpStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Is Pathology<mat-icon class="matIcon"></mat-icon></label>
+          <select class="form-control" formControlName="ddlPathology">
+            <option value="">~Please Choose~</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Address<mat-icon class="matIcon"></mat-icon></label>
+          <textarea class="form-control" formControlName="Address" rows="4" cols="30" placeholder="Enter address details"></textarea>
+        </div>
+      </div>
+
+      <br />
+
+      <div class="row">
+        <div class="col-md-6">
+          <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="createNewEmployee()">
+            <mat-icon>save</mat-icon>Create New Employee
+          </button>
+
+          <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="updateEmployee()">
+            <mat-icon>update</mat-icon>Update Employee
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-toast></app-toast>
+  <app-loader *ngIf="loading$ | async"></app-loader>
+
+  <div class="popup-footer mt-3">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>
