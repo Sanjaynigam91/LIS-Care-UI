@@ -352,12 +352,16 @@ createNewEmployee(){
       this.employeeRequest.department=this.employeEditForm.value.ddlDepartment;
       this.employeeRequest.designation=this.employeEditForm.value.ddlDesignation;
       this.employeeRequest.qualification=this.employeEditForm.value.Qualification;
-      this.employeeRequest.recordStatus=this.employeEditForm.value.ddlEmpStatus;
       this.employeeRequest.address=this.employeEditForm.value.Address;
-      this.employeeRequest.isPathology = this.employeEditForm.value.ddlPathology;
       this.employeeRequest.signatureImage=''; 
       this.employeeRequest.partnerId=this.partnerId; 
       this.employeeRequest.createdBy=this.loggedInUserId; 
+      
+      const empStatusValue = this.employeEditForm.value.ddlEmpStatus;
+      const pathologyValue = this.employeEditForm.value.ddlPathology;
+
+      this.employeeRequest.recordStatus = String(empStatusValue).toLowerCase() === 'true';
+      this.employeeRequest.isPathology = String(pathologyValue).toLowerCase() === 'true';
 
     this.employeeService.updateEmployeeDetails(this.employeeRequest)
     .subscribe({
