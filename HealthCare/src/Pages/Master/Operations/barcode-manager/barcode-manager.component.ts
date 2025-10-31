@@ -135,5 +135,14 @@ filterBarcodeDetails(term: string) {
   }
 }
 
+/// used to generate barcodes in pdf format
+generateBarcodes(sequenceStart: number, sequenceEnd: number){
+  debugger;
+     this.barcodeService.getBulkBarcodesPdf(sequenceStart, sequenceEnd).subscribe((pdfBlob: Blob) => {
+      const fileURL = URL.createObjectURL(pdfBlob);
+      window.open(fileURL, '_blank');
+    });
+  
+}
 
 }

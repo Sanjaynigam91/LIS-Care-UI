@@ -30,4 +30,19 @@ export class BarcodeService {
        return this.httpClient.get<BarcodeResponse[]>(`${this.baseUrl}/GetAllBarcodes`, {params});
     }
 
+getBulkBarcodesPdf(sequenceStart: number, sequenceEnd: number): Observable<Blob> {
+  debugger;
+  const params = new HttpParams()
+    .set('sequenceStart', sequenceStart.toString())
+    .set('sequenceEnd', sequenceEnd.toString());
+
+  return this.httpClient.get(`${this.baseUrl}/GenerateBulkBarcode`, {
+    params,
+    responseType: 'blob'
+  });
+}
+
+
+
+
 }

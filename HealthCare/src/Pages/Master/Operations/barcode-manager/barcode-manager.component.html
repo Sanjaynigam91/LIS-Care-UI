@@ -51,7 +51,7 @@
       <td>{{ item.sequenceEnd }}</td>
       <td>{{ item.createdBy }}</td>
       <td>
-        <button class="print-button" matTooltip="print barcode">
+        <button class="print-button" matTooltip="print barcode" (click)="generateBarcodes(item.sequenceStart, item.sequenceEnd)">
           <mat-icon class="print-icon">print</mat-icon>
         </button>
       </td>
