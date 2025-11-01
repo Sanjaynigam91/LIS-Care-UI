@@ -213,7 +213,7 @@ savePrintedBarcodeDetails(sequenceStart: number, sequenceEnd: number){
       if (response.statusCode === 200 && response.status) {
         this.refPageService.notifyRefresh(); // used to refresh the main list page
         this.toasterService.showToast(response.responseMessage, 'success');
-
+        this.LoadAllBarcodes();
       } else {
         this.toasterService.showToast(response.responseMessage, 'error');
       }
