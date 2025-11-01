@@ -135,14 +135,28 @@ filterBarcodeDetails(term: string) {
   }
 }
 
-/// used to generate barcodes in pdf format
-generateBarcodes(sequenceStart: number, sequenceEnd: number){
+// Used to generate barcodes in PDF format
+generateBarcodes(sequenceStart: number, sequenceEnd: number) {
   debugger;
-     this.barcodeService.getBulkBarcodesPdf(sequenceStart, sequenceEnd).subscribe((pdfBlob: Blob) => {
-      const fileURL = URL.createObjectURL(pdfBlob);
-      window.open(fileURL, '_blank');
-    });
-  
+  this.loaderService.show();
+
+  this.barcodeService.getBulkBarcodesPdf(sequenceStart, sequenceEnd).subscribe({
+    next: (pdfBlob: Blob) => {
+      if (pdfBlob.size > 0) {
+        const fileURL = URL.createObjectURL(pdfBlob);
+        window.open(fileURL, '_blank');
+      } else {
+        alert('No barcodes generated.');
+      }
+      this.loaderService.hide();
+    },
+    error: (err) => {
+      console.error('Error generating barcodes:', err);
+      alert('Error generating barcodes');
+      this.loaderService.hide();
+    }
+  });
 }
+
 
 }
