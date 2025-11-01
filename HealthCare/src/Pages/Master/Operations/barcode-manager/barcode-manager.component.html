@@ -9,7 +9,7 @@
             <input class="form-control" type="text" placeholder="Enter quantity..." formControlName="BarcodeQuantity"/>
         </div>
         <div class="col-md-6">
-            <button class="printbarcode-button" matTooltip="Print Barcode">
+            <button class="printbarcode-button" matTooltip="Print Barcode" (click)="onPrintBarcode()">
                 <mat-icon class="generate-icon">qr_code_scanner</mat-icon> Print Barcode
             </button>
         </div>
@@ -60,6 +60,7 @@
 </table> 
 <pagination-controls *ngIf="IsRecordFound" (pageChange)="p = $event"></pagination-controls>
 </div>
+<app-toast></app-toast>
 <app-loader *ngIf="loading$ | async"></app-loader>
 
 
