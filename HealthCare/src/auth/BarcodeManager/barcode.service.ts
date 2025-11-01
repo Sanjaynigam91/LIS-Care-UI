@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../app/environments/environments';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BarcodeResponse } from '../../Interfaces/BarcodeManager/barcode-response';
+import { ApiResponse } from '../../Interfaces/apiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +43,20 @@ getBulkBarcodesPdf(sequenceStart: number, sequenceEnd: number): Observable<Blob>
   });
 }
 
+  /// used to get all barcode details
+     getLastPrintedBarcode(partnerId: any): Observable<ApiResponse[]> {
+      debugger;
+      // Create HttpParams instance and append query parameters
+       let params = new HttpParams()
+        .set('partnerId', partnerId.toString());
+       return this.httpClient.get<ApiResponse[]>(`${this.baseUrl}/GetLastPrintedBarcode`, {params});
+    }
 
+       /// used to save printed barcode details 
+          savePrintedBarcode(data:any){
+            debugger;
+            return this.httpClient.post(`${this.baseUrl}/SavePrintedBarcode`, data).pipe(delay(1000));
+          }
 
 
 }
