@@ -1,1 +1,77 @@
-<p>project-master works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div class="container mt-3">
+    <div class="row" [formGroup]="ProjectForm">
+        <div class="col-md-3">
+        <label>Project Status</label>
+        <select class="form-control"  formControlName="ddlProjectStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+        </div>
+        <div class="col-md-3">
+            <label>Search By Project Name</label>
+      <input class="form-control" type="text" name="SeachBy" placeholder="Type project name" formControlName="SeachByName"/>
+         </div>
+         <div class="col-md-6">
+            <div class="div-button">
+            <button mat-flat-button class="search-button" (click)="loadProjectData()"><mat-icon>search</mat-icon>Search Projects</button>
+            <button mat-flat-button class="add-button" (click)="OpenAddProjectMasterPopUp()" >
+              <mat-icon>add</mat-icon> Add New Project</button> 
+          </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row" [formGroup]="searchProjectForm" *ngIf="IsRecordFound">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterProjects" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+    <br/>
+    <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found">
+                  No projects found!.
+                </div>
+                <br/>
+   </div>
+  <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
+  <thead>
+    <tr>
+      <th>Project Name</th>
+      <th>Contact Person</th>
+      <th>Contact Number</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of projectApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <td>{{ item.projectName }}</td>
+      <td>{{ item.contactPerson }}</td>
+      <td>{{ item.contactNumber }}</td>
+      <td>{{ item.email }}</td>
+      <td>
+        <button class="edit-button" matTooltip="edit project details" (click)="ViewProjectDetails(item.projectId)">
+          <mat-icon class="edit-icon">edit</mat-icon>
+        </button>
+        <button class="delete-button" matTooltip="delete project" (click)="projectDeleteConfirmationDialog(item.projectId)">
+          <mat-icon class="delete-icon">delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table> 
+<pagination-controls (pageChange)="p = $event" *ngIf="IsRecordFound"></pagination-controls>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>
+
+

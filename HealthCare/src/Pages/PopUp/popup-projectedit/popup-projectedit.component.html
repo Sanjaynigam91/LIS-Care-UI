@@ -1,0 +1,125 @@
+<div class="popup-container">
+  <!-- Header -->
+  <div *ngIf="isAddHeaderVisible" class="popup-header">
+    <h2>Add New Project</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+    <div *ngIf="isEditHeaderVisible" class="popup-header">
+    <h2>View/Edit Project</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+</div>
+
+ <!-- Content / Form -->
+    <div class="container mt-3" [formGroup]="editProjectDetailsForm">
+    <div class="popup-content" >
+    <div class="row">
+    <div class="col-md-3">
+        <label  class="form-label">Project Name<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ProjectName" class="form-control" placeholder="Enter project name" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Contact Person<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ContactPerson" class="form-control" placeholder="Enter contact person" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Contact Number<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ContactNumber" class="form-control" placeholder="Enter contact number" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Email Id<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="EmailId" class="form-control" placeholder="Enter email address" />
+    </div>
+    </div>
+     <br/>
+    <div class="row">      
+    <div class="col-md-3">
+        <label class="form-label">Alternative Email Id<mat-icon class="matIcon"></mat-icon></label>
+          <input type="text" formControlName="AlternamteEmail" class="form-control" placeholder="Enter alternate email address" />
+    </div>
+    <div class="col-md-3">
+        <label  class="form-label">Referred By<mat-icon class="matIcon"></mat-icon></label>
+        <input type="text" formControlName="ReferredBy" class="form-control" placeholder="Enter referred by" />
+    </div>
+    <div class="col-md-3 position-relative">
+    <label class="form-label">
+        Expiry Periods <mat-icon class="matIcon">*</mat-icon>
+    </label>
+
+    <!-- Input with calendar icon on LEFT -->
+    <div class="input-with-icon" (click)="showDropdown = !showDropdown">
+        <mat-icon class="calendar-icon-left">calendar_today</mat-icon>
+        <input
+        type="text"
+        formControlName="ExpiryPeriods"
+        class="form-control expiry-input"
+        placeholder="Select expiry period"
+        [value]="displayPeriod"
+        readonly
+        />
+    </div>
+
+    <!-- Custom dropdown -->
+    <div *ngIf="showDropdown" class="expiry-dropdown">
+        <button
+        class="dropdown-item expiry-option"
+        *ngFor="let option of expiryOptions"
+        (click)="setDateRange(option.value); showDropdown = false"
+        (mouseenter)="hovered = option.value"
+        (mouseleave)="hovered = ''"
+        [ngStyle]="{
+            'background-color': hovered === option.value ? '#007bff' : 'white',
+            'color': hovered === option.value ? 'white' : 'black'
+        }"
+        >
+        {{ option.label }}
+        </button>
+    </div>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Status<mat-icon class="matIcon">*</mat-icon></label>
+         <select class="form-control"  formControlName="ddlProjectStatus">
+            <option value="">~Please Choose~</option>
+            <option value="true">Active</option>
+            <option value="false">InActive</option>
+        </select>
+    </div>
+    </div>
+    <br/>
+    <div class="row">
+    <div class="col-md-2">
+        <label class="form-label">Rate Type<mat-icon class="matIcon"></mat-icon></label>
+         <select class="form-control"  formControlName="ddlRateType">
+            <option value="">~Please Choose~</option>
+            <option value="Credit">Credit</option>
+            <option value="Cash">Cash</option>
+            <option value="NEFT">NEFT</option>
+        </select>
+    </div>      
+    <div class="col-md-3">
+        <label  class="form-label">Receipt Prefix<mat-icon class="matIcon">*</mat-icon></label>
+        <input type="text" formControlName="ReceiptPrefix" class="form-control" placeholder="enter receipt prefix" />
+    </div>
+    <div class="col-md-4">
+         <label  class="form-label">Address (Displayed in Patient Receipt )<mat-icon class="matIcon"></mat-icon></label>
+         <textarea class="form-control" name="Address" formControlName="ProjectAddress" rows="4" cols="30" required></textarea>
+    </div>
+       <div class="col-md-3">
+        <button *ngIf="isSubmitVisible" class="lis-button save-button" (click)="createNewProject()">
+            <mat-icon>save</mat-icon>Create New Project</button>
+        <button *ngIf="isUpdateVisible" class="lis-button update-button" (click)="updateProject()">
+              <mat-icon>update</mat-icon>Update Project</button>
+       </div>
+    </div>
+    </div>
+    </div>
+     <app-toast></app-toast>
+     <app-loader *ngIf="loading$ | async"></app-loader>
+<br/>
+<br/>
+  <!-- Footer / Actions -->
+  <div class="popup-footer">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>
+
