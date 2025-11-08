@@ -1,0 +1,332 @@
+/* Container */
+.popup-container {
+  width: 1500px;          /* medium-large popup */
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  overflow-y: auto; 
+  overflow-x: hidden; /* disable horizontal unless needed */          
+}
+
+/* Header */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 20px;
+  padding-left: 12px; /* little spacing from left */
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Content */
+.popup-content {
+  padding: 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.form-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Footer / Buttons */
+.popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.save-btn {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: #fff;
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+}
+
+ .cancel-btn:hover {
+    background-color: gray; /* Darker blue on hover */
+  }
+
+ .submit-button {
+    background-color: green; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  
+  .submit-button:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
+
+
+.delete-icon {
+  color:  #d70e6f; /* Change to your desired color */
+}
+
+
+.delete-button{
+  background-color: #d70e6f;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+
+}
+
+
+.add-icon {
+  color:  blue; /* Change to your desired color */
+}
+
+
+.add-button{
+  background-color: #17f3e1;;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.update-Mapping-button {
+    background-color: indianred; /* Blue background */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px 20px;        /* Padding */
+    font-size: 16px;           /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin: 28px;
+  }
+  
+  .update-Mapping-button:hover {
+    background-color: #17f3e1; /* Darker blue on hover */
+  }
+
+.table-header thead th {
+  background-color: #17f3e1;
+  color: #000;              /* optional: text color for contrast */
+}
+.table-header:hover {
+  cursor: pointer;         /* Darker blue on hover */
+
+}
+
+.map-button{
+  background-color: #1c93cf;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+  
+}
+
+.map-icon {
+  color:  green; /* Change to your desired color */
+}
+.edit-button{
+  background-color: #1c93cf;
+  margin-right: 2px;
+  border: none; /* Removes the border */
+  background: none; /* Optional: remove the background if needed */
+
+}
+
+.edit-icon {
+  color:  green; /* Change to your desired color */
+}
+
+/* ===== BASE BUTTON STYLE ===== */
+.lis-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  outline: none; /* remove default browser outline */
+  margin-top: 32px;
+}
+
+/* ===== SAVE BUTTON ===== */
+.save-button {
+  background-color: #00796b; /* Teal – Primary */
+}
+.save-button:hover {
+  background-color: #00695c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.save-button:focus {
+  background-color: #00695c;
+  box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.3); /* soft teal ring */
+}
+
+/* ===== UPDATE BUTTON ===== */
+.update-button {
+  background-color: #0288d1; /* Modern blue */
+}
+.update-button:hover {
+  background-color: #0277bd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.update-button:focus {
+  background-color: #0277bd;
+  box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.3); /* blue focus ring */
+}
+
+/* ===== ACTIVE STATE (Click) ===== */
+.lis-button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* ===== DISABLED STATE ===== */
+.lis-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ===== ICON STYLING ===== */
+.lis-button mat-icon,
+.lis-button i {
+  font-size: 18px;
+}
+ .matIcon{
+    color:red;
+    font-size: 30px;
+  }
+
+/* Container */
+.position-relative {
+  position: relative;
+}
+
+/* Input with left icon */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.calendar-icon-left {
+  position: absolute;
+  left: 10px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.calendar-icon-left:hover {
+  color: #007bff;
+}
+
+.expiry-input {
+  width: 100%;
+  padding-left: 35px; /* space for icon on left */
+  cursor: pointer;
+  background-color: #fff;
+}
+
+/* Dropdown styling */
+.expiry-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 2px;
+}
+
+.expiry-option {
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  background: white;
+  color: black;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.expiry-option:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Scrollbar */
+.expiry-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+.expiry-dropdown::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
