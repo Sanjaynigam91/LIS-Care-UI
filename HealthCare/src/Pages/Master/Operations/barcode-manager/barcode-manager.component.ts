@@ -15,7 +15,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoaderComponent } from '../../../loader/loader.component';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoaderService } from '../../../../Interfaces/loader.service';
 import { EmployeeService } from '../../../../auth/EmployeeMaster/employee.service';
@@ -93,32 +93,37 @@ export class BarcodeManagerComponent {
     }
 
    /// used to load all the barcode details
-    LoadAllBarcodes(){
-    this.loaderService.show();
-    this.barcodeService.getAllBarcodeDetails(this.partnerId).subscribe({
+  LoadAllBarcodes() {
+  this.loaderService.show();
+
+  this.barcodeService
+    .getAllBarcodeDetails(this.partnerId)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hide loader after completion (success or error)
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         if (response?.status && response?.statusCode === 200) {
-          this.barcodeApiResponse = response.data; 
+          this.barcodeApiResponse = response.data;
           this.IsNoRecordFound = false;
-          this.IsRecordFound=true;
+          this.IsRecordFound = true;
           console.log(this.barcodeApiResponse);
         } else {
           this.IsNoRecordFound = true;
-          this.IsRecordFound=false;
-          console.warn("No Record Found!");
+          this.IsRecordFound = false;
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
-      }
+        console.error('Error while fetching profiles:', err);
+      },
     });
-    this.loaderService.hide();
-  }
+}
 
   
   ///used to filter the data from grid/table

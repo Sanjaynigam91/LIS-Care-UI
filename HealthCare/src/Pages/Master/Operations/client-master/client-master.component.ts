@@ -15,7 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoaderComponent } from '../../../loader/loader.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { CenterResponse } from '../../../../Interfaces/CenterMaster/CenterResponse';
 import { CenterServiceService } from '../../../../auth/Center/center-service.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -121,35 +121,41 @@ router  =  inject(Router);
   }
 
         /// used to load all the centers based on the search criteria
-    LoadClients(){
-    this.loaderService.show();
-    this.clientStatus = this.ClientForm?.value?.ddlClientStatus ?? '';
-    this.searchBy = this.ClientForm?.value?.SeachDrNameOrMobileNumber ?? '';
-    this.centerCode = this.ClientForm?.value?.ddlCenter ?? '';
-    this.clientService.getAllClients(this.clientStatus,this.partnerId,this.searchBy,this.centerCode).subscribe({
+  LoadClients() {
+  this.loaderService.show();
+
+  this.clientStatus = this.ClientForm?.value?.ddlClientStatus ?? '';
+  this.searchBy = this.ClientForm?.value?.SeachDrNameOrMobileNumber ?? '';
+  this.centerCode = this.ClientForm?.value?.ddlCenter ?? '';
+
+  this.clientService
+    .getAllClients(this.clientStatus, this.partnerId, this.searchBy, this.centerCode)
+    .pipe(
+      finalize(() => {
+        // ✅ Ensures loader hides after API completes (success or error)
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         if (response?.status && response?.statusCode === 200) {
-          this.clientApiResponse = response.data; 
+          this.clientApiResponse = response.data;
           this.IsNoRecordFound = false;
-          this.IsRecordFound=true;
+          this.IsRecordFound = true;
           console.log(this.clientApiResponse);
         } else {
           this.IsNoRecordFound = true;
-          this.IsRecordFound=false;
-          console.warn("No Record Found!");
+          this.IsRecordFound = false;
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
-      }
+        console.error('Error while fetching clients:', err);
+      },
     });
-    this.loaderService.hide();
-  }
+}
 
   onSearch(){
   debugger;

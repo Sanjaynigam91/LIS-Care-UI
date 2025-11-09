@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { CenterResponse } from '../../../../Interfaces/CenterMaster/CenterResponse';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -85,64 +85,75 @@ export class OutLabMasterComponent {
    this.ReteriveAllOutLabRecords();
    }
 
-    ReteriveAllOutLabRecords(){
-    this.loaderService.show();
-    this.outlabStatus='';
-    this.SeachByNameOrCode='';
-    this.outLabService.getAllOutlabs(this.outlabStatus,this.SeachByNameOrCode,this.SeachByNameOrCode,this.partnerId).subscribe({
+ ReteriveAllOutLabRecords() {
+  this.loaderService.show();
+
+  this.outlabStatus = '';
+  this.SeachByNameOrCode = '';
+
+  this.outLabService
+    .getAllOutlabs(this.outlabStatus, this.SeachByNameOrCode, this.SeachByNameOrCode, this.partnerId)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hide loader after success or error
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         if (response?.status && response?.statusCode === 200) {
-          this.outLabApiResponse = response.data; 
+          this.outLabApiResponse = response.data;
           this.IsNoRecordFound = false;
           this.IsRecordFound = true;
           console.log(this.outLabApiResponse);
         } else {
           this.IsNoRecordFound = true;
           this.IsRecordFound = false;
-          console.warn("No Record Found!");
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
-      }
+        console.error('Error while fetching profiles:', err);
+      },
     });
-   this.loaderService.hide();
-  }
-
+}
   /// used to saerch all out labs
-    SearchAllOutLabs(){
-    this.loaderService.show();
-    this.outlabStatus=this.outlabForm.get('ddllabStatus')?.value;
-    this.SeachByNameOrCode=this.outlabForm.get('SeachByNameOrCode')?.value;
-    this.outLabService.getAllOutlabs(this.outlabStatus,this.SeachByNameOrCode,this.SeachByNameOrCode,this.partnerId).subscribe({
+SearchAllOutLabs() {
+  this.loaderService.show();
+
+  this.outlabStatus = this.outlabForm.get('ddllabStatus')?.value;
+  this.SeachByNameOrCode = this.outlabForm.get('SeachByNameOrCode')?.value;
+
+  this.outLabService
+    .getAllOutlabs(this.outlabStatus, this.SeachByNameOrCode, this.SeachByNameOrCode, this.partnerId)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hide loader after success or error
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         if (response?.status && response?.statusCode === 200) {
-          this.outLabApiResponse = response.data; 
+          this.outLabApiResponse = response.data;
           this.IsNoRecordFound = false;
           this.IsRecordFound = true;
           console.log(this.outLabApiResponse);
         } else {
           this.IsNoRecordFound = true;
           this.IsRecordFound = false;
-          console.warn("No Record Found!");
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
-      }
+        console.error('Error while fetching profiles:', err);
+      },
     });
-   this.loaderService.hide();
-  } 
+}
 
    filterOutLabData(term: string) {
     debugger;

@@ -15,7 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoaderComponent } from '../../../loader/loader.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { CenterResponse } from '../../../../Interfaces/CenterMaster/CenterResponse';
 import { ClientResponse } from '../../../../Interfaces/ClientMaster/client-response';
 import { CenterServiceService } from '../../../../auth/Center/center-service.service';
@@ -120,37 +120,43 @@ export class EmployeeMasterComponent {
   }
 
          /// used to load all the employee based on the search criteria
-    LoadAllEmployee(){
-    debugger;
-    this.loaderService.show();
-    this.empStatus=this.employeeForm.value.ddlEmpStatus;
-    this.department=this.employeeForm.value.ddlDepartment;
-    this.employeeName=this.employeeForm.value.SearchEmployee;
-    this.employeeService.getAllEmployeeDetails(this.empStatus, this.department,this.employeeName,this.partnerId).subscribe({
+ LoadAllEmployee() {
+  debugger;
+  this.loaderService.show();
+
+  this.empStatus = this.employeeForm.value.ddlEmpStatus;
+  this.department = this.employeeForm.value.ddlDepartment;
+  this.employeeName = this.employeeForm.value.SearchEmployee;
+
+  this.employeeService
+    .getAllEmployeeDetails(this.empStatus, this.department, this.employeeName, this.partnerId)
+    .pipe(
+      finalize(() => {
+        // ✅ Hide loader once API completes (success or error)
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         if (response?.status && response?.statusCode === 200) {
           debugger;
-          this.employeeApiResponse = response.data; 
+          this.employeeApiResponse = response.data;
           this.IsNoRecordFound = false;
-          this.IsRecordFound=true;
+          this.IsRecordFound = true;
           console.log(this.employeeApiResponse);
         } else {
           this.IsNoRecordFound = true;
-          this.IsRecordFound=false;
-          console.warn("No Record Found!");
+          this.IsRecordFound = false;
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
-      }
+        console.error('Error while fetching profiles:', err);
+      },
     });
-    this.loaderService.hide();
-  }
+}
 
   /// used to search employee based on selection criteria
   onSearch(){
