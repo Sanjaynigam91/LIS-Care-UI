@@ -186,19 +186,19 @@ export const routes: Routes = [
                 component:CentreBlockedComponent
             },
             {
-                path:'Pages/Master/security/UserMaster',
+                path:'UserMaster',
                 component:UserMasterComponent
             },
             {
-                path:'Pages/Master/security/MetaData',
+                path:'MetaData',
                 component:MetaDataComponent
             },
             {
-                path:'Pages/Master/security/UserRoleMaster',
+                path:'UserRoleMaster',
                 component:UserRoleMasterComponent
             },
             {
-                path:'Pages/Master/security/LisPageMaster',
+                path:'LisPageMaster',
                 component:LisPageMasterComponent
             },
             {
