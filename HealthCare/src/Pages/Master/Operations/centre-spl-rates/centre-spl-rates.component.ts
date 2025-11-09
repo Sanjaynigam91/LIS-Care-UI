@@ -15,7 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoaderComponent } from '../../../loader/loader.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { CenterServiceService } from '../../../../auth/Center/center-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoaderService } from '../../../../Interfaces/loader.service';
@@ -150,31 +150,39 @@ this.loaderService.hide();
   }
 
 /// used to load all the center special rates based on the search criteria
-    loadAllCentresCustomRate(){
-    debugger;
-    this.loaderService.show();
-    this.centerStatus='';
-    this.SeachByNameOrCode='';
-    this.optype=this.CentreSpecialRateForm.get('ddlMappingType')?.value;
-    this.centerCode=this.CentreSpecialRateForm.get('ddlCentres')?.value;
-    this.testCode=this.CentreSpecialRateForm.get('testPrrofile')?.value;
-    this.centerService.getCentreCustomRate(this.optype,this.centerCode,this.partnerId,this.testCode).subscribe({
+ loadAllCentresCustomRate() {
+  debugger;
+  this.loaderService.show();
+
+  this.centerStatus = '';
+  this.SeachByNameOrCode = '';
+  this.optype = this.CentreSpecialRateForm.get('ddlMappingType')?.value;
+  this.centerCode = this.CentreSpecialRateForm.get('ddlCentres')?.value;
+  this.testCode = this.CentreSpecialRateForm.get('testPrrofile')?.value;
+
+  this.centerService
+    .getCentreCustomRate(this.optype, this.centerCode, this.partnerId, this.testCode)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hides the loader (even if API fails)
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         debugger;
         if (response?.status && response?.statusCode === 200) {
           this.centerCustomRateResponse = response.data;
           this.IsNoRecordFound = false;
-          this.IsRecordFound=true;
+          this.IsRecordFound = true;
           this.initAgreedRateFormArray();
-          if(this.optype=='RetrieveConfirmedRates')
-          {
-            debugger;
+
+          if (this.optype === 'RetrieveConfirmedRates') {
             const agreedRateArray = this.CentreSpecialRateForm.get('testAgreedRate') as FormArray;
             this.centerCustomRateResponse.forEach((item: any, index: number) => {
-             const customRate = item.customRate && item.customRate !== '' ? parseFloat(item.customRate) : 0;
+              const customRate = item.customRate && item.customRate !== '' ? parseFloat(item.customRate) : 0;
               if (customRate > 0) {
-               item.agreedRate = customRate.toFixed(2);
-                // ✅ Update corresponding FormControl for this test
+                item.agreedRate = customRate.toFixed(2);
                 agreedRateArray.at(index).setValue(item.agreedRate);
               } else {
                 item.agreedRate = '0.00';
@@ -182,27 +190,21 @@ this.loaderService.hide();
               }
             });
           }
-          
 
           console.log(this.centerCustomRateResponse);
         } else {
           this.IsNoRecordFound = true;
-            this.IsRecordFound=false;
-          console.warn("No Record Found!");
+          this.IsRecordFound = false;
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
+        console.error('Error while fetching profiles:', err);
       }
     });
-this.loaderService.hide();
-  }
-
+}
 
   /// used to export the data to excel
   exportToExcel(): void {

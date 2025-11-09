@@ -16,7 +16,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ToastComponent } from '../../../Toaster/toast/toast.component';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { CenterResponse } from '../../../../Interfaces/CenterMaster/CenterResponse';
 import { CenterServiceService } from '../../../../auth/Center/center-service.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -125,46 +125,49 @@ export class ClinicMasterComponent {
   }
 
       /// used to load all the centers based on the search criteria
-    LoadAllClinics(){
-    debugger;
-    this.loaderService.show();
-    const formValue = this.ClinicMasterForm.value;
-    this.centerCode = formValue.ddlCentre?.trim() || '';
-    this.SeachBy = formValue.CityInchargeCode?.trim() || '';
-   this.clinicStatus = formValue.ddlStatus !== null &&
-                    formValue.ddlStatus !== undefined &&
-                    formValue.ddlStatus !== ''
-  ? formValue.ddlStatus
-  : false;
+ LoadAllClinics() {
+  debugger;
+  this.loaderService.show();
 
+  const formValue = this.ClinicMasterForm.value;
+  this.centerCode = formValue.ddlCentre?.trim() || '';
+  this.SeachBy = formValue.CityInchargeCode?.trim() || '';
+  this.clinicStatus =
+    formValue.ddlStatus !== null &&
+    formValue.ddlStatus !== undefined &&
+    formValue.ddlStatus !== ''
+      ? formValue.ddlStatus
+      : false;
 
-    this.clinicService.getAllClinics(this.partnerId,this.centerCode,this.clinicStatus,this.SeachBy).subscribe({
+  this.clinicService
+    .getAllClinics(this.partnerId, this.centerCode, this.clinicStatus, this.SeachBy)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hides loader after success or error
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         debugger;
-
         if (response?.status && response?.statusCode === 200) {
-          this.clinicApiResponse = response.data; 
+          this.clinicApiResponse = response.data;
           this.IsNoRecordFound = false;
-          this.IsRecordFound=true;
+          this.IsRecordFound = true;
           console.log(this.clinicApiResponse);
         } else {
           this.IsNoRecordFound = true;
-          this.IsRecordFound=false;
-          console.warn("No Record Found!");
+          this.IsRecordFound = false;
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
-      }
+        console.error('Error while fetching clinics:', err);
+      },
     });
-    this.loaderService.hide();
-  }
-
+}
   onSearch(){
     this.LoadAllClinics();
   }

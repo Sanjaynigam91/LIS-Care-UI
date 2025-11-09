@@ -14,7 +14,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoaderComponent } from '../../../loader/loader.component';
 import { A11yModule } from '@angular/cdk/a11y';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoaderService } from '../../../../Interfaces/loader.service';
 import { ToastService } from '../../../../auth/Toaster/toast.service';
@@ -83,36 +83,44 @@ export class ProjectMasterComponent {
    }
 
    /// used to load and Serach the Project Data
-   loadProjectData(){
-    debugger;
-    this.centerStatus=this.ProjectForm.get('ddlProjectStatus')?.value;
-    this.SeachByNameOrCode=this.ProjectForm.get('SeachByName')?.value;
-    // Call your service method to fetch data based on filter criteria
-    this.projectService.getAllProjects(this.partnerId,this.centerStatus,this.SeachByNameOrCode).subscribe({
+   loadProjectData() {
+  debugger;
+  this.loaderService.show(); // ✅ Show loader at start
+
+  this.centerStatus = this.ProjectForm.get('ddlProjectStatus')?.value;
+  this.SeachByNameOrCode = this.ProjectForm.get('SeachByName')?.value;
+
+  this.projectService
+    .getAllProjects(this.partnerId, this.centerStatus, this.SeachByNameOrCode)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hide loader once API completes (success or error)
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         debugger;
 
         if (response?.status && response?.statusCode === 200) {
-          this.projectApiResponse = response.data; 
+          this.projectApiResponse = response.data;
           this.IsNoRecordFound = false;
           this.IsRecordFound = true;
           console.log(this.projectApiResponse);
         } else {
           this.IsNoRecordFound = true;
           this.IsRecordFound = false;
-          console.warn("No Record Found!");
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
-      }
+        console.error('Error while fetching profiles:', err);
+      },
     });
-   }
+}
+
 
    /// Filter the data based on the search term
    filterProjectData(term: string) {

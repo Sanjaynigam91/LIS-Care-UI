@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { CenterResponse } from '../../../../Interfaces/CenterMaster/CenterResponse';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -82,37 +82,42 @@ export class CentreMasterComponent {
    }
 
 
-  ReteriveAllCenterRecords(){
-    debugger;
-    this.loaderService.show();
-    this.centerStatus='';
-    this.SeachByNameOrCode='';
-    this.centerService.getAllCenters(this.partnerId,this.centerStatus,this.SeachByNameOrCode).subscribe({
+ ReteriveAllCenterRecords() {
+  debugger;
+  this.loaderService.show();
+
+  this.centerStatus = '';
+  this.SeachByNameOrCode = '';
+
+  this.centerService.getAllCenters(this.partnerId, this.centerStatus, this.SeachByNameOrCode)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hides the loader no matter what happens (success or error)
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
       next: (response: any) => {
         debugger;
 
         if (response?.status && response?.statusCode === 200) {
-          this.centerApiResponse = response.data; 
+          this.centerApiResponse = response.data;
           this.IsNoRecordFound = false;
           this.IsRecordFound = true;
           console.log(this.centerApiResponse);
         } else {
           this.IsNoRecordFound = true;
           this.IsRecordFound = false;
-          console.warn("No Record Found!");
+          console.warn('No Record Found!');
         }
-
-        this.loaderService.hide();
       },
       error: (err) => {
         this.IsNoRecordFound = true;
         this.IsRecordFound = false;
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
+        console.error('Error while fetching centers:', err);
       }
     });
-
-  }
+}
 
    filterCenterData(term: string) {
     debugger;
