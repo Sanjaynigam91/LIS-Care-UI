@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { finalize, Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTableModule, } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -135,21 +135,33 @@ export class MetaDataComponent {
   }
 
 
-  GetTagMasterList(category:any){
+  GetTagMasterList(category: any) {
   debugger;
-  this.loaderService.show();
-    localStorage.setItem('categoryCode', category);
-    this.metaService.getAllMetaTagList(category,this.partnerId).subscribe((response:any)=>{
-      debugger;
-     this.metaTagsList = response.data; 
-    //  this.totalItems=response.data.length;
-     console.log(response);
-    },err=>{
-      console.log(err);
-    }) 
-    this.isMetaDataListVisible=true;
-    this.loaderService.hide();
-  }
+  this.loaderService.show(); // ✅ Show loader at the beginning
+  localStorage.setItem('categoryCode', category);
+
+  this.metaService
+    .getAllMetaTagList(category, this.partnerId)
+    .pipe(
+      finalize(() => {
+        // ✅ Always hide loader after success or error
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
+      next: (response: any) => {
+        debugger;
+        this.metaTagsList = response.data;
+        console.log(response);
+        this.isMetaDataListVisible = true;
+      },
+      error: (err) => {
+        console.error('Error while fetching tag master list:', err);
+        this.isMetaDataListVisible = false;
+      },
+    });
+}
+
 
   
   CreateMasterLst():void{
