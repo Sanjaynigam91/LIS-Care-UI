@@ -6,9 +6,19 @@
   <button mat-button [matMenuTriggerFor]="menu1">Dashboard</button>
   <mat-menu #menu1="matMenu">
     <div class="main-menu">
-    <button mat-menu-item (click)="onMenuItemClick('dashboard')">
+          <!-- ✅ For Center Admin (roleId = 13) -->
+    <ng-container *ngIf="roleId === '13'; else defaultdashboard">
+      <button mat-menu-item (click)="onMenuItemClick('clientdashboard')">
+      <mat-icon>dashboard</mat-icon> Client Dashboard
+    </button>
+    </ng-container>
+  <!-- ✅ Default Account Menus (for other roles) -->
+     <ng-template #defaultdashboard>
+      <button mat-menu-item (click)="onMenuItemClick('dashboard')">
       <mat-icon>dashboard</mat-icon> Dashboard
     </button>
+     </ng-template>
+   
     </div>
   </mat-menu>
 
@@ -16,6 +26,17 @@
   <button [disabled]="isFrontDeskMenuDisabled" mat-button [matMenuTriggerFor]="menu2">Front Desk</button>
   <mat-menu #menu2="matMenu">
     <div class="main-menu">
+     <!-- ✅ For Center Admin (roleId = 13) -->
+    <ng-container *ngIf="roleId === '13'; else defaultFrontDesk">
+      <button mat-menu-item (click)="onMenuItemClick('patientregistration')">
+      <mat-icon>person_add</mat-icon> Patient Registration
+    </button>
+    <button mat-menu-item (click)="onMenuItemClick('patientssummary')">
+      <mat-icon>list</mat-icon> Patients Summary
+    </button>
+    </ng-container>
+  <!-- ✅ Default Account Menus (for other roles) -->
+  <ng-template #defaultFrontDesk>
    <button mat-menu-item (click)="onMenuItemClick('searchpatients')">
       <mat-icon>search</mat-icon> Search Patients
     </button>
@@ -31,6 +52,7 @@
     <button mat-menu-item (click)="onMenuItemClick('rejectionsummary')">
       <mat-icon>report_problem</mat-icon> Rejection Summary
     </button>
+    </ng-template>
      </div>
   </mat-menu>
 
@@ -38,6 +60,15 @@
   <button [disabled]="isSampleMenuDisabled" mat-button [matMenuTriggerFor]="menu3">Sample Management</button>
   <mat-menu #menu3="matMenu">
     <div class="main-menu">
+             <!-- ✅ For Center Admin (roleId = 13) -->
+    <ng-container *ngIf="roleId === '13'; else defaultSampleManagement">
+      <button [disabled]="isRejectionSummaryDisabled" mat-menu-item (click)="onMenuItemClick('rejectionsummary')">
+      <mat-icon>report_problem</mat-icon>
+      Rejection Summary
+    </button>
+    </ng-container>
+        <!-- ✅ Default Account Menus (for other roles) -->
+  <ng-template #defaultSampleManagement>
     <button [disabled]="isSCMenuDisabled" mat-menu-item (click)="onMenuItemClick('samplecollection')">
       <mat-icon>collections</mat-icon> Sample Collection
     </button>
@@ -50,6 +81,11 @@
     <button mat-menu-item (click)="onMenuItemClick('trackstatus')">
       <mat-icon>track_changes</mat-icon> Track Status
     </button>
+    <button [disabled]="isRejectionSummaryDisabled" mat-menu-item (click)="onMenuItemClick('rejectionsummary')">
+      <mat-icon>report_problem</mat-icon>
+      Rejection Summary
+    </button>
+    </ng-template>
     </div>
   </mat-menu>
 
@@ -57,6 +93,14 @@
   <button [disabled]="isReportsMenuDisabled" mat-button [matMenuTriggerFor]="menu4">Reporting Management</button>
   <mat-menu #menu4="matMenu">
     <div class="main-menu">
+          <!-- ✅ For Center Admin (roleId = 13) -->
+    <ng-container *ngIf="roleId === '13'; else defaultReporting">
+      <button mat-menu-item (click)="onMenuItemClick('printreports')">
+        <mat-icon>print</mat-icon> PrintReports
+      </button>
+    </ng-container>
+    <!-- ✅ Default Account Menus (for other roles) -->
+  <ng-template #defaultReporting>
    <button [disabled]="isOutLabSelectionDisabled"mat-menu-item (click)="onMenuItemClick('outLabselection')">
       <mat-icon>radio_button_checked</mat-icon> OutLab Selection
     </button>
@@ -78,18 +122,40 @@
     <button [disabled]="isOutLabUpload" mat-menu-item (click)="onMenuItemClick('outLabupload')">
       <mat-icon>cloud_upload</mat-icon> OutLab Upload
     </button>
+    </ng-template>
     </div>
   </mat-menu>
 
   <!-- Masters Menu -->
-  <button [disabled]="isMasterMenuDisabled" mat-button [matMenuTriggerFor]="parentMenu">Masters</button>
-  <mat-menu #parentMenu="matMenu">
-    <div class="main-menu">
-    <button mat-menu-item [matMenuTriggerFor]="Services"><mat-icon>build</mat-icon> Services</button>
-    <button mat-menu-item [matMenuTriggerFor]="Operations"><mat-icon>settings</mat-icon> Operations</button>
-    <button mat-menu-item [matMenuTriggerFor]="Security"><mat-icon>security</mat-icon> Security & Metadata</button>
-    </div>
-  </mat-menu>
+<button [disabled]="isMasterMenuDisabled" mat-button [matMenuTriggerFor]="parentMenu">Masters</button>
+<mat-menu #parentMenu="matMenu">
+  <div class="main-menu">
+
+    <!-- Show Masters based on role -->
+    <!-- For roleId = 13 (Center Admin) -->
+    <ng-container *ngIf="roleId === '13'; else defaultMasters">
+      <button mat-menu-item (click)="onMenuItemClick('ClientMaster')">
+        <mat-icon>people</mat-icon> Client Master
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('CentreSplRates')">
+        <mat-icon>rate_review</mat-icon> Centre Rate Master
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('ClinicMaster')">
+        <mat-icon>local_hospital</mat-icon> Clinic Master
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('SampleCollectionPlace')">
+        <mat-icon>location_on</mat-icon> Sample Collection Place
+      </button>
+    </ng-container>
+
+    <!-- Default Masters (for all other roles) -->
+    <ng-template #defaultMasters>
+      <button mat-menu-item [matMenuTriggerFor]="Services"><mat-icon>build</mat-icon> Services</button>
+      <button mat-menu-item [matMenuTriggerFor]="Operations"><mat-icon>settings</mat-icon> Operations</button>
+      <button mat-menu-item [matMenuTriggerFor]="Security"><mat-icon>security</mat-icon> Security & Metadata</button>
+    </ng-template>
+  </div>
+</mat-menu>
 
   <!-- Child Menus -->
   <mat-menu #Services="matMenu">
@@ -111,7 +177,7 @@
     <button mat-menu-item (click)="onMenuItemClick('EmployeeMaster')"><mat-icon>assessment</mat-icon> Employee Master</button>
     <button mat-menu-item (click)="onMenuItemClick('BarcodeManager')"><mat-icon>qr_code</mat-icon> Barcode Manager</button>
     <button mat-menu-item (click)="onMenuItemClick('ProjectMaster')"><mat-icon>work</mat-icon> Project Master</button>
-    <button mat-menu-item (click)="onMenuItemClick('CentreBlocked')"><mat-icon>do_not_disturb</mat-icon> Centre Blocked</button>
+    <!-- <button mat-menu-item (click)="onMenuItemClick('CentreBlocked')"><mat-icon>do_not_disturb</mat-icon> Centre Blocked</button> -->
      </div>
   </mat-menu>
 
@@ -124,18 +190,42 @@
      </div>   
   </mat-menu>
 
-  <!-- Menu 5 -->
-  <button [disabled]="isAccountMenuDisabled" mat-button [matMenuTriggerFor]="menu5">Account Management</button>
-  <mat-menu #menu5="matMenu">
-     <div class="main-menu">
-    <button mat-menu-item (click)="onMenuItemClick('BillingSummary')"><mat-icon>attach_money</mat-icon> Billing Summary</button>
-    <button mat-menu-item (click)="onMenuItemClick('AccountsReceivables')"><mat-icon>account_balance_wallet</mat-icon> Accounts Receivables</button>
-    <button mat-menu-item (click)="onMenuItemClick('ClientLedger')"><mat-icon>receipt_long</mat-icon> Client Ledger</button>
-    <button mat-menu-item (click)="onMenuItemClick('ProfitBillingSummary')"><mat-icon>trending_up</mat-icon> Profit Billing Summary</button>
-    <button mat-menu-item (click)="onMenuItemClick('OutlabBillingSummary')"><mat-icon>store</mat-icon> Outlab Billing Summary</button>
-    <button mat-menu-item (click)="onMenuItemClick('TestWiseSummary')"><mat-icon>assessment</mat-icon> Test Wise Summary</button>
-    <button mat-menu-item (click)="onMenuItemClick('FranchiseeBilling')"><mat-icon>business</mat-icon> Franchisee Billing</button>
-     </div>
-  </mat-menu>
-
+ <!-- ✅ Account Management Menu -->
+<button [disabled]="isAccountMenuDisabled" mat-button [matMenuTriggerFor]="accountMenu">
+  Account Management
+</button>
+<mat-menu #accountMenu="matMenu">
+  <div class="main-menu">
+    <!-- ✅ For Center Admin (roleId = 13) -->
+    <ng-container *ngIf="roleId === '13'; else defaultAccounts">
+      <button mat-menu-item (click)="onMenuItemClick('BillingSummary')">
+        <mat-icon>attach_money</mat-icon> Billing Summary
+      </button>
+    </ng-container>
+    <!-- ✅ Default Account Menus (for other roles) -->
+    <ng-template #defaultAccounts>
+      <button mat-menu-item (click)="onMenuItemClick('BillingSummary')">
+        <mat-icon>attach_money</mat-icon> Billing Summary
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('AccountsReceivables')">
+        <mat-icon>account_balance_wallet</mat-icon> Accounts Receivables
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('ClientLedger')">
+        <mat-icon>receipt_long</mat-icon> Client Ledger
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('ProfitBillingSummary')">
+        <mat-icon>trending_up</mat-icon> Profit Billing Summary
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('OutlabBillingSummary')">
+        <mat-icon>store</mat-icon> Outlab Billing Summary
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('TestWiseSummary')">
+        <mat-icon>assessment</mat-icon> Test Wise Summary
+      </button>
+      <button mat-menu-item (click)="onMenuItemClick('FranchiseeBilling')">
+        <mat-icon>business</mat-icon> Franchisee Billing
+      </button>
+    </ng-template>
+  </div>
+</mat-menu>
 </div>
