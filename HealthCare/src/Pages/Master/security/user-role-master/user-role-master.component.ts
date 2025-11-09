@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject,OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../../../auth/UserService/user.service';
 import { FormControl,FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { LoginApiResponse } from '../../../../Interfaces/login-api-response';
 import { Router } from '@angular/router';
 import { MatTableModule, } from '@angular/material/table';
@@ -88,20 +88,36 @@ export class UserRoleMasterComponent {
   }
 
 
-  GetAllLisRoles(){
-    debugger;
-     /// Used for to get the all user list from API
-     this.lisRoleService.getLisRoleList().subscribe((response:any)=>{
-      debugger;
-     this.lisRoles = response.data; 
-     this.totalItems=response.data.length;
-     console.log(response);
-     this.loaderService.hide();
-    },err=>{
-      console.log(err);
-      this.loaderService.hide();
-    }) 
-  }
+ GetAllLisRoles() {
+  debugger;
+  this.loaderService.show(); // ✅ Show loader before API call
+
+  this.lisRoleService
+    .getLisRoleList()
+    .pipe(
+      finalize(() => {
+        // ✅ Always hide loader when API completes or fails
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
+      next: (response: any) => {
+        debugger;
+        if (response?.status && response?.statusCode === 200) {
+          this.lisRoles = response.data;
+          this.totalItems = response.data.length;
+          console.log(response);
+        } else {
+          console.warn('No roles found!');
+          this.lisRoles = [];
+          this.totalItems = 0;
+        }
+      },
+      error: (err) => {
+        console.error('Error while fetching LIS roles:', err);
+      },
+    });
+}
 
   sortTable(column: string) {
     debugger;
