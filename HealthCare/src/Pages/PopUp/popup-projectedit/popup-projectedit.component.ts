@@ -69,6 +69,9 @@ projectRequest: ProjectRequest = {
   receiptPrefix: ''
 }
 
+start: Date = new Date();
+end: Date = new Date();
+
 constructor(public dialogRef: MatDialogRef<PopupProjecteditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
       private authService:AuthService,
@@ -159,96 +162,127 @@ formatDate(date: Date): string {
 }
 
 /// used to set date range based on selected period
+/// used to set date range based on selected period
 setDateRange(period: string): void {
-  let start: Date = new Date();
-  let end: Date = new Date();
+  // 🔒 Always make sure these are Date objects
+  this.start = this.start instanceof Date ? this.start : new Date(this.start);
+  this.end = this.end instanceof Date ? this.end : new Date(this.end);
 
   switch (period) {
     case 'today':
-      start = new Date();
-      end = new Date();
+      this.start = new Date();
+      this.end = new Date();
       break;
 
     case 'yesterday':
-      start = new Date();
-      start.setDate(start.getDate() - 1);
-      end = new Date(start);
+      this.start = new Date();
+      this.start.setDate(this.start.getDate() - 1);
+      this.end = new Date(this.start);
       break;
 
     case 'last7':
-      start.setDate(start.getDate() - 6);
+      this.start = new Date();
+      this.end = new Date();
+      this.start.setDate(this.end.getDate() - 6);
       break;
 
     case 'last30':
-      start.setDate(start.getDate() - 29);
+      this.start = new Date();
+      this.end = new Date();
+      this.start.setDate(this.end.getDate() - 29);
       break;
 
     case 'thisMonth':
-      start = new Date(start.getFullYear(), start.getMonth(), 1);
-      end = new Date();
+      this.start = new Date(this.start.getFullYear(), this.start.getMonth(), 1);
+      this.end = new Date();
       break;
 
     case 'lastMonth':
-      start = new Date(start.getFullYear(), start.getMonth() - 1, 1);
-      end = new Date(start.getFullYear(), start.getMonth(), 0);
+      const now = new Date();
+      this.start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      this.end = new Date(now.getFullYear(), now.getMonth(), 0);
+      break;
+
+    default:
+      // Handle undefined or empty case gracefully
+      this.start = new Date();
+      this.end = new Date();
       break;
   }
 
   // ✅ Update formatted dates
-  this.validFrom = this.formatDate(start);
-  this.validTo = this.formatDate(end);
+  this.validFrom = this.formatDate(this.start);
+  this.validTo = this.formatDate(this.end);
   this.displayPeriod = `${this.validFrom} - ${this.validTo}`;
 
-  // ✅ Update form control so Angular form stays in sync
-  this.editProjectDetailsForm.get('ExpiryPeriods')?.setValue(this.displayPeriod);
+  // ✅ Update form control safely
+  this.editProjectDetailsForm.get('ExpiryPeriods')?.setValue({
+    start: this.start,
+    end: this.end
+  });
+
+  // (Optional) also update ValidFrom and ValidTo controls if you want:
+  this.editProjectDetailsForm.patchValue({
+    ValidFrom: this.start,
+    ValidTo: this.end
+  });
 }
 
 //used to get project details by project Id
-getProjectDetailsbyId(){
+getProjectDetailsbyId() {
   debugger;
   this.loaderService.show();
-  this.projectService.getProjectById(this.partnerId,this.projectId,).subscribe({
-      next: (response: any) => {
-        debugger;
-        if (response?.status && response?.statusCode === 200) {
+
+  this.projectService.getProjectById(this.partnerId, this.projectId).subscribe({
+    next: (response: any) => {
+      debugger;
+      if (response?.status && response?.statusCode === 200) {
         this.projectApiResponse = response.data;
+
         const projectData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-        this.validFrom=projectData.validFrom || '';
-        this.validTo=projectData.validTo || '';
-        
-        this.setDateRange(this.editProjectDetailsForm.value.ExpiryPeriods);
+          ? response.data[0]
+          : response.data;
+
+        // ✅ Convert API dates to Date objects
+        this.start = projectData.validFrom ? new Date(projectData.validFrom) : new Date();
+        this.end = projectData.validTo ? new Date(projectData.validTo) :  new Date();
+
+        // ✅ Format for display
+        this.validFrom = this.start ? this.formatDate(this.start) : '';
+        this.validTo = this.end ? this.formatDate(this.end) : '';
+        this.displayPeriod = `${this.validFrom} - ${this.validTo}`;
+
+        // ✅ Patch form directly — DO NOT call setDateRange()
         this.editProjectDetailsForm.patchValue({
-        ProjectName: projectData.projectName || '',
-        ContactPerson: projectData.contactPerson || '',
-        ContactNumber: projectData.contactNumber || '',
-        EmailId: projectData.email || '',
-        AlternamteEmail: projectData.alternateEmail || '',
-        ReferredBy: projectData.referedBy || '',
-        ExpiryPeriods: projectData.expiryPeriods || '',
-        ValidFrom: projectData.validFrom || '',
-        ValidTo: projectData.validTo || '',
-        ddlProjectStatus: projectData.projectStatus ? 'true' : 'false',
-        ReceiptPrefix: projectData.receiptPrefix || '',
-        ProjectAddress: projectData.projectAddress || '',
-        ddlRateType: projectData.rateType || '',
+          ProjectName: projectData.projectName || '',
+          ContactPerson: projectData.contactPerson || '',
+          ContactNumber: projectData.contactNumber || '',
+          EmailId: projectData.email || '',
+          AlternamteEmail: projectData.alternateEmail || '',
+          ReferredBy: projectData.referedBy || '',
+          ExpiryPeriods: { start: this.start, end: this.end }, // ✅ proper object
+          ValidFrom: this.start,
+          ValidTo: this.end,
+          ddlProjectStatus: projectData.projectStatus ? 'true' : 'false',
+          ReceiptPrefix: projectData.receiptPrefix || '',
+          ProjectAddress: projectData.projectAddress || '',
+          ddlRateType: projectData.rateType || ''
+        });
 
-      });
-          console.log(this.projectApiResponse);
-        } else {
-          console.warn("No Record Found!");
-        }
-
-        this.loaderService.hide();
-      },
-      error: (err) => {
-        console.error("Error while fetching profiles:", err);
-        this.loaderService.hide();
+        console.log('✅ Loaded project details:', this.editProjectDetailsForm.value);
+      } else {
+        console.warn('⚠️ No Record Found!');
       }
-    });
 
+      this.loaderService.hide();
+    },
+    error: (err) => {
+      console.error('❌ Error while fetching project details:', err);
+      this.loaderService.hide();
+    }
+  });
 }
+
 
   /// used to create new project details
 createNewProject(){
@@ -290,8 +324,9 @@ createNewProject(){
       this.projectRequest.email=this.editProjectDetailsForm.value.EmailId;
       this.projectRequest.alternateEmail=this.editProjectDetailsForm.value.AlternamteEmail;
       this.projectRequest.referedBy=this.editProjectDetailsForm.value.ReferredBy;
-      this.projectRequest.validFrom = new Date(this.validFrom)
-      this.projectRequest.validTo=new Date(this.validTo);
+      const expiry = this.editProjectDetailsForm.value.ExpiryPeriods;
+      this.projectRequest.validFrom = expiry?.start ? new Date(expiry.start) : new Date();
+      this.projectRequest.validTo=expiry?.end ? new Date(expiry.end) : new Date();
       this.projectRequest.projectStatus=JSON.parse(this.editProjectDetailsForm.value.ddlProjectStatus.toLowerCase());
       this.projectRequest.rateType=this.editProjectDetailsForm.value.ddlRateType;
       this.projectRequest.receiptPrefix=this.editProjectDetailsForm.value.ReceiptPrefix;
@@ -366,8 +401,9 @@ updateProject(){
       this.projectRequest.email=this.editProjectDetailsForm.value.EmailId;
       this.projectRequest.alternateEmail=this.editProjectDetailsForm.value.AlternamteEmail;
       this.projectRequest.referedBy=this.editProjectDetailsForm.value.ReferredBy;
-      this.projectRequest.validFrom = new Date(this.validFrom)
-      this.projectRequest.validTo=new Date(this.validTo);
+      const expiry = this.editProjectDetailsForm.value.ExpiryPeriods;
+      this.projectRequest.validFrom = expiry?.start ? new Date(expiry.start) : new Date();
+      this.projectRequest.validTo=expiry?.end ? new Date(expiry.end) : new Date();
       this.projectRequest.projectStatus=JSON.parse(this.editProjectDetailsForm.value.ddlProjectStatus.toLowerCase());
       this.projectRequest.rateType=this.editProjectDetailsForm.value.ddlRateType;
       this.projectRequest.receiptPrefix=this.editProjectDetailsForm.value.ReceiptPrefix;
