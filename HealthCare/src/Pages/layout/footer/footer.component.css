@@ -1,7 +1,7 @@
   
 /* Footer */
 footer {
-  background-color: #004C70;
+ background: linear-gradient(90deg, #00C7B7, #00C7B7); /* Gradient background */
   color: #ffffff;
   text-align: center;
   padding: 10px 0;
