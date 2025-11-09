@@ -70,9 +70,16 @@ UserLogin() {
 
         // Update user info
         this.currentUserSubject.next(response.data.fullName);
-
+         
         // Navigate to dashboard
-        this.router.navigate(['/dashboard']);
+        if(response.data.roleId=='13')
+        {
+          this.router.navigate(['/clientdashboard']);
+        }
+        else{
+          this.router.navigate(['/dashboard']);
+        }
+        
         this.message = response.responseMessage || 'Login successful!';
       } 
       else {

@@ -48,6 +48,7 @@ import { TestWiseSummaryComponent } from '../Pages/AccountManagement/test-wise-s
 import { FranchiseeBillingComponent } from '../Pages/AccountManagement/franchisee-billing/franchisee-billing.component';
 import { AdduserComponent } from '../Pages/Master/security/adduser/adduser.component';
 import { LisPageMasterComponent } from '../Pages/Master/security/lis-page-master/lis-page-master.component';
+import { ClientdashboardComponent } from '../Pages/clientdashboard/clientdashboard.component';
 
 export const routes: Routes = [
     {
@@ -63,6 +64,10 @@ export const routes: Routes = [
             {
                 path:'dashboard',
                 component:DsahboardComponent
+            },
+            {
+                path:'clientdashboard',
+                component:ClientdashboardComponent
             },
             {
                 path:'searchpatients',
