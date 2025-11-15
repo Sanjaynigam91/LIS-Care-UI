@@ -49,6 +49,7 @@ import { FranchiseeBillingComponent } from '../Pages/AccountManagement/franchise
 import { AdduserComponent } from '../Pages/Master/security/adduser/adduser.component';
 import { LisPageMasterComponent } from '../Pages/Master/security/lis-page-master/lis-page-master.component';
 import { ClientdashboardComponent } from '../Pages/clientdashboard/clientdashboard.component';
+import { ProjectSplRatesComponent } from '../Pages/Master/Operations/project-spl-rates/project-spl-rates.component';
 
 export const routes: Routes = [
     {
@@ -239,6 +240,9 @@ export const routes: Routes = [
             },
             {
                 path: 'Pages/Master/security/addUser/:userId', component: AdduserComponent
+            },
+            {
+                path: 'ProjectSplRates', component: ProjectSplRatesComponent
             }
             
         ]

@@ -3,6 +3,7 @@ import { environment } from '../../app/environments/environments';
 import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ProjectResponse } from '../../Interfaces/Projects/project-response';
+import { ProjectSpecialRateResponse } from '../../Interfaces/Projects/project-special-rate-response';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,29 @@ export class ProjectService {
       } 
 
 
+      /// used to get all project special rates
+     getAllProjectSpecialRates(optype:any,projectId:number,partnerId: any,testCode:any): Observable<ProjectSpecialRateResponse[]> {
+        debugger;
+        // Create HttpParams instance and append query parameters
+         let params = new HttpParams()
+          .set('optype', optype.toString())
+          .set('projectId', projectId)
+          .set('partnerId',partnerId.toString())
+          .set('testCode',testCode.toString());
+         return this.httpClient.get<ProjectSpecialRateResponse[]>(`${this.baseUrl}/GetProjectSpecialRates`, {params});
+      }
 
+     /// used to update project rate details
+      updateProjectRatesDetails(data: any) {
+          console.log("Payload before sending:", data); // Debugging line to check the payload
+          return this.httpClient.put(
+            `${this.baseUrl}/UpdateProjectSpecialRates`,
+            data,
+            {
+              headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+            }
+          ).pipe(delay(1000));
+        
+        }      
 
 }
