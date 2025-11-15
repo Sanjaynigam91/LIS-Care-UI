@@ -1,0 +1,102 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div class="container mt-3" [formGroup]="projectSpecialRateForm">
+  <div class="row align-items-end">
+    <div class="col-md-3">
+      <label>Search By Project</label>
+      <select class="form-control" formControlName="ddlProjects">
+        <option value="">~Please Choose~</option>
+         <option *ngFor="let item of projectApiResponse" [value]="item.projectId">{{item.projectName}}</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label>Mapping Type</label>
+      <select class="form-control" formControlName="ddlMappingType">
+        <option value="">~Please Choose~</option>
+        <option value="RetrieveMapping">Already Applied</option>
+        <option value="RetrievePendingMapping">Pending</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label>Test / Profile Name</label>
+      <input class="form-control" type="text" placeholder="Enter test or profile name" formControlName="testPrrofile"/>
+    </div>
+
+    <div class="col-md-4">
+      <button mat-flat-button class="search-button" (click)="onSearchProjectRates()">
+        <mat-icon>search</mat-icon> Search Rates
+      </button>
+      <button mat-flat-button class="export-button" (click)="exportToExcel()">
+        <mat-icon>file_download</mat-icon> Export Rates
+      </button>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row align-items-end no-gap">
+    <div class="col-md-2">
+      <label>Apply Discount</label>
+      <input class="form-control" type="text" placeholder="Enter Discount %" formControlName="testProfileDiscount"/>
+    </div>
+
+    <div class="col-md-4">
+      <button mat-flat-button class="discount-button" (click)="applyDiscount()">
+        <mat-icon>percent</mat-icon> Apply Discount
+      </button>
+      <button mat-flat-button class="save-button" (click)="updateAllTestRates()">
+        <mat-icon>update</mat-icon> Update Rates
+      </button>
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row"  *ngIf="IsRecordFound">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+      <input class="form-control" formControlName="filterProjectRates" placeholder="Search..." />
+    </div>
+      <br/>
+      <br/>
+      <br/>
+<div formArrayName="testAgreedRate">
+    <table class="table table-bordered table-striped" *ngIf="IsRecordFound">
+      <thead>
+        <tr>
+          <th>Test Code</th>
+          <th>Test Name</th>
+          <th>MRP</th>
+          <th>Agreed Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of projectCustomRateResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+          <td>{{ item.testcode }}</td>
+          <td>{{ item.testName }}</td>
+          <td>{{ item.mrp }}</td>
+          <td>
+            <input
+              type="text"
+              class="form-control"
+              [formControlName]="i"
+              placeholder="Agreed Rate"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls *ngIf="IsRecordFound" (pageChange)="p = $event"></pagination-controls>
+  </div>
+  </div>
+
+  <div *ngIf="IsNoRecordFound" class="row tbl-div mt-3">
+    <div class="form-group form-control NoRecord-Found">No project rate found!</div>
+  </div>
+
+  
+</div>
+<app-toast></app-toast>
+<app-loader *ngIf="loading$ | async"></app-loader>
