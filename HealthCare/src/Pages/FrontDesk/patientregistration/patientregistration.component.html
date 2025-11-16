@@ -4,35 +4,49 @@
       <h5 class="mb-0"><i class="fa fa-user"></i> Patient Registration</h5>
     </div>
 
-    <div class="patient-registration-container">
+    <div class="patient-registration-container"  [formGroup]="PatientRegistrationForm">
          <div class="row">
             <div class="col-md-2">
               <label>Title<mat-icon class="matIcon">*</mat-icon></label>
-                <select class="form-control">
-                    <option>Select</option>
+                <select class="form-control" formControlName="ddlTitle">
+                   <option value="">~Please Choose~</option>
+                    <option value="MR">MR</option>
+                    <option value="MISS">MISS</option>
+                    <option value="MS">MS</option>
+                    <option value="MRS">MRS</option>
+                    <option value="MASTER">MASTER</option> 
+                    <option value="BABY">BABY</option> 
+                    <option value="BABY OF">BABY OF</option> 
+                    <option value="DR">DR</option> 
+                    <option value="SMT">SMT</option> 
                 </select>
             </div>
              <div class="col-md-2">
               <label>Gender<mat-icon class="matIcon"></mat-icon></label>
-                <select class="form-control">
-                    <option>Gender</option>
+                <select class="form-control" formControlName="ddlGender">
+                    <option value="">~Please Choose~</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
                 </select>
             </div>
 
             <div class="col-md-4">
             <label>Patient Name<mat-icon class="matIcon">*</mat-icon></label>
-            <input type="text" placeholder="Enter patient name" class="form-control">
+            <input type="text" formControlName="PatientName" placeholder="Enter patient name" class="form-control">
             </div>
 
             <div class="col-md-2">
             <label>Age <mat-icon class="matIcon">*</mat-icon></label>
-            <input type="number" class="form-control">
+            <input type="number" formControlName="PatientAge" placeholder="Enter patient age" class="form-control">
             </div>
 
             <div class="col-md-2">
             <label>Years<mat-icon class="matIcon"></mat-icon></label>
-            <select class="form-control">
-                <option>Years</option>
+            <select class="form-control" formControlName="ddlAgeType">
+                <option value="">~Please Choose~</option>
+                <option value="Years">Years</option>
+                <option value="M">Months</option>
+                <option value="D">Days</option>
             </select>
             </div>
          </div>
@@ -40,88 +54,93 @@
          <div class="row">
             <div class="col-md-4">
              <label>Email Id</label>
-             <input type="email" class="form-control">
+             <input type="email" formControlName="PatientEmail" placeholder="Enter patient email" class="form-control">
              </div>
 
             <div class="col-md-4">
-            <label>Contact Number</label>
-            <input type="text" class="form-control">
+            <label>Mobile Number</label>
+            <input type="text" formControlName="PatientMobileNumber" placeholder="Enter patient mobile number" class="form-control">
             </div>
 
             <div class="form-group col-md-4">
              <label>Center Name</label>
-             <select class="form-control">
-            <option>MEDILAB VARANASI (101152)</option>
+             <select class="form-control" formControlName="ddlCenterName">
+              <option value="">~Please Choose~</option>
+              <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
              </select>
             </div>
         </div>
         <br/>
-        
-    </div>
+          <div class="row">
+          <div class="col-md-4">
+            <label>Referred Dr</label>
+              <select class="form-control" formControlName="ddlReferredDr">
+              <option value="">~Please Choose~</option>
+              <option *ngFor="let item of clientApiResponse" [value]="item.clientId">{{item.clientName}}</option>
+              </select>
+            </div>
 
-    <div class="card-body">
-   
-      <!-- Row 3 -->
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label>Referred Dr</label>
-          <select class="form-control">
-            <option>Select an Option</option>
-          </select>
-        </div>
+            <div class="col-md-4">
+            <label>Billing / Patient Type</label>
+            <select class="form-control" formControlName="ddlBillingPatientType">
+              <option value="">~Please Choose~</option> 
+              <option value="Center">Regular</option>
+              <option value="Project">Project</option>
+            </select>
+            </div>
 
-        <div class="form-group col-md-4">
-          <label>Billing / Patient Type</label>
-          <select class="form-control">
-            <option>Project</option>
-          </select>
-        </div>
-
-        <div class="form-group col-md-4">
-          <label>Project</label>
-          <select class="form-control">
-            <option>--Select--</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Row 4 -->
-      <div class="form-row">
-        <div class="form-group col-md-4">
+            <div class="col-md-4" *ngIf="PatientRegistrationForm.get('ddlBillingPatientType')?.value === 'Project'">
+            <label>Project</label>
+            <select class="form-control" formControlName="ddlProject">
+            <option value="">~Please Choose~</option>
+              <option *ngFor="let item of projectApiResponse" [value]="item.projectId">{{item.projectName}}</option>
+            </select>
+            </div>
+          </div>
+         <br/>
+        <div class="row">
+          <div class="col-md-4">
           <label>Instruction to Lab</label>
-          <input type="text" class="form-control">
-        </div>
+          <input type="text" formControlName="LabInstruction" placeholder="Enter instruction to lab " class="form-control">
+          </div>
 
-        <div class="form-group col-md-4">
+          <div class="col-md-4">
           <label>Referral Number (Hospitals)</label>
-          <input type="text" class="form-control">
-        </div>
+          <input type="text" formControlName="ReferalNumber" placeholder="Enter referal number" class="form-control">
+          </div>
 
-        <div class="form-group col-md-4">
+          <div class="col-md-4">
           <label>Sample Collected At</label>
-          <select class="form-control">
-            <option>Select an Option</option>
+          <select class="form-control" formControlName="ddlSampleCollectedAt">
+            <option value="">~Please Choose~</option>
+              <option *ngFor="let item of sampleCollectionPlaceApiResponse" [value]="item.sampleCollectedPlaceName">{{item.sampleCollectedPlaceName}}</option>
           </select>
+          </div>
         </div>
-      </div>
-
-      <hr>
-
-      <!-- TESTS / PROFILES -->
-      <h5 class="text-success">TESTS / PROFILES</h5>
-
-      <div class="input-group mb-2">
-        <input type="text" class="form-control" placeholder="Select atleast one Test/Profile">
-        <div class="input-group-append">
-          <button class="btn btn-primary">Add Tests / Profiles</button>
+        <br/>
+         <hr>
+      <div class="row">
+        <div class="col-md-3">
+            <h5 class="text-success">TESTS / PROFILES</h5>
         </div>
+      <div class="col-md-7">
+      <div class="test-profile-section input-group">
+          <span class="test-profile-search">
+          <mat-icon>search</mat-icon>
+          </span>
+        <input type="text" formControlName="TestProfileName" class="form-control" placeholder="Select at least one Test/Profile"/>
       </div>
-
-      <small class="text-muted">Type few characters of the Test / Profiles you want to select</small>
-
-      <div class="table-responsive mt-3">
-        <table class="table table-bordered table-hover text-center">
-          <thead class="thead-light">
+         <small class="text-muted">Type few characters of the Test / Profiles you want to select</small>
+      </div>
+        <div class="col-md-2">
+          <button class="add-test-profile-button mt-4">Add Tests / Profiles</button>
+        </div>
+       </div>
+       <br/>
+      <div class="row">
+        <div class="table-responsive mt-3">
+           <table class="table table-bordered table-hover text-center">
+           <thead class="thead-light">
             <tr>
               <th>Test Code</th>
               <th>Test Name</th>
@@ -133,66 +152,67 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="6">No data available in table</td>
+              <td colspan="6">No test/profile data available in table</td>
             </tr>
           </tbody>
-        </table>
-      </div>
-
-      <!-- Pricing Section -->
-      <div class="form-row mt-4">
-        <div class="form-group col-md-2">
-          <label>Total Cost</label>
-          <input type="text" class="form-control" value="0" readonly>
-        </div>
-
-        <div class="form-group col-md-2">
-          <label>Discount Type</label>
-          <select class="form-control">
-            <option>Amount</option>
-            <option>Percentage</option>
-          </select>
-        </div>
-
-        <div class="form-group col-md-2">
-          <label>Discount</label>
-          <input type="text" class="form-control">
-        </div>
-
-        <div class="form-group col-md-3">
-          <label>Discount Remarks</label>
-          <textarea class="form-control"></textarea>
+         </table>
         </div>
       </div>
+      <br/>
+       <div class="row">
+            <div class="col-md-3">
+              <label>Total Cost</label>
+              <input type="text" formControlName="TotalCost" class="form-control font-weight-bold" value="0" readonly>
+            </div>
 
-      <!-- Total -->
-      <div class="form-row">
-        <div class="form-group col-md-2">
+            <div class="col-md-3">
+              <label>Discount Type</label>
+              <select class="form-control" formControlName="ddlDiscountType">
+                <option value="">~Please Choose~</option>
+                <option>Amount</option>
+                <option>Percentage</option>
+              </select>
+            </div>
+
+            <div class="col-md-2">
+              <label>Discount</label>
+              <input type="text" formControlName="Discount" class="form-control">
+            </div>
+
+            <div class="col-md-4">
+              <label>Discount Remarks</label>
+              <textarea class="form-control" formControlName="DiscountRemarks"></textarea>
+            </div>
+       </div>
+       <br/>
+       <div class="row">
+       <div class="col-md-3">
           <label>Grand Total</label>
-          <input type="text" class="form-control font-weight-bold" value="0.00" readonly>
-        </div>
+          <input type="text" formControlName="GrandTotal" class="form-control font-weight-bold" value="0.00" readonly>
+       </div>
 
-        <div class="form-group col-md-2">
+        <div class="col-md-3">
           <label>Paid Amount</label>
-          <input type="text" class="form-control">
+          <input type="text" formControlName="PaidAmount" class="form-control">
         </div>
 
-        <div class="form-group col-md-2">
+        <div class="col-md-3">
           <label>Balance Payable</label>
-          <input type="text" class="form-control font-weight-bold" value="0.00" readonly>
+          <input type="text" formControlName="BalancePayable" class="form-control font-weight-bold" value="0.00" readonly>
         </div>
-      </div>
-
-      <!-- Buttons -->
+       </div>
+       <div class="row">
+     <!-- Buttons -->
       <div class="text-center mt-4">
-        <button class="btn btn-success mr-2">
-          <i class="fa fa-check"></i> Save Patient Info
+        <button class="lis-button save-button">
+         <mat-icon>save</mat-icon> Save Patient Info
         </button>
-        <button class="btn btn-primary">
+        <!-- <button class="btn btn-primary">
           <i class="fa fa-plus"></i> New Registration
-        </button>
+        </button> -->
       </div>
-
+       </div>
     </div>
   </div>
 </div>
+<app-loader *ngIf="loading$ | async"></app-loader>
