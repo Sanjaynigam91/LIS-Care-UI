@@ -120,18 +120,33 @@
         <br/>
          <hr>
       <div class="row">
-        <div class="col-md-3">
-            <h5 class="text-success">TESTS / PROFILES</h5>
+        <div class="col-md-2">
+            <label class="text-success">TESTS / PROFILES</label>
         </div>
-      <div class="col-md-7">
+        <div class="col-md-8">
+        <div class="test-profile-section input-group">
+        <span class="test-profile-search">
+          <mat-icon>search</mat-icon>
+          </span>
+          <select formControlName="TestProfileName" class="form-control" multiple="multiple">
+          <!-- <option *ngFor="let item of testProfileApiResponse" [value]="item.testProfileName">{{item.testProfileName}}</option> -->
+        </select>
+    </div>
+    <p class="help-block bold">
+      Type few characters of the Test / Profiles you want to select
+    </p>
+</div>
+
+      <!-- <div class="col-md-8">
       <div class="test-profile-section input-group">
           <span class="test-profile-search">
           <mat-icon>search</mat-icon>
           </span>
+          <select></select>
         <input type="text" formControlName="TestProfileName" class="form-control" placeholder="Select at least one Test/Profile"/>
       </div>
          <small class="text-muted">Type few characters of the Test / Profiles you want to select</small>
-      </div>
+      </div> -->
         <div class="col-md-2">
           <button class="add-test-profile-button mt-4">Add Tests / Profiles</button>
         </div>
