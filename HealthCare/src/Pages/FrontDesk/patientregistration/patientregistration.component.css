@@ -1,0 +1,127 @@
+/* Card Styling */
+.card {
+  border-radius: 10px;
+  border: 1px solid #e1e1e1;
+}
+
+
+
+.card-header {
+  border-radius: 10px 10px 0 0;
+  padding: 12px 20px;
+  background: linear-gradient(90deg, #00C7B7, #00C7B7); /* Gradient background */
+  color: #ffffff;
+}
+
+/* Form Layout */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  padding: 0 10px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Inputs & Selects */
+.form-control {
+  height: 36px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+textarea.form-control {
+  height: 55px !important;
+}
+
+/* Buttons */
+.btn {
+  padding: 6px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.btn-primary {
+  background-color: #0d6efd !important;
+}
+
+.btn-success {
+  background-color: #28a745 !important;
+}
+
+/* Tests/Profiles Section */
+.text-success {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.input-group .form-control {
+  border-radius: 5px 0 0 5px;
+}
+
+.input-group .btn {
+  border-radius: 0 5px 5px 0;
+}
+
+/* Table Styling */
+.table thead th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.table td {
+  font-size: 14px;
+}
+
+.table tbody tr td {
+  color: #666;
+}
+
+/* Pricing Section */
+.font-weight-bold {
+  font-weight: bold !important;
+}
+
+/* Buttons Row */
+.text-center .btn {
+  min-width: 170px;
+  margin: 5px;
+}
+
+/* Improve spacing inside card */
+.card-body {
+  padding: 25px 30px;
+}
+
+/* Page Background */
+.container {
+   margin-bottom: 60px; 
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .form-row {
+    display: block;
+  }
+
+  .form-group {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+}
+
+.matIcon{
+    color:red;
+    font-size: 30px;
+  }
+
+  .patient-registration-container {
+    margin:30px;
+  }
