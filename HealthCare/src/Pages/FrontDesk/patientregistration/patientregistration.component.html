@@ -1,1 +1,198 @@
-<p>patientregistration works!</p>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h5 class="mb-0"><i class="fa fa-user"></i> Patient Registration</h5>
+    </div>
+
+    <div class="patient-registration-container">
+         <div class="row">
+            <div class="col-md-2">
+              <label>Title<mat-icon class="matIcon">*</mat-icon></label>
+                <select class="form-control">
+                    <option>Select</option>
+                </select>
+            </div>
+             <div class="col-md-2">
+              <label>Gender<mat-icon class="matIcon"></mat-icon></label>
+                <select class="form-control">
+                    <option>Gender</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+            <label>Patient Name<mat-icon class="matIcon">*</mat-icon></label>
+            <input type="text" placeholder="Enter patient name" class="form-control">
+            </div>
+
+            <div class="col-md-2">
+            <label>Age <mat-icon class="matIcon">*</mat-icon></label>
+            <input type="number" class="form-control">
+            </div>
+
+            <div class="col-md-2">
+            <label>Years<mat-icon class="matIcon"></mat-icon></label>
+            <select class="form-control">
+                <option>Years</option>
+            </select>
+            </div>
+         </div>
+         <br/>
+         <div class="row">
+            <div class="col-md-4">
+             <label>Email Id</label>
+             <input type="email" class="form-control">
+             </div>
+
+            <div class="col-md-4">
+            <label>Contact Number</label>
+            <input type="text" class="form-control">
+            </div>
+
+            <div class="form-group col-md-4">
+             <label>Center Name</label>
+             <select class="form-control">
+            <option>MEDILAB VARANASI (101152)</option>
+             </select>
+            </div>
+        </div>
+        <br/>
+        
+    </div>
+
+    <div class="card-body">
+   
+      <!-- Row 3 -->
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Referred Dr</label>
+          <select class="form-control">
+            <option>Select an Option</option>
+          </select>
+        </div>
+
+        <div class="form-group col-md-4">
+          <label>Billing / Patient Type</label>
+          <select class="form-control">
+            <option>Project</option>
+          </select>
+        </div>
+
+        <div class="form-group col-md-4">
+          <label>Project</label>
+          <select class="form-control">
+            <option>--Select--</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Instruction to Lab</label>
+          <input type="text" class="form-control">
+        </div>
+
+        <div class="form-group col-md-4">
+          <label>Referral Number (Hospitals)</label>
+          <input type="text" class="form-control">
+        </div>
+
+        <div class="form-group col-md-4">
+          <label>Sample Collected At</label>
+          <select class="form-control">
+            <option>Select an Option</option>
+          </select>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- TESTS / PROFILES -->
+      <h5 class="text-success">TESTS / PROFILES</h5>
+
+      <div class="input-group mb-2">
+        <input type="text" class="form-control" placeholder="Select atleast one Test/Profile">
+        <div class="input-group-append">
+          <button class="btn btn-primary">Add Tests / Profiles</button>
+        </div>
+      </div>
+
+      <small class="text-muted">Type few characters of the Test / Profiles you want to select</small>
+
+      <div class="table-responsive mt-3">
+        <table class="table table-bordered table-hover text-center">
+          <thead class="thead-light">
+            <tr>
+              <th>Test Code</th>
+              <th>Test Name</th>
+              <th>Price</th>
+              <th>Offer Price</th>
+              <th>Specimen Type</th>
+              <th>Imported?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="6">No data available in table</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pricing Section -->
+      <div class="form-row mt-4">
+        <div class="form-group col-md-2">
+          <label>Total Cost</label>
+          <input type="text" class="form-control" value="0" readonly>
+        </div>
+
+        <div class="form-group col-md-2">
+          <label>Discount Type</label>
+          <select class="form-control">
+            <option>Amount</option>
+            <option>Percentage</option>
+          </select>
+        </div>
+
+        <div class="form-group col-md-2">
+          <label>Discount</label>
+          <input type="text" class="form-control">
+        </div>
+
+        <div class="form-group col-md-3">
+          <label>Discount Remarks</label>
+          <textarea class="form-control"></textarea>
+        </div>
+      </div>
+
+      <!-- Total -->
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label>Grand Total</label>
+          <input type="text" class="form-control font-weight-bold" value="0.00" readonly>
+        </div>
+
+        <div class="form-group col-md-2">
+          <label>Paid Amount</label>
+          <input type="text" class="form-control">
+        </div>
+
+        <div class="form-group col-md-2">
+          <label>Balance Payable</label>
+          <input type="text" class="form-control font-weight-bold" value="0.00" readonly>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="text-center mt-4">
+        <button class="btn btn-success mr-2">
+          <i class="fa fa-check"></i> Save Patient Info
+        </button>
+        <button class="btn btn-primary">
+          <i class="fa fa-plus"></i> New Registration
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
