@@ -56,6 +56,13 @@ export class PatientregistrationComponent {
  testCose:string|any;
  testApplicable:string|any;
  selectedSamples: any[] = []; // Data array for the table
+ totalAmount:number|any;
+ balanceAmount:number|any;
+ discountAmount:number|any;
+ discountType:string|any;
+ discountPercentage:number|any;
+ grandTotalAmount:string|any;
+ paidAmount:number|any;
  centerApiResponse:Observable<CenterResponse>| any;
  clientApiResponse:Observable<ClientResponse>|any;
  projectApiResponse:Observable<ProjectResponse>| any;
@@ -309,7 +316,7 @@ getSelectedSamples() {
 
   // Add to table array
   this.selectedSamples.push(selectedItem);
-
+  this.updateTotalAmount();
   // Clear dropdown
   this.PatientRegistrationForm.patchValue({ TestProfileName: '' });
 }
@@ -317,8 +324,51 @@ getSelectedSamples() {
 
 removeSample(index: number) {
   this.selectedSamples.splice(index, 1);
-   this.toasterService.showToast("test sample has been removed successfully!", 'success');
+  if(this.selectedSamples.length>0)
+  {
+    this.updateTotalAmount()
+    this.toasterService.showToast("test sample has been removed successfully!", 'success');
+  }
+  else{
+     this.ngOnInit();
+  }
 }
 
+
+updateTotalAmount() {
+  debugger;
+  this.totalAmount = this.selectedSamples.reduce((sum, item) => sum + (item.mrp || 0), 0);
+  this.discountType= this.PatientRegistrationForm.get('ddlDiscountType')?.value;
+  this.discountAmount=this.PatientRegistrationForm.get('Discount')?.value;
+  this.paidAmount=this.PatientRegistrationForm.get('PaidAmount')?.value;
+
+  if(this.discountType==''){
+    this.discountAmount=0;
+    this.balanceAmount=this.totalAmount-0;
+    this.grandTotalAmount=this.totalAmount-0;
+  }
+  else if(this.discountType=='Amount')
+  {   
+    this.balanceAmount=this.totalAmount-this.discountAmount;
+    
+  }
+  else {
+    this.discountAmount=(this.totalAmount * this.discountAmount) / 100;
+    this.balanceAmount=this.totalAmount-this.discountAmount;
+  }
+
+  this.grandTotalAmount=this.totalAmount-this.discountAmount;
+  
+  if(this.paidAmount>0)
+  {
+    this.balanceAmount=this.grandTotalAmount-this.paidAmount;
+  }
+  
+  this.PatientRegistrationForm.patchValue({
+    TotalCost: this.totalAmount,
+    GrandTotal: this.grandTotalAmount,
+    BalancePayable:this.balanceAmount
+  });
+}
 
 }
