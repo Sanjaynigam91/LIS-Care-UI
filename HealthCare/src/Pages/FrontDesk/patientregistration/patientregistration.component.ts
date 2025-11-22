@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { MatIcon, MatIconModule } from "@angular/material/icon";
 import { MatFormField, MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from '@angular/material/input';
@@ -18,8 +18,15 @@ import { sampleCollectedAtResponse } from '../../../Interfaces/SampleCollection/
 import { SampleCollectionService } from '../../../auth/SampleCollection/sample-collection.service';
 import { ClientResponse } from '../../../Interfaces/ClientMaster/client-response';
 import { ClientService } from '../../../auth/ClientMaster/client.service';
+import { PatientService } from '../../../auth/FrontDesk/patient.service';
+import { TestSampleResponse } from '../../../Interfaces/Patient/test-sample-response';
+import { AfterViewInit } from '@angular/core';
+import $ from 'jquery';
+import 'select2';
+import { ToastComponent } from "../../Toaster/toast/toast.component";
 
 @Component({
+   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   selector: 'app-patientregistration',
   standalone: true,
   imports: [
@@ -28,12 +35,14 @@ import { ClientService } from '../../../auth/ClientMaster/client.service';
     MatIconModule,
     ReactiveFormsModule,
     LoaderComponent,
-    CommonModule 
+    CommonModule,
+    ToastComponent
 ],     // <-- REQUIRED
   templateUrl: './patientregistration.component.html',
   styleUrl: './patientregistration.component.css'
 })
 export class PatientregistrationComponent {
+ $: any;
  loading$!: Observable<boolean>;
  partnerId: string |any;
  loggedInUserId: string |any;
@@ -43,10 +52,16 @@ export class PatientregistrationComponent {
  clientStatus:string|any;
  searchBy:string|any;
  centerCode:string|any;
+ projectCode:number|any;
+ testCose:string|any;
+ testApplicable:string|any;
+ selectedSamples: any[] = []; // Data array for the table
  centerApiResponse:Observable<CenterResponse>| any;
  clientApiResponse:Observable<ClientResponse>|any;
  projectApiResponse:Observable<ProjectResponse>| any;
  sampleCollectionPlaceApiResponse:  Observable<sampleCollectedAtResponse>| any;
+ testSampleApiResponse:Observable<TestSampleResponse>|any;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,7 +71,8 @@ export class PatientregistrationComponent {
     private centerService:CenterServiceService,
     private clientService:ClientService,
     private projectService:ProjectService,
-    private sampleService: SampleCollectionService
+    private sampleService: SampleCollectionService,
+    private patientService:PatientService
     )
     {
       this.loading$ = this.loaderService.loading$;
@@ -88,6 +104,7 @@ export class PatientregistrationComponent {
       GrandTotal: [{ value: '0.00', disabled: true }],
       PaidAmount: [''],
       BalancePayable: [{ value: '0.00', disabled: true }],
+      selectedSamples:['']
   });
 
   this.loadAllCenterRecords();
@@ -104,6 +121,8 @@ export class PatientregistrationComponent {
   });
 
   this.loadSampleCollectionPlaceData();
+
+  this.loadAllTestSamples();
 
   }
 
@@ -233,6 +252,73 @@ export class PatientregistrationComponent {
    
   }
 
+/// Load All test sample details
+loadAllTestSamples() {
+  this.loaderService.show();
+
+  this.centerCode = this.PatientRegistrationForm.get('ddlCenterName')?.value || '';
+  this.projectCode = this.PatientRegistrationForm.get('ddlProject')?.value || 0;
+
+  this.patientService
+    .getAllSamples(this.partnerId, this.centerCode, this.projectCode, this.testCose, this.testApplicable)
+    .pipe(finalize(() => this.loaderService.hide()))
+    .subscribe({
+      next: (response: any) => {
+        if (response?.status && response?.statusCode === 200) {
+
+          // Store Data
+          this.testSampleApiResponse = response.data;
+
+        } else {
+          this.toasterService.showToast("No Record Found!", "error");
+        }
+      },
+      error: () => {
+        this.toasterService.showToast("Error while fetching tests!", "error");
+      }
+    });
+}
+
+
+
+
+getSelectedSamples() {
+
+  const selectedCode = this.PatientRegistrationForm.get('TestProfileName')?.value;
+
+  if (!selectedCode) return;
+
+  // Find selected object from API response
+  const selectedItem = this.testSampleApiResponse.find(
+    (x: { sampleCode: any }) => x.sampleCode === selectedCode
+  );
+
+  if (!selectedItem) return;
+
+  // Prevent duplicates
+  const alreadyExists = this.selectedSamples
+    .some(x => x.sampleCode === selectedItem.sampleCode);
+
+  if (alreadyExists) {
+    // optional: show message
+     this.toasterService.showToast("test sample already selected!", 'error');
+    console.warn("Sample already added!");
+    this.PatientRegistrationForm.patchValue({ TestProfileName: '' });
+    return;
+  }
+
+  // Add to table array
+  this.selectedSamples.push(selectedItem);
+
+  // Clear dropdown
+  this.PatientRegistrationForm.patchValue({ TestProfileName: '' });
+}
+
+
+removeSample(index: number) {
+  this.selectedSamples.splice(index, 1);
+   this.toasterService.showToast("test sample has been removed successfully!", 'success');
+}
 
 
 }
