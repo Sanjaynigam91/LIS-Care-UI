@@ -204,7 +204,7 @@
 
             <div class="col-md-2">
               <label>Discount</label>
-              <input type="text" formControlName="Discount" class="form-control">
+              <input type="text" formControlName="Discount" (change)="updateTotalAmount()" class="form-control">
             </div>
 
             <div class="col-md-4">
@@ -221,7 +221,7 @@
 
         <div class="col-md-3">
           <label>Paid Amount</label>
-          <input type="text" formControlName="PaidAmount" class="form-control">
+          <input type="text" formControlName="PaidAmount" class="form-control" (change)="updateTotalAmount()">
         </div>
 
         <div class="col-md-3">
