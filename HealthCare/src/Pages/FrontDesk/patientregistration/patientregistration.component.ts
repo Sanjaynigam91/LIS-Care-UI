@@ -24,6 +24,7 @@ import { AfterViewInit } from '@angular/core';
 import $ from 'jquery';
 import 'select2';
 import { ToastComponent } from "../../Toaster/toast/toast.component";
+import { PopupsampledetailsComponent } from '../../PopUp/popupsampledetails/popupsampledetails.component';
 
 @Component({
    schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -53,7 +54,7 @@ export class PatientregistrationComponent {
  searchBy:string|any;
  centerCode:string|any;
  projectCode:number|any;
- testCose:string|any;
+ testCode:string|any;
  testApplicable:string|any;
  selectedSamples: any[] = []; // Data array for the table
  totalAmount:number|any;
@@ -63,6 +64,7 @@ export class PatientregistrationComponent {
  discountPercentage:number|any;
  grandTotalAmount:string|any;
  paidAmount:number|any;
+ finalAmount:number|any;
  centerApiResponse:Observable<CenterResponse>| any;
  clientApiResponse:Observable<ClientResponse>|any;
  projectApiResponse:Observable<ProjectResponse>| any;
@@ -267,7 +269,7 @@ loadAllTestSamples() {
   this.projectCode = this.PatientRegistrationForm.get('ddlProject')?.value || 0;
 
   this.patientService
-    .getAllSamples(this.partnerId, this.centerCode, this.projectCode, this.testCose, this.testApplicable)
+    .getAllSamples(this.partnerId, this.centerCode, this.projectCode, this.testCode, this.testApplicable)
     .pipe(finalize(() => this.loaderService.hide()))
     .subscribe({
       next: (response: any) => {
@@ -316,7 +318,7 @@ getSelectedSamples() {
 
   // Add to table array
   this.selectedSamples.push(selectedItem);
-  this.updateTotalAmount();
+  this.updateBillingAmount();
   // Clear dropdown
   this.PatientRegistrationForm.patchValue({ TestProfileName: '' });
 }
@@ -326,8 +328,15 @@ removeSample(index: number) {
   this.selectedSamples.splice(index, 1);
   if(this.selectedSamples.length>0)
   {
-    this.updateTotalAmount()
-    this.toasterService.showToast("test sample has been removed successfully!", 'success');
+    this.updateBillingAmount()
+      if(this.balanceAmount<0 || this.grandTotalAmount<0 || this.totalAmount<0)
+      {
+        this.toasterService.showToast("Final amount should not be negative. Please verify the billed, paid and discount amounts.", 'error');
+      }
+      else{
+        this.toasterService.showToast("test sample has been removed successfully!", 'success');
+      }
+    
   }
   else{
      this.ngOnInit();
@@ -335,12 +344,13 @@ removeSample(index: number) {
 }
 
 
-updateTotalAmount() {
+updateBillingAmount() {
   debugger;
   this.totalAmount = this.selectedSamples.reduce((sum, item) => sum + (item.mrp || 0), 0);
   this.discountType= this.PatientRegistrationForm.get('ddlDiscountType')?.value;
   this.discountAmount=this.PatientRegistrationForm.get('Discount')?.value;
   this.paidAmount=this.PatientRegistrationForm.get('PaidAmount')?.value;
+  this.finalAmount=0;
 
   if(this.discountType==''){
     this.discountAmount=0;
@@ -349,26 +359,70 @@ updateTotalAmount() {
   }
   else if(this.discountType=='Amount')
   {   
-    this.balanceAmount=this.totalAmount-this.discountAmount;
-    
+    this.finalAmount = Number(this.paidAmount) + Number(this.discountAmount);
   }
   else {
-    this.discountAmount=(this.totalAmount * this.discountAmount) / 100;
-    this.balanceAmount=this.totalAmount-this.discountAmount;
+   this.discountAmount=(Number(this.totalAmount) * Number(this.discountAmount)) / 100;
+   this.finalAmount = Number(this.paidAmount) + Number(this.discountAmount);
   }
 
-  this.grandTotalAmount=this.totalAmount-this.discountAmount;
+  this.balanceAmount=Number(this.totalAmount)- Number(this.finalAmount);
+  this.grandTotalAmount=Number(this.totalAmount)- Number(this.finalAmount);
   
   if(this.paidAmount>0)
   {
-    this.balanceAmount=this.grandTotalAmount-this.paidAmount;
+    this.balanceAmount=this.grandTotalAmount;
   }
-  
+
+  if(this.balanceAmount<0 || this.grandTotalAmount<0 || this.totalAmount<0)
+  {
+   this.toasterService.showToast("Final amount should not be negative. Please verify the billed, paid and discount amounts.", 'error');
+  }
+
   this.PatientRegistrationForm.patchValue({
     TotalCost: this.totalAmount,
     GrandTotal: this.grandTotalAmount,
     BalancePayable:this.balanceAmount
   });
 }
+
+ViewSampleDetails() {
+  debugger;
+
+  this.centerCode = this.PatientRegistrationForm.get('ddlCenterName')?.value || '';
+  this.projectCode = this.PatientRegistrationForm.get('ddlProject')?.value || 0;
+
+  console.log("CenterCode:", this.centerCode);
+  console.log("ProjectCode:", this.projectCode);
+
+  // if (!center || !project) {
+  //   this.toasterService.showToast("Please select Center and Project", "error");
+  //   return;
+  // }
+
+  this.centerCode = this.centerCode;
+  this.projectCode = this.projectCode;
+
+  const dialogRef = this.dialog.open(PopupsampledetailsComponent, {
+    width: '1500px',
+    maxWidth: '90vw',
+    minHeight: '300px',
+    disableClose: true,
+    panelClass: 'large-dialog',
+    data: {
+      centerCode: this.centerCode,
+      projectCode: this.projectCode
+    },
+  });
+
+dialogRef.afterClosed().subscribe(() => {
+  setTimeout(() => {
+    this.ngOnInit();
+  });
+});
+
+}
+
+
 
 }
