@@ -1,0 +1,56 @@
+<div class="popup-container">
+  <!-- Content / Form -->
+  <div class="container mt-3">
+    <div class="popup-content" [formGroup]="sampleDetailsForm">
+    <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterSamples" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+<div class="row sample-table popup-scroll">
+  <table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Sample Code</th>
+      <th>Sample Name</th>
+      <th>Price</th>
+      <th>Client Rate</th>
+      <th>Lab Rate</th>
+      <th>Discipline</th>
+      <th>IsProfile</th> 
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of testSampleApiResponse | paginate: { itemsPerPage: itemsPerPage, currentPage: p }; let i = index">
+      <td>{{ item.sampleCode }}</td>
+      <td>{{ item.sampleName }}</td>
+      <td>{{ item.mrp }}</td>
+      <td>{{ item.billRate }}</td>
+      <td>{{ item.labRate }}</td>
+      <td>{{ item.disipline }}</td>
+       <td>
+         <button class="edit-button" matTooltip="edit employee details">
+          <mat-icon class="edit-icon">save</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table> 
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+    </div>
+  </div>
+
+  <app-toast></app-toast>
+  <app-loader *ngIf="loading$ | async"></app-loader>
+
+  <div class="popup-footer mt-3">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>

@@ -23,7 +23,7 @@
                 </select>
             </div>
              <div class="col-md-2">
-              <label>Gender<mat-icon class="matIcon"></mat-icon></label>
+              <label>Gender<mat-icon class="matIcon">*</mat-icon></label>
                 <select class="form-control" formControlName="ddlGender">
                     <option value="">~Please Choose~</option>
                     <option value="M">Male</option>
@@ -42,7 +42,7 @@
             </div>
 
             <div class="col-md-2">
-            <label>Years<mat-icon class="matIcon"></mat-icon></label>
+            <label>Years<mat-icon class="matIcon">*</mat-icon></label>
             <select class="form-control" formControlName="ddlAgeType">
                 <option value="">~Please Choose~</option>
                 <option value="Years">Years</option>
@@ -74,7 +74,7 @@
         <br/>
           <div class="row">
           <div class="col-md-4">
-            <label>Referred Dr</label>
+            <label>Referred Dr<mat-icon class="matIcon">*</mat-icon></label>
               <select class="form-control" formControlName="ddlReferredDr">
               <option value="">~Please Choose~</option>
               <option *ngFor="let item of clientApiResponse" [value]="item.clientId">{{item.clientName}}</option>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="col-md-4">
-            <label>Billing / Patient Type</label>
+            <label>Billing / Patient Type <mat-icon class="matIcon">*</mat-icon></label>
             <select class="form-control" formControlName="ddlBillingPatientType" (change)="loadAllTestSamples()">
               <option value="">~Please Choose~</option> 
               <option value="Center">Regular</option>
@@ -91,7 +91,7 @@
             </div>
 
             <div class="col-md-4" *ngIf="PatientRegistrationForm.get('ddlBillingPatientType')?.value === 'Project'">
-            <label>Project</label>
+            <label>Project<mat-icon class="matIcon">*</mat-icon></label>
             <select class="form-control" formControlName="ddlProject" (change)="loadAllTestSamples()">
             <option value="">~Please Choose~</option>
               <option *ngFor="let item of projectApiResponse" [value]="item.projectId">{{item.projectName}}</option>
@@ -147,9 +147,10 @@
       Type few characters of the Test / Profiles you want to select
     </p>
 </div>
-
         <div class="col-md-2">
-          <button class="add-test-profile-button mt-4">Add Tests / Profiles</button>
+        <!-- <button class="add-test-profile-button mt-4" (click)="ViewSampleDetails()">
+            Add Tests / Profiles
+        </button> -->
         </div>
        </div>
        <br/>
@@ -204,7 +205,7 @@
 
             <div class="col-md-2">
               <label>Discount</label>
-              <input type="text" formControlName="Discount" (change)="updateTotalAmount()" class="form-control">
+              <input type="text" formControlName="Discount" (change)="updateBillingAmount()" class="form-control">
             </div>
 
             <div class="col-md-4">
@@ -221,7 +222,7 @@
 
         <div class="col-md-3">
           <label>Paid Amount</label>
-          <input type="text" formControlName="PaidAmount" class="form-control" (change)="updateTotalAmount()">
+          <input type="text" formControlName="PaidAmount" class="form-control" (change)="updateBillingAmount()">
         </div>
 
         <div class="col-md-3">
@@ -233,7 +234,7 @@
      <!-- Buttons -->
       <div class="text-center mt-4">
         <button class="lis-button save-button">
-         <mat-icon>save</mat-icon> Save Patient Info
+         <mat-icon>save</mat-icon> Save Patient Registration
         </button>
         <!-- <button class="btn btn-primary">
           <i class="fa fa-plus"></i> New Registration
