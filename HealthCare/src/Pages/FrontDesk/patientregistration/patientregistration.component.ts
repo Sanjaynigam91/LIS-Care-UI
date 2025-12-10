@@ -25,6 +25,7 @@ import $ from 'jquery';
 import 'select2';
 import { ToastComponent } from "../../Toaster/toast/toast.component";
 import { PopupsampledetailsComponent } from '../../PopUp/popupsampledetails/popupsampledetails.component';
+import { ValidationService } from '../../../auth/validation.service';
 
 @Component({
    schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -81,7 +82,8 @@ export class PatientregistrationComponent {
     private clientService:ClientService,
     private projectService:ProjectService,
     private sampleService: SampleCollectionService,
-    private patientService:PatientService
+    private patientService:PatientService,
+    private validateService:ValidationService
     )
     {
       this.loading$ = this.loaderService.loading$;
@@ -289,8 +291,6 @@ loadAllTestSamples() {
 }
 
 
-
-
 getSelectedSamples() {
 
   const selectedCode = this.PatientRegistrationForm.get('TestProfileName')?.value;
@@ -318,6 +318,7 @@ getSelectedSamples() {
 
   // Add to table array
   this.selectedSamples.push(selectedItem);
+  this.PatientRegistrationForm.patchValue({ SelectedTest: '' });
   this.updateBillingAmount();
   // Clear dropdown
   this.PatientRegistrationForm.patchValue({ TestProfileName: '' });
@@ -423,6 +424,27 @@ dialogRef.afterClosed().subscribe(() => {
 
 }
 
+savePatientDetails(){
+ debugger;
+ const result = this.validateService.isValidPatientRecord(this.PatientRegistrationForm);
+ if (!result.isValid) {
+  debugger;
+  this.toasterService.showToast(result.message, 'error');
+}
+else{
+    if(this.selectedSamples.length==0)
+    {
+     this.toasterService.showToast("No tests are selected. Please select atleast one.","error" );
+    }
+    else{
+       this.toasterService.showToast(result.message,"success");
+    }
+  }
+   
+}
+
+
 
 
 }
+
