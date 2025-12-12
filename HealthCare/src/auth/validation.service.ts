@@ -39,4 +39,35 @@ export class ValidationService {
   return { isValid: true, message: "Success" };
 }
 
+generatePatientCode(superAdmin: string, centerCode: string): string {
+//  const prefix = 'LIS';
+debugger;
+  // Take first 3 letters safely
+  const adminPart = superAdmin
+    ? superAdmin.substring(0, 3).toUpperCase()
+    : '';
+
+  const centerPart = centerCode
+    ? centerCode.substring(0, 3).toUpperCase()
+    : '';
+
+  // Timestamp (yyMMddHHmmss)
+  const now = new Date();
+  const timestamp =
+    now.getFullYear().toString().substring(2) +
+    this.pad(now.getMonth() + 1) +
+    this.pad(now.getDate()) +
+    this.pad(now.getHours()) +
+    this.pad(now.getMinutes()) +
+    this.pad(now.getSeconds());
+
+     return `${adminPart}${centerPart}${timestamp}`;
+//  return `${prefix}${adminPart}${centerPart}${timestamp}`;
+}
+
+// Helper for adding leading zeros
+pad(num: number): string {
+  return num.toString().padStart(2, '0');
+}
+
 }

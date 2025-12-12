@@ -17,4 +17,9 @@ export interface TestSampleResponse {
     isProject?: string;
     isCustomRate?: string;
     isLMP: boolean;
+    requestId: string;       // Guid → string
+    patientSpecimenId: number;
+    rateType: string;
+    importStatus: boolean;
+    isRejected: boolean;
 }
