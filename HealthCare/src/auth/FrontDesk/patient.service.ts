@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../app/environments/environments';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { TestSampleResponse } from '../../Interfaces/Patient/test-sample-response';
 
@@ -35,6 +35,29 @@ export class PatientService {
            return this.httpClient.get<TestSampleResponse[]>(`${this.baseUrl}/GetAllTestSamples`, {params});
         }
 
+  addUpdatePatientInformation(data:any){
+    debugger;
+   return this.httpClient.post(`${this.baseUrl}/PatientRegistration`, data).pipe(delay(1000));
+  }
+
+  addPatientTestDetails(data:any){
+    debugger;
+   return this.httpClient.post(`${this.baseUrl}/AddTestRequested`, data).pipe(delay(1000));
+  }
+
+  //  /// used to get all sample 
+  //    getLabSampleOrder(partnerId: any,centerCode:any,projectCode:number,testCode:any,testApplicable:any): Observable<TestSampleResponse[]> {
+  //         debugger;
+  //         // Create HttpParams instance and append query parameters
+  //         let params = new HttpParams()
+  //         .set('partnerId', partnerId ?? '')
+  //         .set('centerCode', centerCode ?? '')
+  //         .set('projectCode', projectCode != null ? projectCode.toString() : '0')
+  //         .set('testCode', testCode ?? '')
+  //         .set('testApplicable', testApplicable ?? '');
+
+  //          return this.httpClient.get<TestSampleResponse[]>(`${this.baseUrl}/GetAllTestSamples`, {params});
+  //       }
 
 
 }

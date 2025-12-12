@@ -26,6 +26,11 @@ import 'select2';
 import { ToastComponent } from "../../Toaster/toast/toast.component";
 import { PopupsampledetailsComponent } from '../../PopUp/popupsampledetails/popupsampledetails.component';
 import { ValidationService } from '../../../auth/validation.service';
+import { PatientRequest } from '../../../Interfaces/Patient/patient-request';
+import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
+import { PatientTestRequest } from '../../../Interfaces/Patient/patient-test-request';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
    schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -48,6 +53,7 @@ export class PatientregistrationComponent {
  loading$!: Observable<boolean>;
  partnerId: string |any;
  loggedInUserId: string |any;
+ loggedInUserName:string|any;
  PatientRegistrationForm!: FormGroup<any>;
  centerStatus:string|any;
  SeachByNameOrCode:string|any;
@@ -71,7 +77,57 @@ export class PatientregistrationComponent {
  projectApiResponse:Observable<ProjectResponse>| any;
  sampleCollectionPlaceApiResponse:  Observable<sampleCollectedAtResponse>| any;
  testSampleApiResponse:Observable<TestSampleResponse>|any;
+ patientRequest:PatientRequest={
+   isAddPatient: false,
+   patientCode: '',
+   title: '',
+   gender: '',
+   patientName: '',
+   age: 0,
+   ageType: '',
+   emailId: '',
+   mobileNumber: '',
+   centerCode: '',
+   referredDoctor: '',
+   referredLab: '',
+   isProject: false,
+   projectId: 0,
+   labInstruction: '',
+   referalNumber: '',
+   sampleCollectedAt: '',
+   isPregnant: false,
+   pregnancyWeeks: 0,
+   paymentType: '',
+   totalOriginalAmount: 0,
+   billAmount: 0,
+   receivedAmount: 0,
+   balanceAmount: 0,
+   discountAmount: 0,
+   agreedRatesBilling: 0,
+   discountStatus: '',
+   discountRemarks: '',
+   patientType: '',
+   enteredBy: '',
+   nationality: '',
+   clinicalHistory: '',
+   clinicalRemarks: '',
+   isPercentage: false,
+   invoiceReceiptNo: '',
+   isReportUploaded: false,
+   partnerId: '',
+   createdBy: '',
+   updatedBy: ''
+ }
 
+ testSampleRequest: PatientTestRequest={
+   patientId: '',
+   testCode: '',
+   isProfile: false,
+   specimenType: '',
+   partnerId: '',
+   originalPrice: 0,
+   price: 0
+ }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,12 +139,15 @@ export class PatientregistrationComponent {
     private projectService:ProjectService,
     private sampleService: SampleCollectionService,
     private patientService:PatientService,
-    private validateService:ValidationService
+    private validateService:ValidationService,
+    private refPageService:RefreshPageService,
+
     )
     {
       this.loading$ = this.loaderService.loading$;
       this.partnerId= localStorage.getItem('partnerId');  
-      this.loggedInUserId= localStorage.getItem('loggedInUserId');   
+      this.loggedInUserId= localStorage.getItem('userId'); 
+      this.loggedInUserName= localStorage.getItem('username');  // Get stored
     }
 
   ngOnInit(): void {
@@ -358,7 +417,7 @@ updateBillingAmount() {
     this.balanceAmount=this.totalAmount-0;
     this.grandTotalAmount=this.totalAmount-0;
   }
-  else if(this.discountType=='Amount')
+  else if(this.discountType=="false")
   {   
     this.finalAmount = Number(this.paidAmount) + Number(this.discountAmount);
   }
@@ -424,23 +483,142 @@ dialogRef.afterClosed().subscribe(() => {
 
 }
 
-savePatientDetails(){
- debugger;
- const result = this.validateService.isValidPatientRecord(this.PatientRegistrationForm);
- if (!result.isValid) {
+
+savePatientDetails() {
   debugger;
-  this.toasterService.showToast(result.message, 'error');
-}
-else{
-    if(this.selectedSamples.length==0)
-    {
-     this.toasterService.showToast("No tests are selected. Please select atleast one.","error" );
-    }
-    else{
-       this.toasterService.showToast(result.message,"success");
-    }
+
+  const result = this.validateService.isValidPatientRecord(this.PatientRegistrationForm);
+
+  if (!result.isValid) {
+    this.toasterService.showToast(result.message, 'error');
+    return;
   }
-   
+
+  if (this.selectedSamples.length === 0) {
+    this.toasterService.showToast("No tests are selected. Please select atleast one.", "error");
+    return;
+  }
+
+  // ----------------------------
+  // Prepare Patient Request Body
+  // ----------------------------
+  const patientCode = this.validateService.generatePatientCode(this.loggedInUserName, this.centerCode);
+
+     this.patientRequest.isAddPatient= true;
+     this.patientRequest.patientCode= patientCode,
+     this.patientRequest.title= this.PatientRegistrationForm.get('ddlTitle')?.value;
+     this.patientRequest.gender= this.PatientRegistrationForm.get('ddlGender')?.value;
+     this.patientRequest.patientName= this.PatientRegistrationForm.get('PatientName')?.value;
+     this.patientRequest.age= this.PatientRegistrationForm.get('PatientAge')?.value;
+     this.patientRequest.ageType= this.PatientRegistrationForm.get('ddlAgeType')?.value;
+     this.patientRequest.emailId= this.PatientRegistrationForm.get('PatientEmail')?.value;
+     this.patientRequest.mobileNumber= this.PatientRegistrationForm.get('PatientMobileNumber')?.value;
+     this.patientRequest.centerCode= this.PatientRegistrationForm.get('ddlCenterName')?.value;
+     this.patientRequest.referredDoctor= this.PatientRegistrationForm.get('ddlReferredDr')?.value;
+     this.patientRequest.patientType= this.PatientRegistrationForm.get('ddlBillingPatientType')?.value;
+     if(this.PatientRegistrationForm.get('ddlBillingPatientType')?.value==='Project')
+     {
+      this.patientRequest.isProject= true;
+      this.patientRequest.projectId= this.PatientRegistrationForm.get('ddlProject')?.value;
+     }
+     else{
+      this.patientRequest.isProject= false;
+      this.patientRequest.projectId= 0;
+     }
+     this.patientRequest.labInstruction= this.PatientRegistrationForm.get('LabInstruction')?.value;
+     this.patientRequest.referredLab= this.PatientRegistrationForm.get('ReferalNumber')?.value;
+     this.patientRequest.sampleCollectedAt= this.PatientRegistrationForm.get('ddlSampleCollectedAt')?.value;
+     this.patientRequest.totalOriginalAmount= this.totalAmount;
+     this.patientRequest.agreedRatesBilling= this.totalAmount;
+     this.patientRequest.isPercentage =this.PatientRegistrationForm.get('ddlDiscountType')?.value? true:false;
+     this.patientRequest.discountAmount= this.discountAmount;
+     this.patientRequest.discountRemarks= this.PatientRegistrationForm.get('DiscountRemarks')?.value;
+     this.patientRequest.billAmount= this.grandTotalAmount;
+     this.patientRequest.receivedAmount= this.paidAmount;
+     this.patientRequest.balanceAmount= this.balanceAmount;
+     this.patientRequest. enteredBy= this.loggedInUserId;
+     this.patientRequest.createdBy= this.loggedInUserId;
+     this.patientRequest.updatedBy= this.loggedInUserId;
+     this.patientRequest.partnerId= this.partnerId;
+
+
+  // ----------------------------
+  // Save Patient Master
+  // ----------------------------
+  this.patientService.addUpdatePatientInformation(this.patientRequest).subscribe({
+    next: (response: any) => {
+      debugger;
+
+      if (!(response.statusCode === 200 && response.status)) {
+        this.toasterService.showToast(response.responseMessage, 'error');
+        return;
+      }
+        
+      const dataString = response.data;
+
+        const result: any = {};
+
+        dataString.split(",").forEach((pair: string) => {
+          const parts = pair.split(":");
+          if (parts.length === 2) {
+            const key = parts[0].trim();
+            const value = parts[1].trim();
+            result[key] = value;
+          }
+        });
+      const patientId = result.PatientId;
+
+      if (!patientId) {
+        this.toasterService.showToast("Unable to get patientId.", "error");
+        return;
+      }
+
+      // ----------------------------
+      // Build all test save requests
+      // ----------------------------
+      const testRequests = this.selectedSamples.map(sample => {
+        const testRequest = {
+          patientId: patientId,
+          testCode: sample.sampleCode,
+          isProfile: sample.isProfile,
+          specimenType: sample.sampleType || '',
+          partnerId: this.partnerId,
+          originalPrice: sample.mrp,
+          price: sample.labRate
+        };
+
+        return this.patientService.addPatientTestDetails(testRequest);
+      });
+
+      // ----------------------------
+      // Call all test APIs in parallel
+      // ----------------------------
+      forkJoin(testRequests).subscribe({
+        next: (results: any[]) => {
+          console.log("All test details saved:", results);
+          if(results.every(res => res.statusCode === 200 && res.status)) {
+
+            this.toasterService.showToast(response.responseMessage, 'success');
+          }
+          this.refPageService.notifyRefresh();
+         
+        },
+        error: (err) => {
+          console.error(err);
+          this.toasterService.showToast("Error saving test details", "error");
+        }
+      });
+
+    },
+    error: (err) => {
+      if (err.error?.responseMessage) {
+        this.toasterService.showToast(err.error.responseMessage, 'error');
+      } else {
+        this.toasterService.showToast('Something went wrong. Please try again.', 'error');
+      }
+      console.error(err);
+    }
+  });
 }
 
 
