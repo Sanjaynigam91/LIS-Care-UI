@@ -26,6 +26,7 @@
   [timePicker24Hour]="false"
   [locale]="{ format: 'DD-MMM-YYYY', applyLabel: 'Apply', clearLabel: 'Clear' }"
   placeholder="Select date range"
+  [value]="displayPeriod"
   (apply)="onDateApply($event)"
 />
 

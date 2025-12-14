@@ -85,6 +85,9 @@ export class PatientssummaryComponent {
     status:string|any|null;    
     patientCode:string|any|null; 
     dateForm!: FormGroup;
+    start: Date = new Date();
+    end: Date = new Date();
+    displayPeriod: string = '';
 
      constructor(
         private formBuilder: FormBuilder,
@@ -106,7 +109,9 @@ export class PatientssummaryComponent {
     ngOnInit(): void {
         this.patientSummaryForm = this.formBuilder.group({
           Barcode: [''],
-          DateRange: [this.DateRange],
+          DateRange: [{ startDate: moment(), endDate: moment() }],
+          startDate: [''],
+          endDate: [''],
           PatientName: [''],  
           PatientCode: [''],
           ddlCenter: [''],
@@ -123,12 +128,54 @@ export class PatientssummaryComponent {
         this.filterPatientDetails(value);
       });
 
-      }
-      DateRange: { startDate: Moment; endDate: Moment } = {
-        startDate: moment().subtract(1, 'day').startOf('day'),
-        endDate: moment().endOf('day')
-      };
+  }
 
+
+      setDateRange(period: string): void {
+        const now = new Date();
+
+        switch (period) {
+          case 'today':
+            this.start = new Date();
+            this.end = new Date();
+            break;
+          case 'yesterday':
+            this.start = new Date(now);
+            this.start.setDate(this.start.getDate() - 1);
+            this.end = new Date(this.start);
+            break;
+          case 'last7':
+            this.start = new Date(now);
+            this.end = new Date(now);
+            this.start.setDate(this.end.getDate() - 6);
+            break;
+          case 'last30':
+            this.start = new Date(now);
+            this.end = new Date(now);
+            this.start.setDate(this.end.getDate() - 29);
+            break;
+          case 'thisMonth':
+            this.start = new Date(now.getFullYear(), now.getMonth(), 1);
+            this.end = new Date();
+            break;
+          case 'lastMonth':
+            this.start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            this.end = new Date(now.getFullYear(), now.getMonth(), 0);
+            break;
+          default:
+            this.start = new Date();
+            this.end = new Date();
+            break;
+        }
+
+        // Update the form control with Moment objects
+        this.patientSummaryForm.get('DateRange')?.setValue({
+          startDate: moment(this.start),
+          endDate: moment(this.end)
+        });
+
+      }
+      
         ranges: any = {
           Today: [moment(), moment()],
           Yesterday: [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
@@ -154,7 +201,36 @@ export class PatientssummaryComponent {
 
      
        
-     /// Load All Center Records
+   
+
+
+
+// Button click handler
+pickLatestDate() {
+  const dateRange = this.patientSummaryForm.get('DateRange')?.value;
+
+  if (dateRange && dateRange.startDate && dateRange.endDate) {
+    // These are Moment objects
+    const startMoment = dateRange.startDate;
+    const endMoment = dateRange.endDate;
+
+    // Save in YYYY-MM-DD format for API
+    this.startDate = startMoment.format('YYYY-MM-DD');
+    this.endDate = endMoment.format('YYYY-MM-DD');
+
+    console.log('Latest Start Date:', this.startDate);
+    console.log('Latest End Date:', this.endDate);
+  } else {
+    // If nothing is selected, pick today
+    this.startDate = moment().format('YYYY-MM-DD');
+    this.endDate = moment().format('YYYY-MM-DD');
+  }
+}
+
+
+
+
+  /// Load All Center Records
        loadAllCenterRecords() {
         debugger;
         this.loaderService.show();
@@ -190,11 +266,16 @@ export class PatientssummaryComponent {
          /// Load All Center Records
        loadPatientSummary() {
         debugger;
+        this.pickLatestDate();
         this.loaderService.show();
       
         this.barcode = this.patientSummaryForm.get('Barcode')?.value || null;
-        this.startDate = this.patientSummaryForm.get('DateRange')?.value || null;
-        this.endDate = this.patientSummaryForm.get('DateRange')?.value || null;
+       const dateRange = this.patientSummaryForm.get('DateRange')?.value;
+
+        const startDate = this.start;
+
+        const endDate = this.end;
+         
         this.patientName = this.patientSummaryForm.get('PatientName')?.value || null;
         this.patientCode = this.patientSummaryForm.get('PatientCode')?.value || null;
         this.centerCode = this.patientSummaryForm.get('ddlCenter')?.value || null;
