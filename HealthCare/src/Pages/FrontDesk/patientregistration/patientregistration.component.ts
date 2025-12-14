@@ -425,13 +425,16 @@ updateBillingAmount() {
    this.discountAmount=(Number(this.totalAmount) * Number(this.discountAmount)) / 100;
    this.finalAmount = Number(this.paidAmount) + Number(this.discountAmount);
   }
-
-  this.balanceAmount=Number(this.totalAmount)- Number(this.finalAmount);
-  this.grandTotalAmount=Number(this.totalAmount)- Number(this.finalAmount);
-  
+ 
   if(this.paidAmount>0)
   {
-    this.balanceAmount=this.grandTotalAmount;
+    this.balanceAmount=this.totalAmount-this.finalAmount;
+  }
+  else
+  {
+   this.balanceAmount=Number(this.totalAmount)- Number(this.finalAmount);
+   this.grandTotalAmount=Number(this.totalAmount)- Number(this.finalAmount);
+  
   }
 
   if(this.balanceAmount<0 || this.grandTotalAmount<0 || this.totalAmount<0)
@@ -442,7 +445,8 @@ updateBillingAmount() {
   this.PatientRegistrationForm.patchValue({
     TotalCost: this.totalAmount,
     GrandTotal: this.grandTotalAmount,
-    BalancePayable:this.balanceAmount
+    BalancePayable:this.balanceAmount,
+    discountAmount:this.discountAmount
   });
 }
 

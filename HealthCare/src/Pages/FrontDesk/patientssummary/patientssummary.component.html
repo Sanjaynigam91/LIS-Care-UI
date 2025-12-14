@@ -1,1 +1,179 @@
-<p>patientssummary works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<div class="container mt-3" [formGroup]="patientSummaryForm">
+   <div class="row">
+    <div class="col-md-3">
+    <label>Barcode</label>
+    <input class="form-control" type="text" name="Barcode" placeholder="Search by sample barcode" formControlName="Barcode"/>
+    </div>
+    <div class="col-md-3">
+    <label>For The Date(s)</label>
+   <input
+  type="text"
+  class="form-control"
+  ngxDaterangepickerMd
+  formControlName="DateRange"
+  [ranges]="ranges"
+  [alwaysShowCalendars]="true"
+  [showCustomRangeLabel]="true"
+  [linkedCalendars]="false"
+  [showClearButton]="true"
+  [autoApply]="false"
+  [timePicker]="false"
+  [timePickerSeconds]="false"
+  [timePicker24Hour]="false"
+  [locale]="{ format: 'DD-MMM-YYYY', applyLabel: 'Apply', clearLabel: 'Clear' }"
+  placeholder="Select date range"
+  (apply)="onDateApply($event)"
+/>
+
+
+    </div>
+    <div class="col-md-3">
+    <label>Patient Name</label>
+    <input class="form-control" type="text" name="PatientName" placeholder="Search by patient name" formControlName="PatientName"/>
+    </div>
+    <div class="col-md-3">
+    <label>Patient Code</label>
+    <input class="form-control" type="text" name="PatientCode" placeholder="Search by patient code" formControlName="PatientCode"/>
+    </div>
+   </div>
+   <br/>
+    <div class="row">
+        <div class="col-md-4">
+        <label>Center</label>
+        <select class="form-control"  formControlName="ddlCenter">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
+        </select>
+        </div>
+          <div class="col-md-4">
+        <label>Status</label>
+        <select class="form-control"  formControlName="ddlStatus">
+            <option value="">~Please Choose~</option>
+            <option value="Imported">Imported</option>
+            <option value="Collection Done">Collection Done</option>
+            <option value="Registered">Registered</option>
+            <option value="Sample Collected">Sample Collected</option>
+            <option value="Partially Reported">Partially Reported</option>
+            <option value="Fully Reported">Fully Reported</option>
+        </select>
+        </div>
+         <div class="col-md-4">
+            <div class="div-button">
+            <button mat-flat-button class="search-button" (click)="loadPatientSummary()"><mat-icon>search</mat-icon>Search Registerations</button>
+          </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row" *ngIf="IsRecordFound">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterPatientSummary" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+    <br/>
+    <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found">
+                  No Patient details found!.
+                </div>
+                <br/>
+   </div>
+<div class="table-responsive patient-grid" *ngIf="IsRecordFound">
+
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr class="cell-top nowrap text-center">
+        <th>Date</th>
+        <th>Center Name</th>
+        <th>Patient & Ref By</th>
+        <th>Patient Code</th>
+        <th>Barcode</th>
+        <th>Specimen Type</th>
+        <th>Tests Requested</th>
+        <th>Bill Amount</th>
+        <th>Paid Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of patientSummaryResponse 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+
+        <!-- Date -->
+        <td class="cell-top nowrap">
+        <span>{{ item.woeDate }}</span>
+        </td>
+
+        <!-- Center Name -->
+        <td class="cell-top">
+        <div class="nowrap">{{ item.centerrName }}</div>
+        <div class="sub_text pointer">{{ item.centerCode }}</div>
+        </td>
+
+        <!-- Patient & Ref By -->
+        <td class="cell-top">
+        <div class="fw-semibold nowrap patient-name">{{ item.patientName }}</div>
+        <div class="sub_text pointer">{{ item.referredBy }}</div>
+        </td>
+
+        <!-- Patient Code (reference column) -->
+        <td class="cell-top">
+          <div>{{ item.patientCode }}</div>
+          <div class="sub_text pointer">{{ item.visitId }}</div>
+        </td>
+
+        <td class="cell-top">{{ item.barcode || '-' }}</td>
+
+        <td class="cell-top nowrap">{{ item.specimenType }}</td>
+
+        <td class="cell-top nowrap">
+        <div class="nowrap">{{ item.testRequested }}</div>
+        </td>
+
+      
+        <td class="cell-top text-end">
+          {{ item.billAmount | number:'1.2-2' }}
+        </td>
+
+        <td class="cell-top text-end">
+          {{ item.receivedAmount | number:'1.2-2' }}
+        </td>
+
+        <td class="cell-top">
+          <span class="status registered">
+            {{ item.registrationStatus }}
+          </span>
+        </td>
+
+        <td class="cell-top text-center">
+          <button class="edit-button" matTooltip="Edit">
+            <mat-icon class="edit-icon">edit</mat-icon>
+          </button>
+          <button class="print-button" matTooltip="Delete">
+            <mat-icon class="print-icon">print</mat-icon>
+          </button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<pagination-controls *ngIf="IsRecordFound" (pageChange)="p = $event"></pagination-controls>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>
+
+
