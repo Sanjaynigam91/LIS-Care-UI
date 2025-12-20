@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { TestSampleResponse } from '../../Interfaces/Patient/test-sample-response';
 import { PatientResponse } from '../../Interfaces/Patient/patient-response';
 import dayjs, { Dayjs } from 'dayjs';
+import { PatientDetailResponse } from '../../Interfaces/Patient/patient-detail-response';
 
 @Injectable({
   providedIn: 'root'
@@ -124,5 +125,25 @@ private formatDate(value: Dayjs | Date | string | null): string | null {
   return null;
 }
 
+ /// used to get all sample 
+     getPatientDetailsByPatientId(patientId: any): Observable<PatientDetailResponse[]> {
+          debugger;
+          // Create HttpParams instance and append query parameters
+          let params = new HttpParams()
+          .set('patientId', patientId ?? '');
+           return this.httpClient.get<PatientDetailResponse[]>(`${this.baseUrl}/GetPatientDetailsByPatientId`, {params});
+        }
+
+  /// used to get all sample 
+     getAllSelectedTestByPatientId(patientId: any,partnerId: any): Observable<TestSampleResponse[]> {
+          debugger;
+          // Create HttpParams instance and append query parameters
+          let params = new HttpParams()
+          .set('patientId', patientId ?? '')
+          .set('partnerId', partnerId ?? '');
+        
+           return this.httpClient.get<TestSampleResponse[]>(`${this.baseUrl}/GetSelectedSamples`, {params});
+        }        
 
 }
+

@@ -238,3 +238,40 @@ input[matInput]::placeholder {
   cursor: pointer;
   line-height: 1;
 }
+
+
+.registration-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #00C7B7, #00C7B7); /* Gradient background */
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+}
+
+.registration-header .left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.registration-header .icon {
+  font-size: 18px;
+}
+
+.registration-header .title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.registration-header .right {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.registration-header strong {
+  font-weight: 600;
+}

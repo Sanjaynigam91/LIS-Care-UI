@@ -26,7 +26,6 @@
   [timePicker24Hour]="false"
   [locale]="{ format: 'DD-MMM-YYYY', applyLabel: 'Apply', clearLabel: 'Clear' }"
   placeholder="Select date range"
-  [value]="displayPeriod"
   (apply)="onDateApply($event)"
 />
 
@@ -157,9 +156,14 @@
         </td>
 
         <td class="cell-top text-center">
-          <button class="edit-button" matTooltip="Edit">
-            <mat-icon class="edit-icon">edit</mat-icon>
-          </button>
+          <button
+          type="button"
+          class="edit-button"
+          matTooltip="Edit"
+          [routerLink]="['/patientregistration', item.patientId]">       
+          <mat-icon class="edit-icon">edit</mat-icon>
+        </button>
+
           <button class="print-button" matTooltip="Delete">
             <mat-icon class="print-icon">print</mat-icon>
           </button>

@@ -75,7 +75,7 @@ export const routes: Routes = [
                 component:SearchpatientsComponent
             },
             {
-                path:'patientregistration',
+                path: 'patientregistration/:patientId',
                 component:PatientregistrationComponent
             },
             {

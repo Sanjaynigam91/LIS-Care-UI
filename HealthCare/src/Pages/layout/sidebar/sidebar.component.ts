@@ -96,7 +96,16 @@ export class SidebarComponent {
    */
   onMenuItemClick(routeKey: string) {
     debugger;
-    this.router.navigate([routeKey]);
+    if(routeKey==='patientregistration'){
+     this.router.navigate(['patientregistration', '0']);
+
+      return;
+    }
+    else{
+     this.router.navigate([routeKey]);
+     return;
+    }
+   
     console.log(`${routeKey} clicked`);
   }
 }
