@@ -14,7 +14,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoaderComponent } from '../../loader/loader.component';
 import { A11yModule } from '@angular/cdk/a11y';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { finalize, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from '../../../auth/Toaster/toast.service';
@@ -25,28 +25,32 @@ import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
 import { CenterResponse } from '../../../Interfaces/CenterMaster/CenterResponse';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import moment, { Moment } from 'moment';
+import { PatientResponse } from '../../../Interfaces/Patient/patient-response';
 
 
 @Component({
   selector: 'app-patientssummary',
   standalone: true,
  imports: [
-  MatTableModule,
-  MatPaginatorModule,
-  CommonModule,
-  MatCardModule,
-  MatListModule,
-  MatIconModule,
-  MatButtonModule,
-  NgxDatatableModule,
-  MatSortModule,
-  MatFormFieldModule,
-  MatInputModule,
-  NgxPaginationModule,
-  ReactiveFormsModule,
-  LoaderComponent,
-  A11yModule,
-  NgxDaterangepickerMd   // ✅ ONLY THIS
+    MatTableModule,
+    MatPaginatorModule,
+    CommonModule,
+    MatCardModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    NgxDatatableModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgxPaginationModule,
+    ReactiveFormsModule,
+    LoaderComponent,
+    A11yModule,
+    NgxDaterangepickerMd // ✅ ONLY THIS
+    ,
+    RouterModule,
+    RouterLink
 ],
   templateUrl: './patientssummary.component.html',
   styleUrl: './patientssummary.component.css'
@@ -75,7 +79,7 @@ export class PatientssummaryComponent {
     centerStatus:string|any;
     SeachByNameOrCode:string|any;
     centerApiResponse:Observable<CenterResponse>| any;
-    patientSummaryResponse:Observable<CenterResponse>| any;
+    patientSummaryResponse:Observable<PatientResponse>| any;
     barcode:string|any|null;
     startDate:Date|any|null;
     endDate:Date|any|null;

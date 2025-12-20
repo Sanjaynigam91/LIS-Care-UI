@@ -1,11 +1,20 @@
 
-<div class="container mt-4">
+<div class="container mt-4" [formGroup]="PatientRegistrationForm">
   <div class="card shadow-sm">
-    <div class="card-header">
-      <h5 class="mb-0"><i class="fa fa-user"></i> Patient Registration</h5>
-    </div>
+  <div class="registration-header">
+  <div class="left">
+    <span class="icon">👤</span>
+    <span class="title">Registration</span>
+  </div>
 
-    <div class="patient-registration-container"  [formGroup]="PatientRegistrationForm">
+  <div class="right"] *ngIf="PatientRegistrationForm.get('PatientId')?.value">
+    <span class="reg-on">REG. ON: <strong>{{ PatientRegistrationForm.get('registrationDate')?.value| date:'dd-MMM-yyyy HH:mm' }}</strong></span>
+    <span class="visit-id">VISIT ID : <strong>{{ PatientRegistrationForm.get('VisitId')?.value }}</strong></span>
+  </div>
+</div>
+
+
+    <div class="patient-registration-container">
          <div class="row">
             <div class="col-md-2">
               <label>Title<mat-icon class="matIcon">*</mat-icon></label>
@@ -197,7 +206,7 @@
             <div class="col-md-3">
               <label>Discount Type</label>
               <select class="form-control" formControlName="ddlDiscountType">
-                <option value="false">~Please Choose~</option>
+                <option value="">~Please Choose~</option>
                 <option value="false">Amount</option>
                 <option value="true">Percentage</option>
               </select>
