@@ -67,6 +67,7 @@ UserLogin() {
         localStorage.setItem('mobileNumber', response.data.mobileNumber);
         localStorage.setItem('userLogo', response.data.userLogo);
         localStorage.setItem('roleId', response.data.roleId);
+        localStorage.setItem('centerCode', response.data.centerCode);
         
 
         // Update user info

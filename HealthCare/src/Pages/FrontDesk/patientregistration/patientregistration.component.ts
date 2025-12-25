@@ -56,6 +56,7 @@ export class PatientregistrationComponent {
  partnerId: string |any;
  loggedInUserId: string |any;
  loggedInUserName:string|any;
+ loggedInAsCenterUser:string|any;
  PatientRegistrationForm!: FormGroup<any>;
  centerStatus:string|any;
  SeachByNameOrCode:string|any;
@@ -155,6 +156,7 @@ export class PatientregistrationComponent {
       this.partnerId= localStorage.getItem('partnerId');  
       this.loggedInUserId= localStorage.getItem('userId'); 
       this.loggedInUserName= localStorage.getItem('username');  // Get stored
+      this.loggedInAsCenterUser= localStorage.getItem('centerCode');  // Get stored
     }
 
   ngOnInit(): void {
@@ -234,7 +236,26 @@ export class PatientregistrationComponent {
         next: (response: any) => {
           debugger;
           if (response?.status && response?.statusCode === 200) {
-            this.centerApiResponse = response.data;
+            debugger;
+           const matchedCenter = response.data.find(
+              (center: { centerCode: string }) =>
+                center.centerCode === this.loggedInAsCenterUser
+            );
+
+            if (matchedCenter) {
+              this.centerApiResponse = [matchedCenter];
+
+              this.PatientRegistrationForm.patchValue({
+                ddlCenterName: matchedCenter.centerCode
+              });
+              // 🔒 Disable dropdown for center login
+            this.PatientRegistrationForm.get('ddlCenterName')?.disable();
+            }
+            else{
+                this.centerApiResponse = response.data;
+                 // 🔓 Enable for admin
+                this.PatientRegistrationForm.get('ddlCenterName')?.enable();
+            }
             console.log(this.centerApiResponse);
           } else {
             this.toasterService.showToast('No Record Found!', 'error');

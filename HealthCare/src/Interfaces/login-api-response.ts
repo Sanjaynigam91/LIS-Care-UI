@@ -20,6 +20,7 @@ export interface LoginApiResponse {
     firstName:string,
     lastName:string,
     departmentId:number,
-    userLogo:string
+    userLogo:string,
+    centerCode:string
   };
 }
