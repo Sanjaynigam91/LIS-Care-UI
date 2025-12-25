@@ -575,7 +575,6 @@ savePatientDetails() {
   // ----------------------------
   if (this.patientRequest.isAddPatient) {
     this.patientCode = this.validateService.generatePatientCode(
-      this.loggedInUserName,
       this.centerCode
     );
   }

@@ -39,13 +39,13 @@ export class ValidationService {
   return { isValid: true, message: "Success" };
 }
 
-generatePatientCode(superAdmin: string, centerCode: string): string {
+generatePatientCode(centerCode: string): string {
 //  const prefix = 'LIS';
 debugger;
-  // Take first 3 letters safely
-  const adminPart = superAdmin
-    ? superAdmin.substring(0, 3).toUpperCase()
-    : '';
+  // // Take first 3 letters safely
+  // const adminPart = superAdmin
+  //   ? superAdmin.substring(0, 3).toUpperCase()
+  //   : '';
 
   const centerPart = centerCode
     ? centerCode.substring(0, 3).toUpperCase()
@@ -60,8 +60,9 @@ debugger;
     this.pad(now.getHours()) +
     this.pad(now.getMinutes()) +
     this.pad(now.getSeconds());
+    
 
-     return `${adminPart}${centerPart}${timestamp}`;
+     return `${'LIS'}${centerPart}${timestamp}`;
 //  return `${prefix}${adminPart}${centerPart}${timestamp}`;
 }
 

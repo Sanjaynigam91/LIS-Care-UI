@@ -44,7 +44,7 @@
     <div class="row">
         <div class="col-md-4">
         <label>Center</label>
-        <select class="form-control"  formControlName="ddlCenter">
+        <select class="form-control"  formControlName="ddlCenter" [disabled]="loggedInAsCenterUser">
             <option value="">~Please Choose~</option>
             <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
         </select>
@@ -137,7 +137,7 @@
         <td class="cell-top nowrap">{{ item.specimenType }}</td>
 
         <td class="cell-top nowrap">
-        <div class="nowrap">{{ item.testRequested }}</div>
+        <div [innerHTML]="formatTests(item.testRequested)"></div>
         </td>
 
       
