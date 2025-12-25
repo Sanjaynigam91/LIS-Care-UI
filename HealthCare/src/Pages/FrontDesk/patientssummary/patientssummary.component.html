@@ -164,7 +164,7 @@
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
 
-          <button class="print-button" matTooltip="Delete">
+          <button class="print-button" matTooltip="print invoice" (click)="downloadPatientReceipt(item.patientId)">
             <mat-icon class="print-icon">print</mat-icon>
           </button>
         </td>

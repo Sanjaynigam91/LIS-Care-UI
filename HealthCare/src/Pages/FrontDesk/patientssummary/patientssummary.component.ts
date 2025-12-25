@@ -344,6 +344,26 @@ pickLatestDate() {
     if(searchTerm==""){
       this.ngOnInit();
     }
-  }      
+  }    
+
+ downloadPatientReceipt(patientId: any): void {
+    debugger;
+    this.patientService.getPatientReceipt(patientId,this.partnerId).subscribe({
+      next: (blob) => {
+        const fileURL = window.URL.createObjectURL(blob);
+
+        // const a = document.createElement('a');
+        // a.href = fileURL;
+        // a.download = 'PatientReceipt.pdf'; // backend name will override if provided
+        // a.click();
+
+        // window.URL.revokeObjectURL(fileURL);
+        window.open(fileURL, 'PatientReceipt.pdf');
+      },
+      error: (err) => {
+        console.error('PDF download failed', err);
+      }
+    });
+  }
     
 }
