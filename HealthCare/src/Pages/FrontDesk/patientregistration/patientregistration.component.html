@@ -74,7 +74,7 @@
 
             <div class="form-group col-md-4">
              <label>Center Name</label>
-             <select class="form-control" formControlName="ddlCenterName" (change)="loadAllTestSamples()">
+             <select class="form-control" formControlName="ddlCenterName" [disabled]="loggedInAsCenterUser" (change)="loadAllTestSamples()">
               <option value="">~Please Choose~</option>
               <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
              </select>
