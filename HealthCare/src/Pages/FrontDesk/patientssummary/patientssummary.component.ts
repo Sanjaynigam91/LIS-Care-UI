@@ -65,6 +65,7 @@ export class PatientssummaryComponent {
     employeeName:string|any;
     loggedInUserId: string |any;
     loggedInUserName: string |any;
+    loggedInAsCenterUser:string|any;
     p: number = 1; // current page
     totalItems: number =0; // total number of items, for example
     itemsPerPage: number = 10; // items per page
@@ -108,6 +109,7 @@ export class PatientssummaryComponent {
           this.partnerId= localStorage.getItem('partnerId');  
           this.loggedInUserId= localStorage.getItem('userId'); 
           this.loggedInUserName= localStorage.getItem('username');  // Get stored
+          this.loggedInAsCenterUser= localStorage.getItem('centerCode');  // Get stored
         }
 
     ngOnInit(): void {
@@ -253,12 +255,31 @@ pickLatestDate() {
             next: (response: any) => {
               debugger;
               if (response?.status && response?.statusCode === 200) {
-                this.centerApiResponse = response.data;
-                console.log(this.centerApiResponse);
-              } else {
-                this.toasterService.showToast('No Record Found!', 'error');
-                console.warn('No Record Found!');
-              }
+
+                  const matchedCenter = response.data.find(
+                    (center: { centerCode: string }) =>
+                      center.centerCode === this.loggedInAsCenterUser
+                  );
+
+                  if (matchedCenter) {
+                    this.centerApiResponse = [matchedCenter];
+
+                    // ✅ Patch value FIRST
+                    this.patientSummaryForm.patchValue({
+                      ddlCenter: matchedCenter.centerCode
+                    });
+
+                    // ✅ Disable AFTER patching
+                    this.patientSummaryForm.get('ddlCenter')?.disable();
+
+                  } else {
+                    this.centerApiResponse = response.data;
+
+                    // ✅ Enable for admin
+                    this.patientSummaryForm.get('ddlCenter')?.enable();
+                  }
+                }
+
             },
             error: (err) => {
                this.toasterService.showToast('Error while fetching centers!', 'error');
@@ -282,9 +303,15 @@ pickLatestDate() {
          
         this.patientName = this.patientSummaryForm.get('PatientName')?.value || null;
         this.patientCode = this.patientSummaryForm.get('PatientCode')?.value || null;
+        if(this.loggedInAsCenterUser)
+        {
+          this.centerCode=this.loggedInAsCenterUser;
+        }
+        else
+        {
         this.centerCode = this.patientSummaryForm.get('ddlCenter')?.value || null;
+        }
         this.status = this.patientSummaryForm.get('ddlStatus')?.value || null;
-        
         this.patientService.getPatientSummary(this.barcode, this.startDate, this.endDate, this.patientName,
          this.patientCode, this.centerCode, this.status, this.partnerId)
           .pipe(
@@ -365,5 +392,23 @@ pickLatestDate() {
       }
     });
   }
+
+  formatTests(tests: string): string {
+  if (!tests) return '';
+
+  const testArray = tests.split(',');
+
+  let result = '';
+  for (let i = 0; i < testArray.length; i++) {
+    result += testArray[i].trim();
+    if ((i + 1) % 2 === 0) {
+      result += '<br>';   // break line after 2 tests
+    } else {
+      result += ', ';
+    }
+  }
+  return result;
+}
+
     
 }
