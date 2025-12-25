@@ -186,7 +186,7 @@
                <td>{{item.billRate}}</td>
                <td>{{item.sampleType}}</td>
                <td>
-                <button class="remove-icon" (click)="removeSample(i)">&times;</button>
+                <button class="remove-icon" (click)="removeSample(item)">&times;</button>
               </td>
             </tr>
             <tr *ngIf="selectedSamples.length === 0">

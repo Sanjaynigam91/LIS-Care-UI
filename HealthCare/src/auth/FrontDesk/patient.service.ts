@@ -143,7 +143,32 @@ private formatDate(value: Dayjs | Date | string | null): string | null {
           .set('partnerId', partnerId ?? '');
         
            return this.httpClient.get<TestSampleResponse[]>(`${this.baseUrl}/GetSelectedSamples`, {params});
-        }        
+        }     
+
+deletePatientRequestedTest(patientId: any, testCode: any) {
+  return this.httpClient.delete(
+    `${this.baseUrl}/DeletePatientSampleTest`,
+    {
+      params: {
+        patientId,
+        testCode
+      }
+    }
+  ).pipe(delay(1000));
+}
+
+getPatientReceipt(patientId: any,partnerId: any): Observable<Blob> {
+  debugger;
+  // Create HttpParams instance and append query parameters
+  let params = new HttpParams()
+  .set('patientId', patientId ?? '')
+  .set('partnerId', partnerId ?? '');
+  return this.httpClient.get(`${this.baseUrl}/GeneratePatientReceipt`, {
+    params,
+    responseType: 'blob'
+  });
+}
+
 
 }
 

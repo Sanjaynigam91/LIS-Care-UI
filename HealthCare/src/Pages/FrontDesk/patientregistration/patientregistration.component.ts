@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LoaderComponent } from "../../loader/loader.component";
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, Observable, pipe } from 'rxjs';
+import { finalize, Observable, of, pipe } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoaderService } from '../../../Interfaces/loader.service';
 import { ToastService } from '../../../auth/Toaster/toast.service';
@@ -76,6 +76,7 @@ export class PatientregistrationComponent {
  paidAmount:number|any;
  finalAmount:number|any;
  patientCode:string|any;
+ slectedTestSampleCode:string|any;
  centerApiResponse:Observable<CenterResponse>| any;
  clientApiResponse:Observable<ClientResponse>|any;
  projectApiResponse:Observable<ProjectResponse>| any;
@@ -402,9 +403,16 @@ getSelectedSamples() {
 }
 
 
-removeSample(index: number) {
+removeSample(item: any) {
   debugger;
-  this.selectedSamples.splice(index, 1);
+  this.slectedTestSampleCode=item.sampleCode;
+   const index = this.selectedSamples.findIndex(
+    x => x.sampleCode === item.sampleCode
+  );
+
+ if (index > -1) {
+    this.selectedSamples.splice(index, 1);
+  }
   if(this.selectedSamples.length>0)
   {
     this.updateBillingAmount()
@@ -513,157 +521,171 @@ dialogRef.afterClosed().subscribe(() => {
 savePatientDetails() {
   debugger;
 
-  const result = this.validateService.isValidPatientRecord(this.PatientRegistrationForm);
-
-  if (!result.isValid) {
-    this.toasterService.showToast(result.message, 'error');
+  // ----------------------------
+  // Form Validation
+  // ----------------------------
+  const validation = this.validateService.isValidPatientRecord(this.PatientRegistrationForm);
+  if (!validation.isValid) {
+    this.toasterService.showToast(validation.message, 'error');
     return;
   }
 
   if (this.selectedSamples.length === 0) {
-    this.toasterService.showToast("No tests are selected. Please select atleast one.", "error");
+    this.toasterService.showToast(
+      'No tests are selected. Please select at least one.',
+      'error'
+    );
     return;
   }
 
-  if(this.PatientRegistrationForm.get('PatientId')?.value=='')
-  {
-       this.patientRequest.isAddPatient= true;
-  }
-  else{
-       this.patientRequest.isAddPatient= false;
-       this.patientRequest.patientId= this.PatientRegistrationForm.get('PatientId')?.value;
+  const patientIdFromForm = this.PatientRegistrationForm.get('PatientId')?.value;
+
+  // ----------------------------
+  // Add / Update Logic
+  // ----------------------------
+  this.patientRequest.isAddPatient = !patientIdFromForm || patientIdFromForm === '0';
+
+  if (!this.patientRequest.isAddPatient) {
+    this.patientRequest.patientId = patientIdFromForm;
   }
 
   // ----------------------------
-  // Prepare Patient Request Body
+  // Generate Patient Code (only for new)
   // ----------------------------
-  if(this.PatientRegistrationForm.get('PatientId')?.value=='0'){
-     this.patientCode = this.validateService.generatePatientCode(this.loggedInUserName, this.centerCode)
+  if (this.patientRequest.isAddPatient) {
+    this.patientCode = this.validateService.generatePatientCode(
+      this.loggedInUserName,
+      this.centerCode
+    );
   }
-  
-    
-     this.patientRequest.patientCode= this.patientCode;
-     this.patientRequest.title= this.PatientRegistrationForm.get('ddlTitle')?.value;
-     this.patientRequest.gender= this.PatientRegistrationForm.get('ddlGender')?.value;
-     this.patientRequest.patientName= this.PatientRegistrationForm.get('PatientName')?.value;
-     this.patientRequest.age= this.PatientRegistrationForm.get('PatientAge')?.value;
-     this.patientRequest.ageType= this.PatientRegistrationForm.get('ddlAgeType')?.value;
-     this.patientRequest.emailId= this.PatientRegistrationForm.get('PatientEmail')?.value;
-     this.patientRequest.mobileNumber= this.PatientRegistrationForm.get('PatientMobileNumber')?.value;
-     this.patientRequest.centerCode= this.PatientRegistrationForm.get('ddlCenterName')?.value;
-     this.patientRequest.referredDoctor= this.PatientRegistrationForm.get('ddlReferredDr')?.value;
-     this.patientRequest.patientType= this.PatientRegistrationForm.get('ddlBillingPatientType')?.value;
-     if(this.PatientRegistrationForm.get('ddlBillingPatientType')?.value==='Project')
-     {
-      this.patientRequest.isProject= true;
-      this.patientRequest.projectId= this.PatientRegistrationForm.get('ddlProject')?.value;
-     }
-     else{
-      this.patientRequest.isProject= false;
-      this.patientRequest.projectId= 0;
-     }
-     this.patientRequest.labInstruction= this.PatientRegistrationForm.get('LabInstruction')?.value;
-     this.patientRequest.referredLab= this.PatientRegistrationForm.get('ReferalNumber')?.value;
-     this.patientRequest.sampleCollectedAt= this.PatientRegistrationForm.get('ddlSampleCollectedAt')?.value;
-     this.patientRequest.totalOriginalAmount= this.PatientRegistrationForm.get('TotalCost')?.value;;
-     this.patientRequest.agreedRatesBilling= this.PatientRegistrationForm.get('TotalCost')?.value;;
-     if(this.PatientRegistrationForm.get('ddlDiscountType')?.value=='true')
-     {
-      this.patientRequest.isPercentage = true;
-     }
-      else{
-      this.patientRequest.isPercentage = false;
-      }
-     this.patientRequest.discountAmount= this.PatientRegistrationForm.get('Discount')?.value;
-     this.patientRequest.discountRemarks= this.PatientRegistrationForm.get('DiscountRemarks')?.value;
-     this.patientRequest.billAmount=this.PatientRegistrationForm.get('GrandTotal')?.value;
-     this.patientRequest.receivedAmount= this.PatientRegistrationForm.get('PaidAmount')?.value;
-     this.patientRequest.balanceAmount= this.PatientRegistrationForm.get('BalancePayable')?.value;
-     this.patientRequest. enteredBy= this.loggedInUserId;
-     this.patientRequest.createdBy= this.loggedInUserId;
-     this.patientRequest.updatedBy= this.loggedInUserId;
-     this.patientRequest.partnerId= this.partnerId;
-
 
   // ----------------------------
-  // Save Patient Master
+  // Prepare Patient Request
+  // ----------------------------
+  this.patientRequest = {
+    ...this.patientRequest,
+    patientCode: this.patientCode,
+    title: this.PatientRegistrationForm.get('ddlTitle')?.value,
+    gender: this.PatientRegistrationForm.get('ddlGender')?.value,
+    patientName: this.PatientRegistrationForm.get('PatientName')?.value,
+    age: this.PatientRegistrationForm.get('PatientAge')?.value,
+    ageType: this.PatientRegistrationForm.get('ddlAgeType')?.value,
+    emailId: this.PatientRegistrationForm.get('PatientEmail')?.value,
+    mobileNumber: this.PatientRegistrationForm.get('PatientMobileNumber')?.value,
+    centerCode: this.PatientRegistrationForm.get('ddlCenterName')?.value,
+    referredDoctor: this.PatientRegistrationForm.get('ddlReferredDr')?.value,
+    patientType: this.PatientRegistrationForm.get('ddlBillingPatientType')?.value,
+    isProject: this.PatientRegistrationForm.get('ddlBillingPatientType')?.value === 'Project',
+    projectId:
+      this.PatientRegistrationForm.get('ddlBillingPatientType')?.value === 'Project'
+        ? this.PatientRegistrationForm.get('ddlProject')?.value
+        : 0,
+    labInstruction: this.PatientRegistrationForm.get('LabInstruction')?.value,
+    referredLab: this.PatientRegistrationForm.get('ReferalNumber')?.value,
+    sampleCollectedAt: this.PatientRegistrationForm.get('ddlSampleCollectedAt')?.value,
+    totalOriginalAmount: this.PatientRegistrationForm.get('TotalCost')?.value,
+    agreedRatesBilling: this.PatientRegistrationForm.get('TotalCost')?.value,
+    isPercentage: this.PatientRegistrationForm.get('ddlDiscountType')?.value === 'true',
+    discountAmount: this.PatientRegistrationForm.get('Discount')?.value,
+    discountRemarks: this.PatientRegistrationForm.get('DiscountRemarks')?.value,
+    billAmount: this.PatientRegistrationForm.get('GrandTotal')?.value,
+    receivedAmount: this.PatientRegistrationForm.get('PaidAmount')?.value,
+    balanceAmount: this.PatientRegistrationForm.get('BalancePayable')?.value,
+    enteredBy: this.loggedInUserId,
+    createdBy: this.loggedInUserId,
+    updatedBy: this.loggedInUserId,
+    partnerId: this.partnerId
+  };
+
+  // ----------------------------
+  // Save / Update Patient Master
   // ----------------------------
   this.patientService.addUpdatePatientInformation(this.patientRequest).subscribe({
     next: (response: any) => {
-      debugger;
-
       if (!(response.statusCode === 200 && response.status)) {
-        this.refPageService.notifyRefresh(); 
-        this.toasterService.showToast(response.responseMessage, 'success');
-        return;
-      }
-        
-      const dataString = response.data;
-
-        const result: any = {};
-
-        dataString.split(",").forEach((pair: string) => {
-          const parts = pair.split(":");
-          if (parts.length === 2) {
-            const key = parts[0].trim();
-            const value = parts[1].trim();
-            result[key] = value;
-          }
-        });
-      const patientId = result.PatientId;
-
-      if (!patientId) {
-        this.toasterService.showToast("Unable to get patientId.", "error");
+        this.toasterService.showToast(response.responseMessage, 'error');
         return;
       }
 
       // ----------------------------
-      // Build all test save requests
+      // Extract PatientId from response.data
       // ----------------------------
-      const testRequests = this.selectedSamples.map(sample => {
-        const testRequest = {
-          patientId: patientId,
-          testCode: sample.sampleCode,
-          isProfile: sample.isProfile,
-          specimenType: sample.sampleType || '',
-          partnerId: this.partnerId,
-          originalPrice: sample.mrp,
-          price: sample.billRate
-        };
-
-        return this.patientService.addPatientTestDetails(testRequest);
-      });
-
-      // ----------------------------
-      // Call all test APIs in parallel
-      // ----------------------------
-      forkJoin(testRequests).subscribe({
-        next: (results: any[]) => {
-          console.log("All test details saved:", results);
-          if(results.every(res => res.statusCode === 200 && res.status)) {
-
-            this.toasterService.showToast(response.responseMessage, 'success');
-          }
-          this.refPageService.notifyRefresh();
-         
-        },
-        error: (err) => {
-          console.error(err);
-          this.toasterService.showToast("Error saving test details", "error");
+      const result: any = {};
+      response.data?.split(',').forEach((pair: string) => {
+        const [key, value] = pair.split(':');
+        if (key && value) {
+          result[key.trim()] = value.trim();
         }
       });
 
+      const patientId = result.PatientId;
+      if (!patientId) {
+        this.toasterService.showToast('Unable to get PatientId.', 'error');
+        return;
+      }
+
+      // ----------------------------
+      // Delete Old Tests (Update Case)
+      // ----------------------------
+      const delete$ = this.patientRequest.isAddPatient
+        ? of(true)
+        : this.patientService.deletePatientRequestedTest(
+            patientId,
+            this.slectedTestSampleCode
+          );
+
+      delete$.subscribe(() => {
+
+        // ----------------------------
+        // Build Test Requests
+        // ----------------------------
+        const testRequests = this.selectedSamples.map(sample =>
+          this.patientService.addPatientTestDetails({
+            patientId,
+            testCode: sample.sampleCode,
+            isProfile: sample.isProfile,
+            specimenType: sample.sampleType || '',
+            partnerId: this.partnerId,
+            originalPrice: sample.mrp,
+            price: sample.billRate
+          })
+        );
+
+        // ----------------------------
+        // Save Tests in Parallel
+        // ----------------------------
+        forkJoin(testRequests).subscribe({
+          next: (results: any[]) => {
+            if (results.every(r => r.statusCode === 200 && r.status)) {
+              this.toasterService.showToast(response.responseMessage, 'success');
+                // ✅ CLEAR SELECTED SAMPLES AFTER SAVE
+                this.selectedSamples = [];
+              this.refPageService.notifyRefresh();
+              this.ngOnInit(); // ✅ RESET FORM HERE
+            } else {
+              this.toasterService.showToast(
+                'Some test records failed to save.',
+                'error'
+              );
+            }
+          },
+          error: () =>
+            this.toasterService.showToast(
+              'Error saving test details.',
+              'error'
+            )
+        });
+      });
     },
     error: (err) => {
-      if (err.error?.responseMessage) {
-        this.toasterService.showToast(err.error.responseMessage, 'error');
-      } else {
-        this.toasterService.showToast('Something went wrong. Please try again.', 'error');
-      }
-      console.error(err);
+      this.toasterService.showToast(
+        err.error?.responseMessage || 'Something went wrong.',
+        'error'
+      );
     }
   });
 }
+
 
 getPatientDeatils(patientId:any) {
     this.loaderService.show();
@@ -754,7 +776,5 @@ getSelectedSamplesDeatils(patientId:any) {
     });
    
   }
-
-
 }
 
