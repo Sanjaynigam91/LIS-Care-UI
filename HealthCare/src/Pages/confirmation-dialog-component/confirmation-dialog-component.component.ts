@@ -28,6 +28,7 @@ export class ConfirmationDialogComponentComponent {
   labCode:any;// used to dlete outlab from out lab master page
   empId:any;//used to delete employee from employee master page
   projectId:any;// used to delete project from project master page
+  patientId:any;// used to delete patient from patient summary page
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponentComponent>,

@@ -170,5 +170,18 @@ getPatientReceipt(patientId: any,partnerId: any): Observable<Blob> {
 }
 
 
+deletePatientRegisteredPatient(patientId: any, enteredBy: any) {
+  return this.httpClient.delete(
+    `${this.baseUrl}/DeleteRegisteredPatient`,
+    {
+      params: {
+        patientId,
+        enteredBy
+      }
+    }
+  ).pipe(delay(1000));
+}
+
+
 }
 

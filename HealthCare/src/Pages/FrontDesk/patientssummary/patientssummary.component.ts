@@ -26,6 +26,7 @@ import { CenterResponse } from '../../../Interfaces/CenterMaster/CenterResponse'
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import moment, { Moment } from 'moment';
 import { PatientResponse } from '../../../Interfaces/Patient/patient-response';
+import { ConfirmationDialogComponentComponent } from '../../confirmation-dialog-component/confirmation-dialog-component.component';
 
 
 @Component({
@@ -66,11 +67,13 @@ export class PatientssummaryComponent {
     loggedInUserId: string |any;
     loggedInUserName: string |any;
     loggedInAsCenterUser:string|any;
+    currentUserRoleId:any;
     p: number = 1; // current page
     totalItems: number =0; // total number of items, for example
     itemsPerPage: number = 10; // items per page
     IsNoRecordFound=false;
     IsRecordFound=false;
+    IsDeleteVisible=false;
     sortColumn = '';
     sortDirection = 'asc';
     // Filter criteria
@@ -110,6 +113,7 @@ export class PatientssummaryComponent {
           this.loggedInUserId= localStorage.getItem('userId'); 
           this.loggedInUserName= localStorage.getItem('username');  // Get stored
           this.loggedInAsCenterUser= localStorage.getItem('centerCode');  // Get stored
+          this.currentUserRoleId= localStorage.getItem('roleId');
         }
 
     ngOnInit(): void {
@@ -125,6 +129,13 @@ export class PatientssummaryComponent {
           filterPatientSummary: [''],
             
       });
+
+      if(this.currentUserRoleId==2){
+        this.IsDeleteVisible=true;
+      }
+      else{
+        this.IsDeleteVisible=false;
+      }
 
       this.loadAllCenterRecords();
       this.loadPatientSummary();
@@ -409,6 +420,40 @@ pickLatestDate() {
   }
   return result;
 }
+
+
+ patientDeleteConfirmationDialog(patientId:any): void {
+      debugger;
+      const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
+         width: 'auto',
+         disableClose: true,  
+        data: { message: 'Are you sure you want to delete this patient details?',patientId: patientId }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        debugger;
+        if (result.success) {
+          debugger;
+          this.patientService.deletePatientRegisteredPatient(patientId,this.loggedInUserId).subscribe((response:any)=>{
+            debugger;
+           if(response.status && response.statusCode==200){
+            this.toasterService.showToast(response.responseMessage, 'success');
+            this.ngOnInit();
+           }
+           else{
+            this.toasterService.showToast(response.responseMessage, 'error');
+           }
+           console.log(response);
+          }) 
+          console.log('Returned User ID:', result.userId);
+          console.log('User confirmed the action.');
+        } else {
+          debugger;
+          // User clicked 'Cancel'
+          console.log('User canceled the action.');
+        }
+      });
+    }
 
     
 }
