@@ -155,19 +155,37 @@
           </span>
         </td>
 
-        <td class="cell-top text-center">
-          <button
-          type="button"
-          class="edit-button"
-          matTooltip="Edit"
-          [routerLink]="['/patientregistration', item.patientId]">       
-          <mat-icon class="edit-icon">edit</mat-icon>
-        </button>
+       <td class="cell-top text-center">
+  <div class="action-container">
+    
+    <button
+      type="button"
+      class="action-btn edit-button"
+      matTooltip="Edit"
+      [routerLink]="['/patientregistration', item.patientId]">
+      <mat-icon>edit</mat-icon>
+    </button>
 
-          <button class="print-button" matTooltip="print invoice" (click)="downloadPatientReceipt(item.patientId)">
-            <mat-icon class="print-icon">print</mat-icon>
-          </button>
-        </td>
+    <button
+      type="button"
+      class="action-btn print-button"
+      matTooltip="Print Invoice"
+      (click)="downloadPatientReceipt(item.patientId)">
+      <mat-icon>print</mat-icon>
+    </button>
+
+    <button
+      type="button"
+      class="action-btn delete-button"
+      *ngIf="IsDeleteVisible"
+      (click)="patientDeleteConfirmationDialog(item.patientId)"
+      matTooltip="Delete Patient">
+      <mat-icon class="delete-icon">delete</mat-icon>
+    </button>
+
+  </div>
+</td>
+
 
       </tr>
     </tbody>

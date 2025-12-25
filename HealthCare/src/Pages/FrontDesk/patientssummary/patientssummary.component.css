@@ -346,3 +346,33 @@ color:  #1c93cf; /* Change to your desired color */
     color: deepskyblue;
 }
 
+.action-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* spacing between icons */
+}
+
+.action-btn {
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.edit-button mat-icon {
+  color: #2196f3; /* blue */
+}
+
+.print-button mat-icon {
+  color: #1976d2; /* dark blue */
+}
+
+.delete-button mat-icon {
+  color: #e91e63; /* pink */
+}
+
+.action-btn:hover mat-icon {
+  transform: scale(1.1);
+}
