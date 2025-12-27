@@ -4,6 +4,7 @@ import { sampleCollectedAtResponse } from '../../Interfaces/SampleCollection/sam
 import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { HttpClient,HttpParams } from '@angular/common/http';
 import { SampleCollectionResponse } from '../../Interfaces/SampleCollection/sample-collection-response';
+import { RequestedTest, SamplePendingCollectionResponse } from '../../Interfaces/SampleCollection/sample-pending-collection-response';
 
 @Injectable({
   providedIn: 'root'
@@ -68,5 +69,28 @@ export class SampleCollectionService {
     { params }
   );
 }
+
+GetPendingSampleForCollectionById(patientId:any):Observable<SamplePendingCollectionResponse>{
+    debugger;
+    //const apiUrl = `${this.baseUrl}/GetUserById?userId=${userId}`;
+    return this.httpClient.get<SamplePendingCollectionResponse>(`${this.baseUrl}/GetSamplesForCollection?patientId=${patientId}`).pipe(delay(1000));
+  }
+
+GetRequsetedTestForCollection(
+  patientId: any,
+  barcode: string
+): Observable<RequestedTest[]> {
+
+  debugger;
+
+  let params = new HttpParams()
+    .set('patientId', patientId ?? '')
+    .set('barcode', barcode ?? '');
+
+  return this.httpClient
+    .get<RequestedTest[]>(`${this.baseUrl}/GetRequestedSampleForCollection`, { params })
+    .pipe(delay(1000));
+}
+ 
       
 }

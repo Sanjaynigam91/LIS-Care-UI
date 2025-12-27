@@ -27,6 +27,7 @@ import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
 import { SampleCollectionService } from '../../../auth/SampleCollection/sample-collection.service';
 import moment from 'moment';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PopuppendingcollectionComponent } from '../../PopUp/popuppendingcollection/popuppendingcollection.component';
 
 @Component({
   selector: 'app-samplecollection',
@@ -50,8 +51,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     A11yModule,
     NgxDaterangepickerMd // ✅ ONLY THIS
     ,
-    RouterModule,
-    RouterLink
+    RouterModule
 ],
   templateUrl: './samplecollection.component.html',
   styleUrl: './samplecollection.component.css'
@@ -367,4 +367,22 @@ export class SamplecollectionComponent {
       this.ngOnInit();
     }
   }
+  // open the pending collection dialog
+    pendingSampleCollectionDetails(patientId:any){
+       debugger;
+       this.dialog.open(PopuppendingcollectionComponent, {
+        width: '1500px',           // slightly larger than medium
+        maxWidth: '90vw',         // responsive on smaller screens
+        height: 'auto',            // taller than medium but not full screen
+        minHeight: '400px',       // ensures minimum height
+        panelClass: 'large-dialog', // optional custom CSS
+        disableClose: true,
+        data: { patientId: patientId },        // Pass data if needed
+            
+      });
+      
+       this.dialog.afterAllClosed.subscribe(() => {
+       this.ngOnInit(); // Refresh the list after the dialog is closed
+      });
+    }  
 }
