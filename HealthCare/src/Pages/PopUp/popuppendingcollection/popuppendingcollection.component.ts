@@ -198,7 +198,7 @@ export class PopuppendingcollectionComponent
         error: err => {
           this.requestedTestApiResponse = [];
           this.toasterService.showToast(
-            'Error while fetching pending collections!',
+            'No sample found against this barcode.',
             'error'
           );
           console.error(err);
