@@ -26,16 +26,17 @@ import { ConfirmationDialogComponentComponent } from '../../../confirmation-dial
 import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { ToastComponent } from "../../../Toaster/toast/toast.component";
 import { AdduserComponent } from '../adduser/adduser.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
 @Component({
   selector: 'app-user-master',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+  imports: [MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
-    MatFormFieldModule, MatInputModule, MatSort, NgxPaginationModule,
-    ReactiveFormsModule, LoaderComponent, ConfirmationDialogComponentComponent, ToastComponent],
+    MatFormFieldModule, MatInputModule, NgxPaginationModule,
+    ReactiveFormsModule, LoaderComponent],
   templateUrl: './user-master.component.html',
   styleUrl: './user-master.component.css'
 })

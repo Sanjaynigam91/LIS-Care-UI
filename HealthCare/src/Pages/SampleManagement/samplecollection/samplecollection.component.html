@@ -1,1 +1,133 @@
-<p>samplecollection works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<div class="container mt-3" [formGroup]="SampleCollectionForm">
+   <div class="row">
+    <div class="col-md-3">
+    <label>For The Date(s)</label>
+   <input
+  type="text"
+  class="form-control"
+  ngxDaterangepickerMd
+  formControlName="DateRange"
+  [ranges]="ranges"
+  [alwaysShowCalendars]="true"
+  [showCustomRangeLabel]="true"
+  [linkedCalendars]="false"
+  [showClearButton]="true"
+  [autoApply]="false"
+  [timePicker]="false"
+  [timePickerSeconds]="false"
+  [timePicker24Hour]="false"
+  [locale]="{ format: 'DD-MMM-YYYY', applyLabel: 'Apply', clearLabel: 'Clear' }"
+  placeholder="Select date range"
+  (apply)="onDateApply($event)"
+/>
+    </div>
+      <div class="col-md-3">
+    <label>Patient Code</label>
+    <input class="form-control" type="text" name="PatientCode" placeholder="Search by patient code" formControlName="PatientCode"/>
+    </div>
+    <div class="col-md-3">
+    <label>Patient Name</label>
+    <input class="form-control" type="text" name="PatientName" placeholder="Search by patient name" formControlName="PatientName"/>
+    </div>
+         <div class="col-md-3">
+        <label>Center</label>
+        <select class="form-control"  formControlName="ddlCenter" [disabled]="loggedInAsCenterUser">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
+        </select>
+        </div>
+   </div>
+   <br/>
+    <div class="row">
+         <div class="col-md-6">
+            <div class="div-button">
+            <button mat-flat-button class="search-button" (click)="searchPatientForPendingCollection()"><mat-icon class="search-mat-icon">schedule</mat-icon>Pending for Collection</button>
+          </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row" *ngIf="IsRecordFound">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterSampleCollection" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+    <br/>
+    <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found">
+                  No Patient details found!.
+                </div>
+                <br/>
+   </div>
+<div class="table-responsive patient-grid" *ngIf="IsRecordFound">
+
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr class="cell-top nowrap text-left">
+        <th>Registered Date</th>
+        <th>Patient Code</th>
+        <th>Patient Name</th>
+        <th>Mobile Number</th>
+        <th>OrderId</th>
+        <th>ReferedBy</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of searchPatientApiResponse 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+
+        <!-- Date -->
+        <td class="cell-top nowrap">
+        <span>{{ item.workOrderDate | date:'dd MMM yyyy' }}</span>
+        </td>
+
+        <!-- Patient Code -->
+        <td class="cell-top">
+        <div class="nowrap">{{ item.patientCode }}</div>
+        </td>
+
+        <!-- Patient Name-->
+        <td class="cell-top">
+        <div class="nowrap">{{ item.patientName }}</div>
+        </td>
+
+        <!-- Mobile number -->
+        <td class="cell-top">
+          <div>{{ item.mobileNumber }}</div>
+        </td>
+
+        <td class="cell-top">{{ item.visitId || '-' }}</td>
+
+        <td class="cell-top nowrap">{{ item.referDoctor }}</td>
+    <td>
+    <button
+      type="button"
+      class="action-btn assignment-button"
+      matTooltip="Sample Collection">
+      <mat-icon>assignment</mat-icon>
+    </button>
+    </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<pagination-controls *ngIf="IsRecordFound" (pageChange)="p = $event"></pagination-controls>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>
+
+

@@ -3,6 +3,7 @@ import { environment } from '../../app/environments/environments';
 import { sampleCollectedAtResponse } from '../../Interfaces/SampleCollection/sampleCollectedAtResponse';
 import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { HttpClient,HttpParams } from '@angular/common/http';
+import { SampleCollectionResponse } from '../../Interfaces/SampleCollection/sample-collection-response';
 
 @Injectable({
   providedIn: 'root'
@@ -42,4 +43,30 @@ export class SampleCollectionService {
    .set('partnerId', partnerId.toString());
    return this.httpClient.delete(`${this.baseUrl}/DeleteSamplePlace`, {params});
   }
+
+ searchPatientsForSampleCollection(
+  request: {
+    startDate: any;
+    endDate: any;
+    patientCode: any;
+    centerCode: any;
+    patientName: any;
+    partnerId: any;
+  }
+): Observable<SampleCollectionResponse[]> {
+
+  const params = new HttpParams()
+    .set('startDate', request.startDate ?? '')
+    .set('endDate', request.endDate ?? '')
+    .set('patientCode', request.patientCode ?? '')
+    .set('centerCode', request.centerCode ?? '')
+    .set('patientName', request.patientName ?? '')
+    .set('partnerId', request.partnerId ?? '');
+
+  return this.httpClient.get<SampleCollectionResponse[]>(
+    `${this.baseUrl}/SearchPatientForCollection`,
+    { params }
+  );
+}
+      
 }

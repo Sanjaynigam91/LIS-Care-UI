@@ -60,10 +60,10 @@
       <td>{{ item.contactNumber }}</td>
       <td>{{ item.email }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit project details" (click)="ViewProjectDetails(item.projectId)">
+        <button class="action-btn edit-button" matTooltip="edit project details" (click)="ViewProjectDetails(item.projectId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete project" (click)="projectDeleteConfirmationDialog(item.projectId)">
+        <button class="action-btn delete-button" matTooltip="delete project" (click)="projectDeleteConfirmationDialog(item.projectId)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

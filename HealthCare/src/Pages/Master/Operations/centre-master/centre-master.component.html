@@ -64,10 +64,10 @@
       <td>{{ item.centerAddress }}</td>
       <td>{{ item.emailId }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit center details" (click)="ViewCenterDetails(item.centerCode)">
+        <button class="action-btn edit-button" matTooltip="edit center details" (click)="ViewCenterDetails(item.centerCode)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete center" (click)="centerDeleteConfirmationDialog(item.centerCode)">
+        <button class="action-btn delete-button" matTooltip="delete center" (click)="centerDeleteConfirmationDialog(item.centerCode)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

@@ -37,9 +37,9 @@
     </ng-container>
   <!-- ✅ Default Account Menus (for other roles) -->
   <ng-template #defaultFrontDesk>
-   <button mat-menu-item (click)="onMenuItemClick('searchpatients')">
+   <!-- <button mat-menu-item (click)="onMenuItemClick('searchpatients')">
       <mat-icon>search</mat-icon> Search Patients
-    </button>
+    </button> -->
     <button mat-menu-item (click)="onMenuItemClick('patientregistration')">
       <mat-icon>person_add</mat-icon> Patient Registration
     </button>
@@ -48,6 +48,10 @@
     </button>
     <button mat-menu-item (click)="onMenuItemClick('barcodeeditor')">
       <mat-icon>edit</mat-icon> Barcode Editor
+    </button>
+     <button [disabled]="isRejectionSummaryDisabled" mat-menu-item (click)="onMenuItemClick('rejectionsummary')">
+      <mat-icon>report_problem</mat-icon>
+      Rejection Summary
     </button>
     </ng-template>
      </div>
@@ -77,10 +81,6 @@
     </button>
     <button mat-menu-item (click)="onMenuItemClick('trackstatus')">
       <mat-icon>track_changes</mat-icon> Track Status
-    </button>
-    <button [disabled]="isRejectionSummaryDisabled" mat-menu-item (click)="onMenuItemClick('rejectionsummary')">
-      <mat-icon>report_problem</mat-icon>
-      Rejection Summary
     </button>
     </ng-template>
     </div>

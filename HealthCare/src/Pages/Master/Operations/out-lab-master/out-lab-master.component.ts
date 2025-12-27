@@ -27,12 +27,13 @@ import { OutLabService } from '../../../../auth/OutLab/out-lab.service';
 import { OutLabResponse } from '../../../../Interfaces/OutLab/out-lab-response';
 import { PopupOutLabeditComponent } from '../../../PopUp/popup-out-labedit/popup-out-labedit.component';
 import { PopupOutLabMappingComponent } from '../../../PopUp/popup-out-lab-mapping/popup-out-lab-mapping.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
   selector: 'app-out-lab-master',
   standalone: true,
-imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+imports: [MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
     MatFormFieldModule, MatInputModule, NgxPaginationModule,
     ReactiveFormsModule, LoaderComponent, A11yModule],

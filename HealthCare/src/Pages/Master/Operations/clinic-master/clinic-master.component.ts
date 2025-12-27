@@ -26,11 +26,12 @@ import { ClinicResponse } from '../../../../Interfaces/ClinicMaster/clinic-respo
 import { ClinicServiceService } from '../../../../auth/ClinicMaster/clinic-service.service';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 import { PopupClinicrmastereditComponent } from '../../../PopUp/popup-clinicrmasteredit/popup-clinicrmasteredit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-clinic-master',
   standalone: true,
- imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+ imports: [MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
     MatFormFieldModule, MatInputModule, NgxPaginationModule,
     ReactiveFormsModule, LoaderComponent, A11yModule,ToastComponent ],

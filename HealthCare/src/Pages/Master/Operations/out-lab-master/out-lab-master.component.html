@@ -62,13 +62,13 @@
       <td>{{ item.mobileNumber }}</td>
       <td>{{ item.email }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit out lab details" (click)="ViewOutLabDetails(item.labCode)">
+        <button class="action-btn edit-button" matTooltip="edit out lab details" (click)="ViewOutLabDetails(item.labCode)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
         <!-- <button class="outlab-button" matTooltip="map out lab details" (click)="ViewOutLabMapping(item.labCode)">
           <mat-icon class="outlab-icon">science</mat-icon>
         </button> -->
-        <button class="delete-button" matTooltip="delete out lab" (click)="outLabDeleteConfirmationDialog(item.labCode)">
+        <button class="action-btn delete-button" matTooltip="delete out lab" (click)="outLabDeleteConfirmationDialog(item.labCode)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

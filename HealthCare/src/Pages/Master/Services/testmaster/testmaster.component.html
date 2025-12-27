@@ -84,10 +84,10 @@
             <td>{{ item.reportTemplateTame }}</td>
             <td>{{ item.mrp }}</td>
             <td>  
-              <button class="edit-button" matTooltip="edit test" (click)="ViewTestDetails(item.testCode)">
+              <button class="action-btn edit-button" matTooltip="edit test" (click)="ViewTestDetails(item.testCode)">
               <mat-icon class="edit-icon">edit</mat-icon>
             </button>
-            <button class="delete-button" matTooltip="delete test" (click)="testDeleteConfirmationDialog(item.testCode)">
+            <button class="action-btn delete-button" matTooltip="delete test" (click)="testDeleteConfirmationDialog(item.testCode)">
               <mat-icon class="delete-icon">delete</mat-icon>
             </button>
           </td>

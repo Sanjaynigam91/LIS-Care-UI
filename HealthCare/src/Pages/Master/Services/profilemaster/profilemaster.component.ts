@@ -24,12 +24,13 @@ import { ViewChild } from '@angular/core';
 import { ProfileService } from '../../../../auth/ProfileMasterService/profile.service';
 import { ProfileResponse } from '../../../../Interfaces/ProfileMaster/ProfileResponse';
 import { PopupProfilemastereditComponent } from '../../../PopUp/popup-profilemasteredit/popup-profilemasteredit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
   selector: 'app-profilemaster',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+  imports: [MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
       MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
       MatFormFieldModule, MatInputModule, MatSort, NgxPaginationModule,
       ReactiveFormsModule, LoaderComponent, ConfirmationDialogComponentComponent, ToastComponent],

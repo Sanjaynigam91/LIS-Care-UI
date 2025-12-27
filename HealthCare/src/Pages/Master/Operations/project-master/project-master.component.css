@@ -307,3 +307,14 @@ pagination-controls {
   box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.4); /* purple glow */
   transform: scale(1.03);
 }
+.action-btn {
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  line-height: 1;
+  pointer-events: auto;
+}
+.action-btn:hover mat-icon {
+  transform: scale(1.1);
+}
