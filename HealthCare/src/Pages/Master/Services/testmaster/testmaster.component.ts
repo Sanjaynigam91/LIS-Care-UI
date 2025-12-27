@@ -25,16 +25,17 @@ import { testDataSearchResponse } from '../../../../Interfaces/TestMaster/testDa
 import { testMasterSearchRequest } from '../../../../Interfaces/TestMaster/testMasterSearchRequest';
 import { TestService } from '../../../../auth/TestMasterService/test.service';
 import { LabtesteditComponent } from './labtestedit/labtestedit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
 @Component({
   selector: 'app-testmaster',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+  imports: [MatTooltipModule, MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
-    MatFormFieldModule, MatInputModule, MatSort, NgxPaginationModule,
-    ReactiveFormsModule, LoaderComponent, ConfirmationDialogComponentComponent, ToastComponent],
+    MatFormFieldModule, MatInputModule, NgxPaginationModule,
+    ReactiveFormsModule, LoaderComponent],
   templateUrl: './testmaster.component.html',
   styleUrl: './testmaster.component.css'
 })

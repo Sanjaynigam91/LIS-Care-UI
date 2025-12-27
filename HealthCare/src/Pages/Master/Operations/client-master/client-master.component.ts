@@ -25,12 +25,13 @@ import { ClientService } from '../../../../auth/ClientMaster/client.service';
 import { ClientResponse } from '../../../../Interfaces/ClientMaster/client-response';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 import { PopupClientmastereditComponent } from '../../../PopUp/popup-clientmasteredit/popup-clientmasteredit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-client-master',
   standalone: true,
   imports: [
-    MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+    MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule,
     MatSortModule, MatFormFieldModule, MatInputModule, NgxPaginationModule,
     ReactiveFormsModule, LoaderComponent, A11yModule

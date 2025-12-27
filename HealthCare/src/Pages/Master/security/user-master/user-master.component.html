@@ -101,10 +101,10 @@
         <td>{{ item.userStatus }}</td>
         <td>{{ item.partnerId }}</td>
         <td>  
-          <button class="edit-button" matTooltip="edit user" (click)="ViewUsers(item.userId)">
+          <button class="action-btn edit-button" matTooltip="edit user" (click)="ViewUsers(item.userId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete user" (click)="openConfirmationDialog(item.userId)">
+        <button class="action-btn delete-button" matTooltip="delete user" (click)="openConfirmationDialog(item.userId)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

@@ -61,10 +61,10 @@
         <td>{{ item.department }}</td>
         <td>{{ item.roleStatus }}</td>
         <td>  
-          <button class="edit-button" matTooltip="edit role" (click)="ViewEditRole(item.roleId)">
+          <button class="action-btn edit-button" matTooltip="edit role" (click)="ViewEditRole(item.roleId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete role" (click)="openConfirmationDialog(item.roleId)">
+        <button class="action-btn delete-button" matTooltip="delete role" (click)="openConfirmationDialog(item.roleId)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

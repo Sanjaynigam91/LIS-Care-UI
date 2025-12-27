@@ -64,10 +64,10 @@
       <td>{{ item.engineerContactNo }}</td>
       <td>{{ item.purchaseValue }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit analyer details" (click)="ViewAnalyzerDetails(item.analyzerId)">
+        <button class="action-btn edit-button" matTooltip="edit analyer details" (click)="ViewAnalyzerDetails(item.analyzerId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete analyzer" (click)="analyzerDeleteConfirmationDialog(item.analyzerId)">
+        <button class="action-btn delete-button" matTooltip="delete analyzer" (click)="analyzerDeleteConfirmationDialog(item.analyzerId)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

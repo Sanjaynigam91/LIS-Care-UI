@@ -72,10 +72,10 @@
       <td>{{ item.department }}</td>
       <td>{{ item.designation }}</td>
       <td>
-        <button class="edit-button" matTooltip="edit employee details" (click)="ViewCenterDetails(item.employeeId)">
+        <button class="action-btn edit-button" matTooltip="edit employee details" (click)="ViewCenterDetails(item.employeeId)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
-        <button class="delete-button" matTooltip="delete employee" (click)="employeeDeleteConfirmationDialog(item.employeeId)">
+        <button class="action-btn delete-button" matTooltip="delete employee" (click)="employeeDeleteConfirmationDialog(item.employeeId)">
           <mat-icon class="delete-icon">delete</mat-icon>
         </button>
       </td>

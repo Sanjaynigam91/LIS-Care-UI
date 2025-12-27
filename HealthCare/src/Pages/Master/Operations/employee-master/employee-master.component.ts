@@ -28,12 +28,13 @@ import { EmployeeService } from '../../../../auth/EmployeeMaster/employee.servic
 import { EmployeeResponse } from '../../../../Interfaces/Employee/employee-response';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 import { PopupEmployeeeditComponent } from '../../../PopUp/popup-employeeedit/popup-employeeedit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-employee-master',
   standalone: true,
   imports: [
-      MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+      MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
       MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule,
       MatSortModule, MatFormFieldModule, MatInputModule, NgxPaginationModule,
       ReactiveFormsModule, LoaderComponent, A11yModule

@@ -29,14 +29,16 @@ import { LisroleService } from '../../../../auth/Role/lisrole.service';
 import { AddroleComponent } from '../../../PopUp/addrole/addrole.component';
 import { ToastComponent } from "../../../Toaster/toast/toast.component";
 import { RefreshPageService } from '../../../../auth/Shared/refresh-page.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-user-role-master',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+  imports: [
+    MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
-    MatFormFieldModule, MatInputModule, MatSort, NgxPaginationModule,
-    ReactiveFormsModule, LoaderComponent, ConfirmationDialogComponentComponent, ToastComponent],
+    MatFormFieldModule, MatInputModule, NgxPaginationModule,
+    ReactiveFormsModule, LoaderComponent],
   templateUrl: './user-role-master.component.html',
   styleUrl: './user-role-master.component.css'
 })

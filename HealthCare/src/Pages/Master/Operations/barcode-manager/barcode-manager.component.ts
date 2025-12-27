@@ -25,12 +25,13 @@ import { BarcodeResponse } from '../../../../Interfaces/BarcodeManager/barcode-r
 import { ToastComponent } from "../../../Toaster/toast/toast.component";
 import { BarcodeRequest } from '../../../../Interfaces/BarcodeManager/barcode-request';
 import { RefreshPageService } from '../../../../auth/Shared/refresh-page.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-barcode-manager',
   standalone: true,
  imports: [
-    MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+    MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule,
     MatSortModule, MatFormFieldModule, MatInputModule, NgxPaginationModule,
     ReactiveFormsModule, LoaderComponent, A11yModule,

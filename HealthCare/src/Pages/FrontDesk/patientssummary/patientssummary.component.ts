@@ -27,12 +27,14 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import moment, { Moment } from 'moment';
 import { PatientResponse } from '../../../Interfaces/Patient/patient-response';
 import { ConfirmationDialogComponentComponent } from '../../confirmation-dialog-component/confirmation-dialog-component.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
   selector: 'app-patientssummary',
   standalone: true,
  imports: [
+    MatTooltipModule, 
     MatTableModule,
     MatPaginatorModule,
     CommonModule,

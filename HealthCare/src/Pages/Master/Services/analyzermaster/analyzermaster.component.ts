@@ -23,11 +23,12 @@ import { LoaderService } from '../../../../Interfaces/loader.service';
 import { AnalyzerResponse } from '../../../../Interfaces/AnalyzerMaster/AnalyzerResponse';
 import { AnalyzerService } from '../../../../auth/AnalyzerService/analyzer.service';
 import { PopupAnalyzereditComponent } from '../../../PopUp/popup-analyzeredit/popup-analyzeredit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-analyzermaster',
   standalone: true,
-imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+imports: [MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
       MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
       MatFormFieldModule, MatInputModule, NgxPaginationModule,
       ReactiveFormsModule, LoaderComponent],

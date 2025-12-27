@@ -22,11 +22,12 @@ import { ProjectResponse } from '../../../../Interfaces/Projects/project-respons
 import { ProjectService } from '../../../../auth/ProjectMaster/project.service';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 import { PopupProjecteditComponent } from '../../../PopUp/popup-projectedit/popup-projectedit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-project-master',
   standalone: true,
- imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+ imports: [MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
      MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
      MatFormFieldModule, MatInputModule, NgxPaginationModule,
      ReactiveFormsModule, LoaderComponent, A11yModule],

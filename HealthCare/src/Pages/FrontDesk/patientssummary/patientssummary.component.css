@@ -359,6 +359,7 @@ color:  #1c93cf; /* Change to your desired color */
   padding: 4px;
   cursor: pointer;
   line-height: 1;
+  pointer-events: auto;
 }
 
 .edit-button mat-icon {

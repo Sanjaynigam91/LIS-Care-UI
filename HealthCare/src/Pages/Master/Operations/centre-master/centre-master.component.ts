@@ -23,11 +23,12 @@ import { ToastService } from '../../../../auth/Toaster/toast.service';
 import { ConfirmationDialogComponentComponent } from '../../../confirmation-dialog-component/confirmation-dialog-component.component';
 import { PopupCentermastereditComponent } from '../../../PopUp/popup-centermasteredit/popup-centermasteredit.component';
 import { A11yModule } from "@angular/cdk/a11y";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-centre-master',
   standalone: true,
-imports: [MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
+imports: [MatTooltipModule,MatTableModule, MatPaginatorModule, CommonModule, MatCardModule,
     MatListModule, MatIconModule, MatButtonModule, NgxDatatableModule, MatSortModule,
     MatFormFieldModule, MatInputModule, NgxPaginationModule,
     ReactiveFormsModule, LoaderComponent, A11yModule],

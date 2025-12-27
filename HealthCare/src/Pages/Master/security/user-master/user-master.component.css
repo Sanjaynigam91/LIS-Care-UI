@@ -275,3 +275,14 @@ pagination-controls {
 .div-button{
   margin-top: 15px;
 }
+.action-btn {
+  border: none;
+  background: transparent;
+  padding: 2px;
+  cursor: pointer;
+  line-height: 1;
+  pointer-events: auto;
+}
+.action-btn:hover mat-icon {
+  transform: scale(1.1);
+}
