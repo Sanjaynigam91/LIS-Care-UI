@@ -1,0 +1,139 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<div class="popup-container">
+     <!-- Loader overlay -->
+  <app-loader *ngIf="loading$ | async"></app-loader>
+
+  <!-- Header -->
+  <div class="popup-header">
+    <h5> <mat-icon>menu</mat-icon>
+      Sample Collection</h5>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+  
+<!-- Specimen Collection Content -->
+<div class="container-fluid mt-3" [formGroup]="pendingCollectionForm">
+  <!-- Patient Info -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <strong>Ref. by Dr.</strong> : {{ referedDoctor }}
+    </div>
+
+    <div class="col-md-6 text-end">
+      <strong>Registered on</strong> :
+      {{ registeredDate | date:'dd-MMM-yy HH:mm' }}
+    </div>
+  </div>
+
+  <!-- Specimen Table -->
+  <table class="table table-bordered table-striped">
+    <thead class="table-light">
+      <tr>
+        <th>No. of Tubes</th>
+        <th>Specimen Type</th>
+        <th>Barcode</th>
+        <th>Collection Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let s of samplePendingCollectionResponse; let i = index">
+        <td>{{ s.totalTubes }}</td>
+        <td>
+          {{ s.sampleType }}
+        </td>
+            <td>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Enter barcode"
+                maxlength="20"
+                formControlName="Barcode"
+               (change)="getRequestedTestforCollection(s.patientId)"
+            />
+            </td>
+              <td>
+                <div class="date-wrapper d-flex align-items-center">
+                    <input
+                    #dateInput
+                    type="text"
+                    class="form-control"
+                    ngxDaterangepickerMd
+                    formControlName="DateRange"
+                    [singleDatePicker]="true"
+                    [timePicker]="true"
+                    [timePickerSeconds]="false"
+                    [timePicker24Hour]="false"
+                    [showDropdowns]="true"
+                    [autoApply]="true"
+                    [locale]="{
+                    format: 'DD-MMM-YYYY hh:mm A',
+                    applyLabel: 'Apply',
+                    clearLabel: 'Clear'
+                    }"
+                    placeholder="Select date & time"
+                    readonly
+                    />
+                    <mat-icon class="ms-2 cursor-pointer" (click)="dateInput.click()">
+                    calendar_today
+                    </mat-icon>
+                </div>
+                </td>
+               <td class="text-center align-middle">
+                <input
+                    type="checkbox"
+                    [checked]="s.isSpecimenCollected"
+                />
+                </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Confirm Button -->
+<div class="row">
+  <div class="col-md-6">
+  <div class="text-center my-4">
+    <button class="confirm-collection-btn">
+      Confirm Collection
+    </button>
+  </div>
+  </div>
+</div>
+
+  <!-- Tests Requested -->
+<div calss="row">
+  <div class="col-md-8">
+  <div class="card">
+    <div class="card-header bg-primary text-center text-white">
+      Tests Requested
+    </div>
+      <table class="table table-bordered table-striped">
+        <thead class="table-light">
+          <tr>
+            <th>Test Description</th>
+            <th>Specimen Type</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let t of requestedTestApiResponse">
+              <td>{{ t.testName }}</td>
+              <td>{{ t.specimenType }}</td>
+            </tr>
+        </tbody>
+      </table>
+  </div>
+ </div>
+</div>
+</div>
+
+
+  <app-toast></app-toast>
+  <app-loader *ngIf="loading$ | async"></app-loader>
+
+  <div class="popup-footer mt-3">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+</div>
