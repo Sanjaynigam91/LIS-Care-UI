@@ -2,7 +2,7 @@ export interface SamplePendingCollectionResponse {
   registeredDate: string;          // DateTime → ISO string
   referedDoctor: string;
   totalTubes: number;
-  sampleType: string;
+  sampleType: string|null;
   barcode: string;
   newBarcode: string;
   sampleCollectionTime: string;    // DateTime → ISO string

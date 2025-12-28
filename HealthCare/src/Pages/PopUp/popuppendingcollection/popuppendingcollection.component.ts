@@ -21,6 +21,7 @@ import { RequestedTest, SamplePendingCollectionResponse } from '../../../Interfa
 import { MatFormField } from "@angular/material/form-field";
 import moment from 'moment';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { SampleRequest } from '../../../Interfaces/SampleCollection/sample-request';
 
 @Component({
   selector: 'app-popuppendingcollection',
@@ -51,7 +52,8 @@ export class PopuppendingcollectionComponent
   isEditHeaderVisible = false;
   isSubmitVisible = false;
   isUpdateVisible = false;
-
+  showGotoAccession: boolean = false;  // or false
+  showConfirmCollection:boolean=false;
   partnerId!: string | null;
   loggedInUserId!: string | null;
   patientId!: string | null;
@@ -62,6 +64,16 @@ export class PopuppendingcollectionComponent
   startDate:Date|any|null;
   endDate:Date|any|null;
   dateRangeLabel:Date|any|null;
+  sampleRequest:SampleRequest={
+    barcode: '',
+    collectionTime: new Date(),
+    collectedBy: '',
+    specimenType: '',
+    patientId: ''
+  }
+  selectedSample!: SamplePendingCollectionResponse;
+  isComingFromError:boolean=false;
+  barcode:string|undefined;
 
   constructor(
     public dialogRef: MatDialogRef<PopuppendingcollectionComponent>,
@@ -82,11 +94,13 @@ export class PopuppendingcollectionComponent
   // ---------------- INIT ----------------
   ngOnInit(): void {
     this.loading$ = this.loaderService.loading$;
-    
+    this.showGotoAccession=false;
+    this.showConfirmCollection=true;
     this.pendingCollectionForm = this.fb.group({
       specimens: this.fb.array([]),
       DateRange: [{ startDate: moment(), endDate: moment() }],
-      Barcode:['']
+      Barcode:[''],
+      IsSpecimenCollected:['']
     });
 
     if (this.patientId) {
@@ -178,9 +192,19 @@ export class PopuppendingcollectionComponent
   getRequestedTestforCollection(patientId: string): void {
     debugger;
     this.loaderService.show();
-    const barcode=this.pendingCollectionForm.get('Barcode')?.value;
+    if(!this.isComingFromError)
+    {
+      this.barcode=this.pendingCollectionForm.get('Barcode')?.value;
+      this.pendingCollectionForm.get('Barcode')?.setValue(this.barcode);
+
+    }
+    else{
+      this.barcode='';
+    }
+    
+    const IsSpecimenCollected=this.pendingCollectionForm.get('IsSpecimenCollected')?.value;
     this.sampleCollectionService
-      .GetRequsetedTestForCollection(patientId,barcode)
+      .GetRequsetedTestForCollection(patientId,this.barcode)
       .pipe(finalize(() => this.loaderService.hide()))
       .subscribe({
         next: (response: any) => {
@@ -196,11 +220,14 @@ export class PopuppendingcollectionComponent
           }
         },
         error: err => {
+          debugger;
           this.requestedTestApiResponse = [];
-          this.toasterService.showToast(
-            'No sample found against this barcode.',
-            'error'
-          );
+          // this.toasterService.showToast(
+          //   'No sample found against this barcode.',
+          //   'error'
+          // );
+          this.isComingFromError=true;
+          this.getRequestedTestforCollection(patientId);
           console.error(err);
         }
       });
@@ -274,5 +301,85 @@ export class PopuppendingcollectionComponent
  
          }
 
-         
+onSpecimenChecked(event: Event, sample: SamplePendingCollectionResponse) {
+  debugger;
+  const isChecked = (event.target as HTMLInputElement).checked;
+
+  if (isChecked) {
+    debugger;
+    this.selectSample(sample);
+  } else {
+    this.selectedSample = undefined!;
+  }
+}
+
+selectSample(sample: SamplePendingCollectionResponse) {
+  debugger;
+  this.selectedSample = sample;
+}
+
+updateEmployee() {
+debugger;
+  // 🔴 VALIDATION FIRST (NO LOADER YET)
+  if (!this.samplePendingCollectionResponse) {
+    return;
+  }
+
+  if (!this.pendingCollectionForm.value.Barcode) {
+    this.toasterService.showToast('Please enter barcode...', 'error');
+    return;
+  }
+
+  if (!this.pendingCollectionForm.value.IsSpecimenCollected) {
+    this.toasterService.showToast('Please select the status...', 'error');
+    return;
+  }
+
+  // ✅ NOW show loader (only when API will be called)
+  this.loaderService.show();
+
+  this.sampleRequest.barcode =
+  this.pendingCollectionForm.get('Barcode')?.value;
+
+    const dateRange = this.pendingCollectionForm.get('DateRange')?.value;
+
+    this.sampleRequest.collectionTime = dateRange?.startDate
+      ? new Date(dateRange.startDate)
+      : new Date();
+  this.sampleRequest.collectedBy = this.loggedInUserId;
+  this.sampleRequest.specimenType = this.selectedSample.sampleType;
+  this.sampleRequest.patientId = this.patientId;
+
+  this.sampleCollectionService
+    .updateSampleCollectionStatus(this.sampleRequest)
+    .pipe(
+      finalize(() => {
+        // 🔥 ALWAYS hides loader (success / error / exception)
+        this.loaderService.hide();
+      })
+    )
+    .subscribe({
+      next: (response: any) => {
+        if (response.statusCode === 200 && response.status) {
+          debugger;
+          this.toasterService.showToast(response.responseMessage, 'success');
+         this.ngOnInit();
+        } else {
+          this.toasterService.showToast(response.responseMessage, 'error');
+        }
+      },
+      error: (err) => {
+        if (err.error?.responseMessage) {
+          this.toasterService.showToast(err.error.responseMessage, 'error');
+        } else {
+          this.toasterService.showToast(
+            'Something went wrong. Please try again.',
+            'error'
+          );
+        }
+        console.error(err);
+      }
+    });
+}
+        
 }

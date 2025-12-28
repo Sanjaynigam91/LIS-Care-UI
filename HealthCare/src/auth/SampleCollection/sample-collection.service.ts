@@ -78,7 +78,7 @@ GetPendingSampleForCollectionById(patientId:any):Observable<SamplePendingCollect
 
 GetRequsetedTestForCollection(
   patientId: any,
-  barcode: string
+  barcode: string|undefined
 ): Observable<RequestedTest[]> {
 
   debugger;
@@ -91,6 +91,10 @@ GetRequsetedTestForCollection(
     .get<RequestedTest[]>(`${this.baseUrl}/GetRequestedSampleForCollection`, { params })
     .pipe(delay(1000));
 }
- 
+
+  updateSampleCollectionStatus(data:any){
+    debugger;
+    return this.httpClient.put(`${this.baseUrl}/UpdateSampleCollectionStatus`, data).pipe(delay(1000));
+  }
       
 }
