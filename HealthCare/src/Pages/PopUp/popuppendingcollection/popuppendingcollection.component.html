@@ -48,17 +48,17 @@
                 type="text"
                 class="form-control"
                 placeholder="Enter barcode"
-                maxlength="20"
+                maxlength="10"
                 formControlName="Barcode"
                (change)="getRequestedTestforCollection(s.patientId)"
             />
             </td>
               <td>
-                <div class="date-wrapper d-flex align-items-center">
+                <div class="date-wrapper">
                     <input
                     #dateInput
                     type="text"
-                    class="form-control"
+                    class="form-control date-input"
                     ngxDaterangepickerMd
                     formControlName="DateRange"
                     [singleDatePicker]="true"
@@ -69,13 +69,13 @@
                     [autoApply]="true"
                     [locale]="{
                     format: 'DD-MMM-YYYY hh:mm A',
-                    applyLabel: 'Apply',
+                    applyLabel: 'Apply', 
                     clearLabel: 'Clear'
                     }"
                     placeholder="Select date & time"
                     readonly
                     />
-                    <mat-icon class="ms-2 cursor-pointer" (click)="dateInput.click()">
+                    <mat-icon class="ms-2 cursor-pointer calendar-icon" (click)="dateInput.click()">
                     calendar_today
                     </mat-icon>
                 </div>
@@ -83,7 +83,9 @@
                <td class="text-center align-middle">
                 <input
                     type="checkbox"
+                    formControlName="IsSpecimenCollected"
                     [checked]="s.isSpecimenCollected"
+                    (change)="onSpecimenChecked($event, s)"
                 />
                 </td>
 
@@ -95,8 +97,11 @@
 <div class="row">
   <div class="col-md-6">
   <div class="text-center my-4">
-    <button class="confirm-collection-btn">
+    <button class="confirm-collection-btn" *ngIf="showConfirmCollection"  (click)="updateEmployee()">
       Confirm Collection
+    </button>
+    <button class="goto-accession-btn" *ngIf="showGotoAccession">
+      Goto Accession
     </button>
   </div>
   </div>
