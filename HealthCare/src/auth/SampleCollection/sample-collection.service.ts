@@ -56,13 +56,22 @@ export class SampleCollectionService {
   }
 ): Observable<SampleCollectionResponse[]> {
 
-  const params = new HttpParams()
-    .set('startDate', request.startDate ?? '')
-    .set('endDate', request.endDate ?? '')
-    .set('patientCode', request.patientCode ?? '')
-    .set('centerCode', request.centerCode ?? '')
-    .set('patientName', request.patientName ?? '')
-    .set('partnerId', request.partnerId ?? '');
+
+  let params = new HttpParams()
+  .set('startDate', this.formatDateForApi(request.startDate) ?? '')
+  .set('endDate', this.formatDateForApi(request.endDate) ?? '')
+  .set('patientCode', request.patientCode ?? '')
+  .set('centerCode', request.centerCode ?? '')
+  .set('patientName', request.patientName ?? '')
+  .set('partnerId', 'P610389');
+
+  // const params = new HttpParams()
+  //   .set('startDate', request.startDate ?? '')
+  //   .set('endDate', request.endDate ?? '')
+  //   .set('patientCode', request.patientCode ?? '')
+  //   .set('centerCode', request.centerCode ?? '')
+  //   .set('patientName', request.patientName ?? '')
+  //   .set('partnerId', request.partnerId ?? '');
 
   return this.httpClient.get<SampleCollectionResponse[]>(
     `${this.baseUrl}/SearchPatientForCollection`,
@@ -96,5 +105,11 @@ GetRequsetedTestForCollection(
     debugger;
     return this.httpClient.put(`${this.baseUrl}/UpdateSampleCollectionStatus`, data).pipe(delay(1000));
   }
+
+  private formatDateForApi(date: Date | null): string | null {
+  if (!date) return null;
+  return date.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
       
 }
