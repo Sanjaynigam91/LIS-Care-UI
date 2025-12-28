@@ -97,16 +97,14 @@ export class PopuppendingcollectionComponent
     this.showGotoAccession=false;
     this.showConfirmCollection=true;
     this.pendingCollectionForm = this.fb.group({
-      specimens: this.fb.array([]),
-      DateRange: [{ startDate: moment(), endDate: moment() }],
-      Barcode:[''],
-      IsSpecimenCollected:['']
+      samples: this.fb.array([])   // ONLY FormArray at root
     });
 
     if (this.patientId) {
       this.getSamplesforCollection(this.patientId);
       this.getRequestedTestforCollection(this.patientId);
     }
+     this.buildSpecimenForm();
   }
 
   // ---------------- FIX NG0100 HERE ----------------
@@ -133,29 +131,46 @@ export class PopuppendingcollectionComponent
     return this.pendingCollectionForm.get('specimens') as FormArray;
   }
 
-  // ---------- Build Form ----------
-  buildSpecimenForm(): void {
-    this.specimens.clear();
 
-    if (!this.samplePendingCollectionResponse?.length) {
-      return;
+  get samplesFA(): FormArray {
+  return this.pendingCollectionForm.get('samples') as FormArray;
+}
+
+  // ---------- Build Form ----------
+ buildSpecimenForm() {
+  const fa = this.pendingCollectionForm.get('samples') as FormArray;
+  fa.clear();
+
+  this.samplePendingCollectionResponse.forEach((s: any) => {
+
+    const isRowCollected =
+      s.isSpecimenCollected === true &&
+      s.workOrderStatus === 'Sample Collected';
+
+    const row = this.fb.group({
+      patientId: [s.patientId],
+      totalTubes: [s.totalTubes],
+      sampleType: [s.sampleType],
+
+      barcode: [{ value: s.barcode ?? '', disabled: isRowCollected }],
+      collectionTime: [{ value: s.sampleCollectionTime ?? null, disabled: isRowCollected }],
+      isSpecimenCollected: [{ value: isRowCollected, disabled: isRowCollected }]
+    });
+
+    if (isRowCollected) {
+      row.disable({ emitEvent: false });
+       this.showGotoAccession=true;
     }
 
-    this.samplePendingCollectionResponse.forEach(item => {
-      this.specimens.push(
-        this.fb.group({
-          barcode: [item.barcode || ''],
-          sampleCollectionTime: [item.sampleCollectionTime],
-          isSpecimenCollected: [item.isSpecimenCollected]
-        })
-      );
-    });
-  }
+    fa.push(row);
+  });
+}
+
 
   // ---------- API Call ----------
   getSamplesforCollection(patientId: string): void {
+    debugger;
     this.loaderService.show();
-
     this.sampleCollectionService
       .GetPendingSampleForCollectionById(patientId)
       .pipe(finalize(() => this.loaderService.hide()))
@@ -171,8 +186,7 @@ export class PopuppendingcollectionComponent
                 this.registeredDate = firstRecord.registeredDate;
              }
              this.cdr.detectChanges(); // ✅ FORCE UI UPDATE
-            this.buildSpecimenForm();
-
+             this.buildSpecimenForm();
           } else {
             this.samplePendingCollectionResponse = [];
             this.toasterService.showToast('No Record Found!', 'error');
@@ -189,19 +203,14 @@ export class PopuppendingcollectionComponent
       });
   }
 // ---------- API Call ----------
-  getRequestedTestforCollection(patientId: string): void {
+  getRequestedTestforCollection(patientId:string): void {
     debugger;
     this.loaderService.show();
-    if(!this.isComingFromError)
+    if(this.isComingFromError)
     {
-      this.barcode=this.pendingCollectionForm.get('Barcode')?.value;
-      this.pendingCollectionForm.get('Barcode')?.setValue(this.barcode);
+       this.barcode='';
 
     }
-    else{
-      this.barcode='';
-    }
-    
     const IsSpecimenCollected=this.pendingCollectionForm.get('IsSpecimenCollected')?.value;
     this.sampleCollectionService
       .GetRequsetedTestForCollection(patientId,this.barcode)
@@ -212,8 +221,7 @@ export class PopuppendingcollectionComponent
             debugger;
             this.requestedTestApiResponse = response.data ?? [];
             this.cdr.detectChanges(); // ✅ FORCE UI UPDATE
-            this.buildSpecimenForm();
-
+  
           } else {
             this.requestedTestApiResponse = [];
             this.toasterService.showToast('No Record Found!', 'error');
@@ -323,14 +331,15 @@ debugger;
   // 🔴 VALIDATION FIRST (NO LOADER YET)
   if (!this.samplePendingCollectionResponse) {
     return;
+
   }
 
-  if (!this.pendingCollectionForm.value.Barcode) {
+  if (!this.pendingCollectionForm.value.barcode) {
     this.toasterService.showToast('Please enter barcode...', 'error');
     return;
   }
 
-  if (!this.pendingCollectionForm.value.IsSpecimenCollected) {
+  if (!this.pendingCollectionForm.value.isSpecimenCollected) {
     this.toasterService.showToast('Please select the status...', 'error');
     return;
   }
@@ -381,5 +390,33 @@ debugger;
       }
     });
 }
+
+formatDateToDDMMMYYYY(date: any): string | null {
+  if (!date) return null;
+
+  const d = new Date(date);
+
+  const day = d.getDate().toString().padStart(2, '0');
+  const month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  const year = d.getFullYear();
+
+  const hours = d.getHours().toString().padStart(2, '0');
+  const minutes = d.getMinutes().toString().padStart(2, '0');
+
+  return `${day} ${month} ${year} ${hours}:${minutes}`;
+}
+
+onBarcodeChange(index: number) {
+  debugger;
+  const row = this.samplesFA.at(index) as FormGroup;
+  this.barcode = row.get('barcode')?.value;
+  const patientId = row.get('patientId')?.value;
+  console.log('Barcode:',  this.barcode);
+  console.log('PatientId:', patientId);
+
+  // call API
+  this.getRequestedTestforCollection(patientId);
+}
+
         
 }

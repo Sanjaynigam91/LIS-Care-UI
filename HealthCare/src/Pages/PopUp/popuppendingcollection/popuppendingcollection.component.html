@@ -37,11 +37,12 @@
       </tr>
     </thead>
 
-    <tbody>
-      <tr *ngFor="let s of samplePendingCollectionResponse; let i = index">
-        <td>{{ s.totalTubes }}</td>
+    <tbody formArrayName="samples">
+       <tr *ngFor="let s of samplesFA.controls; let i = index"
+      [formGroupName]="i">
+        <td>{{ s.value.totalTubes }}</td>
         <td>
-          {{ s.sampleType }}
+          {{ s.value.sampleType }}
         </td>
             <td>
             <input
@@ -49,8 +50,9 @@
                 class="form-control"
                 placeholder="Enter barcode"
                 maxlength="10"
-                formControlName="Barcode"
-               (change)="getRequestedTestforCollection(s.patientId)"
+                formControlName="barcode"
+                [value]="s.value.barcode"
+               (change)="onBarcodeChange(i)"
             />
             </td>
               <td>
@@ -60,7 +62,7 @@
                     type="text"
                     class="form-control date-input"
                     ngxDaterangepickerMd
-                    formControlName="DateRange"
+                    formControlName="collectionTime"
                     [singleDatePicker]="true"
                     [timePicker]="true"
                     [timePickerSeconds]="false"
@@ -74,6 +76,11 @@
                     }"
                     placeholder="Select date & time"
                     readonly
+                     [value]="
+                    s.get('isSpecimenCollected')?.value
+                      ? s.get('collectionTime')?.value
+                      : ''
+                  "
                     />
                     <mat-icon class="ms-2 cursor-pointer calendar-icon" (click)="dateInput.click()">
                     calendar_today
@@ -83,9 +90,9 @@
                <td class="text-center align-middle">
                 <input
                     type="checkbox"
-                    formControlName="IsSpecimenCollected"
-                    [checked]="s.isSpecimenCollected"
-                    (change)="onSpecimenChecked($event, s)"
+                    formControlName="isSpecimenCollected"
+                    [checked]="s.value.isSpecimenCollected"
+                    (change)="onSpecimenChecked($event, s.value)"
                 />
                 </td>
 
