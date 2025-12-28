@@ -22,6 +22,7 @@ import { MatFormField } from "@angular/material/form-field";
 import moment from 'moment';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { SampleRequest } from '../../../Interfaces/SampleCollection/sample-request';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-popuppendingcollection',
@@ -84,7 +85,7 @@ export class PopuppendingcollectionComponent
     private sampleCollectionService: SampleCollectionService,
     private cdr: ChangeDetectorRef,
     public dialog: MatDialog,
-    private zone: NgZone
+    private router: Router
   ) {
     this.partnerId = localStorage.getItem('partnerId');
     this.loggedInUserId = localStorage.getItem('userId');
@@ -418,5 +419,10 @@ onBarcodeChange(index: number) {
   this.getRequestedTestforCollection(patientId);
 }
 
+gotoAccession() {
+  debugger;
+  this.router.navigate(['/sampleaccession']);
+  this.dialogRef.close();
+}
         
 }
