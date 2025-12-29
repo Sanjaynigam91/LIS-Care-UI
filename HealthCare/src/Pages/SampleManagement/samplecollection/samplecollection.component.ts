@@ -11,7 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { RouterModule, RouterLink } from '@angular/router';
+import { RouterModule, RouterLink, Router } from '@angular/router';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { NgxPaginationModule } from 'ngx-pagination';
