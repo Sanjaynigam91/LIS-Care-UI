@@ -180,12 +180,25 @@ export class PopuppendingcollectionComponent
           if (response?.status && response.statusCode === 200) {
             debugger;
             this.samplePendingCollectionResponse = response.data ?? [];
-            if (this.samplePendingCollectionResponse.length > 0) {
-                const firstRecord = this.samplePendingCollectionResponse[0];
+         
+             const totalSamples = this.samplePendingCollectionResponse.length;
 
-                this.referedDoctor = firstRecord.referedDoctor;
-                this.registeredDate = firstRecord.registeredDate;
+
+          // ✅ count collected samples
+          const collectedSamples =  this.samplePendingCollectionResponse.filter(
+            (s: any) => s.isSpecimenCollected === true
+          );
+
+          // ✅ NAVIGATION RULE
+          if (totalSamples === 1 && collectedSamples.length === 1) {
+                this.router.navigate(['/sampleaccession']);
+          } 
+            if (this.samplePendingCollectionResponse.length > 0) {
+                const sampleCollected = this.samplePendingCollectionResponse[0];
+                this.referedDoctor = sampleCollected.referedDoctor;
+                this.registeredDate = sampleCollected.registeredDate; 
              }
+             if(this.samplePendingCollectionResponse)
              this.cdr.detectChanges(); // ✅ FORCE UI UPDATE
              this.buildSpecimenForm();
           } else {
@@ -212,7 +225,7 @@ export class PopuppendingcollectionComponent
        this.barcode='';
 
     }
-    const IsSpecimenCollected=this.pendingCollectionForm.get('IsSpecimenCollected')?.value;
+    
     this.sampleCollectionService
       .GetRequsetedTestForCollection(patientId,this.barcode)
       .pipe(finalize(() => this.loaderService.hide()))
@@ -375,7 +388,7 @@ debugger;
     .subscribe({
       next: (response: any) => {
         if (response.statusCode === 200 && response.status) {
-          debugger;
+          debugger;               
           this.toasterService.showToast(response.responseMessage, 'success');
           this.ngOnInit();
         } else {
