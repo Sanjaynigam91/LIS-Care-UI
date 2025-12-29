@@ -332,15 +332,20 @@ debugger;
   // 🔴 VALIDATION FIRST (NO LOADER YET)
   if (!this.samplePendingCollectionResponse) {
     return;
-
   }
+  
+   this.barcode = this.selectedSample.barcode;
+   const anySelected =
+  this.pendingCollectionForm.value.samples
+    .some((s: any) => s.isSpecimenCollected);
 
-  if (!this.pendingCollectionForm.value.barcode) {
+
+  if (!this.barcode) {
     this.toasterService.showToast('Please enter barcode...', 'error');
     return;
   }
 
-  if (!this.pendingCollectionForm.value.isSpecimenCollected) {
+  if (!anySelected) {
     this.toasterService.showToast('Please select the status...', 'error');
     return;
   }
@@ -348,8 +353,7 @@ debugger;
   // ✅ NOW show loader (only when API will be called)
   this.loaderService.show();
 
-  this.sampleRequest.barcode =
-  this.pendingCollectionForm.get('Barcode')?.value;
+  this.sampleRequest.barcode =this.barcode;
 
     const dateRange = this.pendingCollectionForm.get('DateRange')?.value;
 
@@ -373,7 +377,7 @@ debugger;
         if (response.statusCode === 200 && response.status) {
           debugger;
           this.toasterService.showToast(response.responseMessage, 'success');
-         this.ngOnInit();
+          this.ngOnInit();
         } else {
           this.toasterService.showToast(response.responseMessage, 'error');
         }
