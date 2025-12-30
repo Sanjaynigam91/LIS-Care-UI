@@ -1,1 +1,137 @@
-<p>sampleaccession works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<div class="container mt-3" [formGroup]="pendingAccessionForm">
+    <div class="row gx-0">
+      <div class="col-md-4 pe-0">
+        <label>For The Date(s)</label>
+
+        <div class="date-input-wrapper">
+         <input
+          type="text"
+          #dateInput
+          class="form-control date-input"
+          ngxDaterangepickerMd
+          formControlName="DateRange"
+          [ranges]="ranges"
+          [alwaysShowCalendars]="true"
+          [showCustomRangeLabel]="true"
+          [linkedCalendars]="false"
+          [showClearButton]="true"
+          [autoApply]="false"
+          [timePicker]="false"
+          [timePickerSeconds]="false"
+          [timePicker24Hour]="false"
+          [locale]="{ format: 'DD-MMM-YYYY', applyLabel: 'Apply', clearLabel: 'Clear' }"
+          placeholder="Select date range"
+          (apply)="onDateApply($event)"
+        />
+
+          <mat-icon
+            class="calendar-icon"
+            (click)="dateInput.click()">
+            calendar_today
+          </mat-icon>
+        </div>
+      </div>
+
+      <div class="col-md-3 ps-3">
+       <label>Barcode</label>
+        <input class="form-control" type="text" name="Barcode" placeholder="Search by barcode code" formControlName="Barcode"/>
+      </div>
+
+       <div class="col-md-3 ps-3">
+        <label>Patient Name</label>
+        <input class="form-control" type="text" name="PatientName" placeholder="Search by patient name" formControlName="PatientName"/>
+       </div>
+
+         <div class="col-md-2 ps-2">
+        <label>Center</label>
+        <select class="form-control"  formControlName="ddlCenter" [disabled]="loggedInAsCenterUser">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
+        </select>
+        </div>
+
+    </div>
+   <br/>
+    <div class="row">
+         <div class="col-md-6">
+            <div class="div-button">
+            <button mat-flat-button class="accession-btn" (click)="getAllPendingSampleForAccession()" ><mat-icon class="search-mat-icon">schedule</mat-icon>Pending for Accession</button>
+          </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row" *ngIf="IsRecordFound">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterSampleCollection" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+    <br/>
+    <div *ngIf="IsNoRecordFound" calss="row tbl-div">
+                <br/>
+                <div class="form-group form-control NoRecord-Found marquee">
+                   <span>🚫No pending sample found for accession!.</span>
+                </div>
+                <br/>
+   </div>
+<div class="table-responsive patient-grid" *ngIf="IsRecordFound">
+
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr class="cell-top nowrap text-left">
+        <th>Reg. Date</th>
+        <th>Center Name</th>
+        <th>Patient Name & Ref.By</th>
+        <th>Barcode</th>
+        <th>Test Name</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of PendingAccessionApiResponse 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+
+        <!-- Date -->
+        <td class="cell-top nowrap">
+        <span>{{ item.workOrderDate | date:'dd MMM yyyy' }}</span>
+        </td>
+
+           <!-- Center Name -->
+        <td class="cell-top">
+        <div class="nowrap">{{ item.centerName }}</div>
+        <div class="sub_text pointer">{{ item.centerCode }}</div>
+        </td>
+
+        <!-- Patient Name-->
+        <td class="cell-top">
+        <div class="nowrap">{{ item.patientName }}</div>
+         <div class="sub_text pointer">{{ item.referredBy }}</div>
+        </td>
+
+        <td class="cell-top">{{ item.barcode || '-' }}</td>
+
+        <td class="cell-top">{{ item.testRequested }}</td>
+        <td class="cell-top nowrap">{{ item.sampleStatus }}</td>
+
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<pagination-controls *ngIf="IsRecordFound" (pageChange)="p = $event"></pagination-controls>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>
+
+

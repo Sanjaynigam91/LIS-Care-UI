@@ -63,7 +63,7 @@ export class SampleCollectionService {
   .set('patientCode', request.patientCode ?? '')
   .set('centerCode', request.centerCode ?? '')
   .set('patientName', request.patientName ?? '')
-  .set('partnerId', 'P610389');
+  .set('partnerId', request.partnerId);
 
   return this.httpClient.get<SampleCollectionResponse[]>(
     `${this.baseUrl}/SearchPatientForCollection`,
