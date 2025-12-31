@@ -189,7 +189,7 @@ export class SampleaccessionComponent {
           PatientName: [''],
           Barcode: [''],
           ddlCenter: [''],
-          filterSampleCollection: [''],
+          filterSampleAccession: [''],
         });
 
      
@@ -197,9 +197,9 @@ export class SampleaccessionComponent {
      this.getAllPendingSampleForAccession();
 
        // ✅ Subscribe after form initialized
-    //  this.pendingAccessionForm.get('filterSampleCollection')?.valueChanges.subscribe(value => {
-    //    this.filterPatientForCollection(value);
-    //   });
+     this.pendingAccessionForm.get('filterSampleAccession')?.valueChanges.subscribe(value => {
+       this.filterSamplesForAccession(value);
+      });
 
   }    
 
@@ -343,6 +343,29 @@ export class SampleaccessionComponent {
     });
 }  
 
+ ///used to filter the data from grid/table
+    filterSamplesForAccession(searchTerm: string) {
+    debugger;
+      this.filteredData = this.PendingAccessionApiResponse.filter((item:
+      {
+        registerDate: any; centerName:any; centerCode: any; patientName: any;
+        referredBy: any; barcode: any;testRequested:any;sampleStatus:any;
+      }) =>
+      (item.registerDate ?? '').toString().toLowerCase().includes(searchTerm) ||
+      (item.centerName ?? '').toLowerCase().includes(searchTerm) ||
+      (item.centerCode ?? '').toLowerCase().includes(searchTerm) ||
+      (item.patientName ?? '').toLowerCase().includes(searchTerm) ||
+      (item.referredBy ?? '').toString().includes(searchTerm) ||
+      (item.barcode ?? '').toString().includes(searchTerm)||
+      (item.testRequested ?? '').toString().includes(searchTerm)||
+      (item.sampleStatus ?? '').toString().includes(searchTerm)
+      );
+    this.PendingAccessionApiResponse= this.filteredData;
+    if(searchTerm==""){
+      // this.ngOnInit();
+      window.location.reload();
+    }
+  }
 
            
 
