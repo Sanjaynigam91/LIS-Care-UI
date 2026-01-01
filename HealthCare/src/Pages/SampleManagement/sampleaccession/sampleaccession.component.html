@@ -93,6 +93,7 @@
         <th>Barcode</th>
         <th>Test Name</th>
         <th>Status</th>
+        <th>Action</th>
       </tr>
     </thead>
 
@@ -121,7 +122,14 @@
 
         <td class="cell-top">{{ item.testRequested }}</td>
         <td class="cell-top nowrap">{{ item.sampleStatus }}</td>
-
+        <td>
+            <button
+              type="button"
+              class="action-btn assignment-button"
+              matTooltip="Accept Sample">
+              <mat-icon>hourglass_empty</mat-icon>
+            </button>
+            </td>
       </tr>
     </tbody>
   </table>

@@ -443,4 +443,8 @@ color:  #1c93cf; /* Change to your desired color */
   100% { transform: translateX(-100%); }
 }
 
+.pending-icon {
+  color: orange;
+}
+
 
