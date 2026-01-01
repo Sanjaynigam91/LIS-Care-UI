@@ -378,3 +378,8 @@ color:  #1c93cf; /* Change to your desired color */
   transform: scale(1.1);
 }
 
+.test-col {
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
