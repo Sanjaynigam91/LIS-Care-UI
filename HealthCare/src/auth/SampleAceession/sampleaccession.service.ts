@@ -3,6 +3,10 @@ import { environment } from '../../app/environments/environments';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PendingAccessionResponse } from '../../Interfaces/SampleAccession/pending-accession-response';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { SampleTypeResponse } from '../../Interfaces/SampleAccession/sample-type-response';
+import { ApiResponse } from '../../Interfaces/apiResponse';
+import { PatientInfoResponse } from '../../Interfaces/SampleAccession/patient-info-response';
+import { SampleAccessionTestResponse } from '../../Interfaces/SampleAccession/sample-accession-test-response';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +55,72 @@ private formatDateForApi(date: Date | null): string | null {
   return this.httpClient.get<PendingAccessionResponse[]>(
     `${this.baseUrl}/GetAllSamplesForAccession`,
     { params }
+  );
+}
+
+ getLastImported(
+  request: {
+    woeDate: any;
+    partnerId: any;
+  }
+): Observable<ApiResponse[]> {
+  let params = new HttpParams()
+  .set('woeDate', this.formatDateForApi(request.woeDate) ?? '')
+  .set('partnerId', request.partnerId);
+  return this.httpClient.get<ApiResponse[]>(
+    `${this.baseUrl}/GetLastImported`,
+    { params }
+  );
+}
+
+
+getSampleTypeByVisitId(
+  visitId: any,
+  partnerId: any
+): Observable<ApiResponse> {
+
+  return this.httpClient.get<ApiResponse>(
+    `${this.baseUrl}/GetSampleTypeByVisitId`,
+    {
+      params: {
+        visitId: visitId,
+        partnerId: partnerId
+      }
+    }
+  );
+}
+
+
+
+GetPatientInfoByVisitId(
+  visitId: any,
+  partnerId: any
+): Observable<PatientInfoResponse> {
+
+  return this.httpClient.get<PatientInfoResponse>(
+    `${this.baseUrl}/GetPatientInfoByBarcode`,
+    {
+      params: {
+        visitId: visitId,
+        partnerId: partnerId
+      }
+    }
+  );
+}
+
+GetTestDetailsByVisitId(
+  visitId: any,
+  partnerId: any
+): Observable<SampleAccessionTestResponse> {
+
+  return this.httpClient.get<SampleAccessionTestResponse>(
+    `${this.baseUrl}/GetTestsByBarcode`,
+    {
+      params: {
+        visitId: visitId,
+        partnerId: partnerId
+      }
+    }
   );
 }
 }

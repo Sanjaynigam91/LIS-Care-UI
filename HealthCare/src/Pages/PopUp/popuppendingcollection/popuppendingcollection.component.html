@@ -10,7 +10,7 @@
       Sample Collection</h5>
     <button class="close-btn" (click)="close()">&times;</button>
   </div>
-  
+<div class="popup-body">
 <!-- Specimen Collection Content -->
 <div class="container-fluid mt-3" [formGroup]="pendingCollectionForm">
   <!-- Patient Info -->
@@ -140,7 +140,7 @@
  </div>
 </div>
 </div>
-
+</div>
 
   <app-toast></app-toast>
   <app-loader *ngIf="loading$ | async"></app-loader>
