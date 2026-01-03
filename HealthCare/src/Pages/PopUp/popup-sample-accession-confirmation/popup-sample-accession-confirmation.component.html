@@ -1,0 +1,162 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- 🔒 IMPORTANT: Guard whole template -->
+<div class="popup-container" *ngIf="accessionConfirmationForm">
+
+  <!-- Loader overlay -->
+  <ng-container *ngIf="loading$ | async as isLoading">
+    <app-loader *ngIf="isLoading"></app-loader>
+  </ng-container>
+
+  <!-- Header -->
+  <div class="popup-header">
+    <h5>
+      <mat-icon>menu</mat-icon>
+      Accession Confirmation
+    </h5>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+<div class="popup-body">
+  <div class="container-fluid p-3">
+
+    <div class="row g-3">
+
+      <!-- LEFT : FORM CARD -->
+      <div class="col-lg-8">
+        <div class="card accession-card p-3">
+          <form [formGroup]="accessionConfirmationForm">
+
+            <div class="row g-0 border">
+
+              <!-- Accession Date -->
+              <div class="col-md-3 border-end p-2">
+                <label class="form-label">Accession Date</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [value]="displayAccessionDate"
+                    readonly>
+                  <span class="input-group-text">
+                    <mat-icon>calendar_today</mat-icon>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Last Imported Ref -->
+              <div class="col-md-3 border-end p-2">
+                <label class="form-label">Last Imported Ref #</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="lastImportedRef"
+                  readonly>
+              </div>
+
+              <!-- Scan Barcode -->
+              <div class="col-md-3 border-end p-2">
+                <label class="form-label">Scan Barcode</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="barcode">
+              </div>
+
+              <!-- Avbl Sample Type -->
+              <div class="col-md-3 p-2">
+                <label class="form-label">Avbl Sample Type</label>
+                <select class="form-select" formControlName="vialType">
+                  <option value="">~Please Choose~</option>
+                  <option
+                    *ngFor="let item of sampleTypeApiResponse"
+                    [value]="item.sampleType">
+                    {{ item.sampleType }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Patient Details -->
+              <div class="col-md-6 border-top border-end p-2">
+                <label class="form-label">Patient Details</label>
+                <input type="text" class="form-control mb-2" formControlName="patientCode" readonly>
+                <input type="text" class="form-control mb-2" formControlName="patientName" readonly>
+                <input type="text" class="form-control" formControlName="referredBy" readonly>
+              </div>
+
+              <!-- Print -->
+              <div class="col-md-3 border-top border-end p-2 d-flex align-items-center">
+                <button type="button" class="btn btn-print w-100">
+                  Print Barcode
+                </button>
+              </div>
+
+              <!-- Accept -->
+              <div class="col-md-3 border-top p-2 d-flex align-items-center">
+                <button type="button" class="btn btn-accept w-100">
+                  Accept Sample
+                </button>
+              </div>
+
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT : ALERT -->
+      <div class="col-lg-4" *ngIf="showSampleAlert$ | async">
+        <div class="custom-alert d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-start gap-2">
+            <span class="alert-indicator"></span>
+            <span class="alert-text">
+              Multiple sample types available.
+              Choose the required sample type to import.
+            </span>
+          </div>
+
+          <button
+            type="button"
+            class="btn-close alert-close"
+            (click)="showSampleAlert$.next(false)">
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="card mt-3">
+      <table class="table table-bordered mb-0 align-middle">
+        <thead>
+          <tr>
+            <th style="width:15%">Test / Profile Code</th>
+            <th style="width:30%">Test / Profile Name</th>
+            <th>Reason for Reject</th>
+            <th style="width:20%">Cancel Rejection Remark</th>
+            <th style="width:10%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of sampleAccessionTestResponse">
+            <td>{{ item.testCode }}</td>
+            <td>{{ item.testName }}</td>
+            <td><input type="text" class="form-control"></td>
+            <td><input type="text" class="form-control" readonly></td>
+            <td class="text-center">
+              <button class="btn btn-reject">Reject Test</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+  <!-- Footer -->
+  <div class="popup-footer mt-3">
+    <button class="btn cancel-btn" (click)="close()">Close</button>
+  </div>
+
+  <app-toast></app-toast>
+
+</div>

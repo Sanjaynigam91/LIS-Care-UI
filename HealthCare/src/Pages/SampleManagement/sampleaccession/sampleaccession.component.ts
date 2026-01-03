@@ -27,6 +27,7 @@ import { ToastService } from '../../../auth/Toaster/toast.service';
 import { CenterServiceService } from '../../../auth/Center/center-service.service';
 import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
 import { SampleaccessionService } from '../../../auth/SampleAceession/sampleaccession.service';
+import { PopupSampleAccessionConfirmationComponent } from '../../PopUp/popup-sample-accession-confirmation/popup-sample-accession-confirmation.component';
 
 @Component({
   selector: 'app-sampleaccession',
@@ -367,6 +368,23 @@ export class SampleaccessionComponent {
     }
   }
 
-           
+// open the pending collection dialog
+    pendingSampleAccessionDetails(patientId:any,visitId:any){
+       debugger;
+       this.dialog.open(PopupSampleAccessionConfirmationComponent, {
+        width: '1500px',           // slightly larger than medium
+        maxWidth: '90vw',         // responsive on smaller screens
+        height: 'auto',            // taller than medium but not full screen
+        minHeight: '400px',       // ensures minimum height
+        panelClass: 'large-dialog', // optional custom CSS
+        disableClose: true,
+        data: { patientId: patientId, visitId: visitId },        // Pass data if needed
+
+      });
+      
+       this.dialog.afterAllClosed.subscribe(() => {
+       this.ngOnInit(); // Refresh the list after the dialog is closed
+      });
+    }            
 
 }
