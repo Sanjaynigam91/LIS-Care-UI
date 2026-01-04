@@ -77,7 +77,8 @@ export class PopupSampleAccessionConfirmationComponent {
     vialType: [''],
     patientCode: [''],
     patientName: [''],
-    referredBy: ['']
+    referredBy: [''],
+    hdnPatientSpecimenId: ['']
   });
 }
 
@@ -266,7 +267,8 @@ formatDate(date: Date): string {
               barcode: this.patientInfoResponse?.barcode ?? '',
               patientCode: this.patientInfoResponse?.patientCode ?? '',
               patientName: this.patientInfoResponse?.patientName ?? '',
-              referredBy: this.patientInfoResponse?.referDoctor ?? ''
+              referredBy: this.patientInfoResponse?.referDoctor ?? '',
+              hdnPatientSpecimenId: this.patientInfoResponse?.sampleId ?? ''
             });
 
            // this.getTestDetailsByVisitId(sampleType, this.patientInfoResponse?.barcode);
