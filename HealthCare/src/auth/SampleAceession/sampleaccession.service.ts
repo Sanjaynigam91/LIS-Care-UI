@@ -94,6 +94,7 @@ getSampleTypeByVisitId(
 
 GetPatientInfoByVisitId(
   visitId: any,
+  sampleType: any,
   partnerId: any
 ): Observable<PatientInfoResponse> {
 
@@ -102,6 +103,7 @@ GetPatientInfoByVisitId(
     {
       params: {
         visitId: visitId,
+        sampleType: sampleType,
         partnerId: partnerId
       }
     }
@@ -109,7 +111,8 @@ GetPatientInfoByVisitId(
 }
 
 GetTestDetailsByVisitId(
-  visitId: any,
+  barcode: any,
+  sampleType: any,
   partnerId: any
 ): Observable<SampleAccessionTestResponse> {
 
@@ -117,7 +120,8 @@ GetTestDetailsByVisitId(
     `${this.baseUrl}/GetTestsByBarcode`,
     {
       params: {
-        visitId: visitId,
+        barcode: barcode,
+        sampleType: sampleType,
         partnerId: partnerId
       }
     }
