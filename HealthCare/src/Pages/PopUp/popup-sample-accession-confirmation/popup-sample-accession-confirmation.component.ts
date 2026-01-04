@@ -319,4 +319,21 @@ onSpecimenChange(event: Event) {
   this.getPatientInfoByVisitId(specimen);
 }
 
+printBarcodeBySampleType(): void {
+  debugger;
+  const visitId = this.visitId;
+  this.sampleType = this.accessionConfirmationForm.get('vialType')?.value;
+  const partnerId = this.partnerId;
+
+  this.sampleAccessionService.printBarcode(visitId, this.sampleType, partnerId)
+    .subscribe({
+      next: (response: Blob) => {
+        const fileURL = URL.createObjectURL(response);
+        window.open(fileURL, '_blank');
+      },
+      error: (err) => {
+        console.error('Error printing barcode:', err);
+      }
+    });
+}
 }

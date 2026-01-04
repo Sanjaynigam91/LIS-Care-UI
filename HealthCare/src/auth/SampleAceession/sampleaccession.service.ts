@@ -127,4 +127,20 @@ GetTestDetailsByVisitId(
     }
   );
 }
+
+printBarcode(visitId: any,sampleType:any,partnerId:any): Observable<Blob> {
+  debugger;
+  const params = new HttpParams()
+    .set('visitId', visitId.toString())
+    .set('sampleType', sampleType.toString())
+    .set('partnerId', partnerId.toString());
+
+  return this.httpClient.get(`${this.baseUrl}/PrintBarcode`, {
+    params,
+    responseType: 'blob'
+  });
 }
+
+}
+
+

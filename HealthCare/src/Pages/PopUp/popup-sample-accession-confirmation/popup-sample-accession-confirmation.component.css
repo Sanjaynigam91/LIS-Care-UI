@@ -447,3 +447,68 @@ input[readonly] {
   background-color: #f5f5f5;
 }
 
+.print-icon {
+  color:  #1c93cf; /* Change to your desired color */
+}
+
+/* Search Button (Purple Theme) */
+.printbarcode-button {
+  background-color: #5B9BD5; /* Hoki Blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  margin-right:10px;
+}
+
+.printbarcode:hover {
+  background-color: #5B9BD5; /* darker purple on hover */
+  transform: translateY(-1px);
+}
+
+.printbarcode:focus {
+  outline: none;
+  background-color: #5B9BD5; /* deep purple focus color */
+  box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.4); /* purple glow */
+  transform: scale(1.03);
+}
+
+
+/* Search Button (Purple Theme) */
+.acceptSample-button {
+  background-color: #198754;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  margin-right:10px;
+}
+
+.acceptSample:hover {
+ background-color: #157347;
+  transform: translateY(-1px);
+}
+
+.acceptSample:focus {
+  outline: none;
+  background-color: #157347;
+  box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.4); /* purple glow */
+  transform: scale(1.03);
+}
+.accept-icon {
+color: #fff;
+}
