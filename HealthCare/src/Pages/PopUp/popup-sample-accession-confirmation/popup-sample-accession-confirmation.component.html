@@ -85,15 +85,19 @@
 
               <!-- Print -->
               <div class="col-md-3 border-top border-end p-2 d-flex align-items-center">
-                <button type="button" class="btn btn-print w-100">
-                  Print Barcode
-                </button>
+                <button class="printbarcode-button" (click)="printBarcodeBySampleType()">
+                <mat-icon class="generate-icon">qr_code_scanner</mat-icon> Print Barcode
+            </button>
+                <!-- <button type="button" class="btn btn-print w-100" (click)="printBarcodeBySampleType()">
+                  <mat-icon class="print-icon">print</mat-icon> Print Barcode
+                </button> -->
               </div>
 
               <!-- Accept -->
               <div class="col-md-3 border-top p-2 d-flex align-items-center">
-                <button type="button" class="btn btn-accept w-100">
-                  Accept Sample
+                <button type="button" class="acceptSample-button">
+                 <mat-icon class="accept-icon">check_circle</mat-icon>
+                 Accept Sample
                 </button>
               </div>
 
