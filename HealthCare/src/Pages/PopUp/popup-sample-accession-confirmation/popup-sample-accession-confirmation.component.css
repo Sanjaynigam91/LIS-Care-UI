@@ -403,7 +403,7 @@ th {
 }
 
 .btn-reject {
-  background-color: #6c757d;
+  background-color: #DC3545;
   color: #fff;
   font-size: 13px;
   padding: 4px 10px;
@@ -411,7 +411,7 @@ th {
 }
 
 .btn-reject:hover {
-  background-color: #5a6268;
+  background-color: #DC3545;
 }
 .custom-alert {
   background-color: #f8dede;          /* light pink */
@@ -511,4 +511,19 @@ input[readonly] {
 }
 .accept-icon {
 color: #fff;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  margin: 5px !important;
+  padding: 0 !important;
+  color: #198754; /* Healthcare green */
+}
+
+.reject-icon {
+  font-size: 18px;
+  line-height: 1;
+  color: #ffffff;
 }

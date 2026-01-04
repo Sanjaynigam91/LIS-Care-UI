@@ -37,7 +37,7 @@
                     class="form-control"
                     [value]="displayAccessionDate"
                     readonly>
-                  <span class="input-group-text">
+                  <span class="calendar-icon">
                     <mat-icon>calendar_today</mat-icon>
                   </span>
                 </div>
@@ -88,9 +88,7 @@
                 <button class="printbarcode-button" (click)="printBarcodeBySampleType()">
                 <mat-icon class="generate-icon">qr_code_scanner</mat-icon> Print Barcode
             </button>
-                <!-- <button type="button" class="btn btn-print w-100" (click)="printBarcodeBySampleType()">
-                  <mat-icon class="print-icon">print</mat-icon> Print Barcode
-                </button> -->
+
               </div>
 
               <!-- Accept -->
@@ -147,7 +145,11 @@
             <td><input type="text" class="form-control"></td>
             <td><input type="text" class="form-control" readonly></td>
             <td class="text-center">
-              <button class="btn btn-reject">Reject Test</button>
+              <button class="btn btn-reject">
+               <span class="reject-icon">
+                   x
+                </span>Reject Test
+            </button>
             </td>
           </tr>
         </tbody>
