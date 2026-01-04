@@ -5,7 +5,7 @@ import { MatIcon } from '@angular/material/icon';
 import { ToastComponent } from '../../Toaster/toast/toast.component';
 import { LoaderComponent } from '../../loader/loader.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
-import { BehaviorSubject, finalize, Observable } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, finalize, Observable } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastService } from '../../../auth/Toaster/toast.service';
 import { LoaderService } from '../../../Interfaces/loader.service';
@@ -46,6 +46,7 @@ export class PopupSampleAccessionConfirmationComponent {
   loggedInUserId!: string | null;
   patientId!: string | null;
   visitId!: number | null;
+  sampleType!: string | null;
 
   sampleTypeApiResponse: SampleTypeResponse[] = [];
   patientInfoResponse!: PatientInfoResponse;
@@ -86,13 +87,31 @@ ngOnInit(): void {
   this.loading$ = this.loaderService.loading$;
    const date: Date =
     this.accessionConfirmationForm.get('accessionDate')?.value;
+    this.sampleType = this.accessionConfirmationForm.get('vialType')?.value;
 
-  this.displayAccessionDate = this.formatDate(date);
+    this.displayAccessionDate = this.formatDate(date);
 
   if (this.visitId) {
     this.getLastImported();
-    this.getTestDetailsByVisitId();
   }
+
+    this.accessionConfirmationForm
+    .get('barcode')
+    ?.valueChanges
+    .pipe(
+      debounceTime(400),          // avoids API call on every key press
+      distinctUntilChanged()
+    )
+    .subscribe(barcode => {
+
+      if (!barcode) {
+        return;
+      }
+
+
+      this.getTestDetailsByVisitId(this.sampleType, barcode);
+    });
+
 }
 
   // ✅ CALL ONLY ONCE (IMPORTANT)
@@ -176,7 +195,7 @@ formatDate(date: Date): string {
               this.accessionConfirmationForm.patchValue({
                 vialType: selectedType
               });
-              this.getPatientInfoByVisitId();
+              this.getPatientInfoByVisitId(selectedType);
 
               this.showSampleAlert$.next(true);
             }
@@ -190,7 +209,7 @@ formatDate(date: Date): string {
                 vialType: selectedType
               });
 
-              this.getPatientInfoByVisitId();
+              this.getPatientInfoByVisitId(selectedType);
 
               // ✅ SAFE ASYNC ALERT
               this.showSampleAlert$.next(true);
@@ -207,7 +226,7 @@ formatDate(date: Date): string {
                 vialType: selectedType
               });
 
-              this.getPatientInfoByVisitId();
+              this.getPatientInfoByVisitId(selectedType);
 
               setTimeout(() => {
                 // this.close();
@@ -225,10 +244,10 @@ formatDate(date: Date): string {
       });
   }
 
- getPatientInfoByVisitId(): void {
+ getPatientInfoByVisitId(sampleType:any): void {
   debugger;
   this.sampleAccessionService
-    .GetPatientInfoByVisitId(this.visitId, this.partnerId)
+    .GetPatientInfoByVisitId(this.visitId,sampleType, this.partnerId)
     .pipe(
       finalize(() => {
         // ✅ Always hide loader
@@ -250,6 +269,8 @@ formatDate(date: Date): string {
               referredBy: this.patientInfoResponse?.referDoctor ?? ''
             });
 
+           // this.getTestDetailsByVisitId(sampleType, this.patientInfoResponse?.barcode);
+
          // console.log(this.PendingAccessionApiResponse);
         } else {
           this.patientInfoResponse = {} as PatientInfoResponse;
@@ -267,9 +288,9 @@ formatDate(date: Date): string {
     });
 }  
 
-getTestDetailsByVisitId(): void {
+getTestDetailsByVisitId(sampleType: any, barcode: any): void {
   this.sampleAccessionService
-    .GetTestDetailsByVisitId(this.visitId, this.partnerId)
+    .GetTestDetailsByVisitId(barcode, sampleType, this.partnerId)
     .pipe(
       finalize(() => {
         // ✅ Always hide loader
@@ -290,4 +311,12 @@ getTestDetailsByVisitId(): void {
       }
     });
 }
+
+onSpecimenChange(event: Event) {
+  debugger;
+  const specimen = (event.target as HTMLSelectElement).value;
+  this.getLastImported();
+  this.getPatientInfoByVisitId(specimen);
+}
+
 }

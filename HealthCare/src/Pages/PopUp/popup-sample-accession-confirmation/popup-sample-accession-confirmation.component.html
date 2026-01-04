@@ -59,13 +59,13 @@
                 <input
                   type="text"
                   class="form-control"
-                  formControlName="barcode">
+                  formControlName="barcode"/>
               </div>
 
               <!-- Avbl Sample Type -->
               <div class="col-md-3 p-2">
                 <label class="form-label">Avbl Sample Type</label>
-                <select class="form-select" formControlName="vialType">
+                <select class="form-select" formControlName="vialType" (change)="onSpecimenChange($event)">
                   <option value="">~Please Choose~</option>
                   <option
                     *ngFor="let item of sampleTypeApiResponse"
