@@ -7,6 +7,9 @@ import { SampleTypeResponse } from '../../Interfaces/SampleAccession/sample-type
 import { ApiResponse } from '../../Interfaces/apiResponse';
 import { PatientInfoResponse } from '../../Interfaces/SampleAccession/patient-info-response';
 import { SampleAccessionTestResponse } from '../../Interfaces/SampleAccession/sample-accession-test-response';
+import { AcceptSampleResponse } from '../../Interfaces/accept-sample-response';
+import { AcceptSampleRequest } from '../../Interfaces/accept-sample-request';
+import { ApiResponseModel } from '../../Interfaces/ApiResponseModel';
 
 @Injectable({
   providedIn: 'root'
@@ -140,6 +143,17 @@ printBarcode(visitId: any,sampleType:any,partnerId:any): Observable<Blob> {
     responseType: 'blob'
   });
 }
+
+acceptSampleByBarcode(
+  request: AcceptSampleRequest
+): Observable<ApiResponseModel<AcceptSampleResponse>> {
+
+  return this.httpClient.put<ApiResponseModel<AcceptSampleResponse>>(
+    `${this.baseUrl}/AcceptSampleByBarcode`,
+    request
+  );
+}
+
 
 }
 

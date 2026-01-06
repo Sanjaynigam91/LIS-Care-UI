@@ -14,6 +14,8 @@ import { SampleaccessionService } from '../../../auth/SampleAceession/sampleacce
 import { SampleTypeResponse } from '../../../Interfaces/SampleAccession/sample-type-response';
 import { PatientInfoResponse } from '../../../Interfaces/SampleAccession/patient-info-response';
 import { SampleAccessionTestResponse } from '../../../Interfaces/SampleAccession/sample-accession-test-response';
+import { AcceptSampleRequest } from '../../../Interfaces/accept-sample-request';
+import { AcceptSampleResponse } from '../../../Interfaces/accept-sample-response';
 
 @Component({
   selector: 'app-popup-sample-accession-confirmation',
@@ -51,6 +53,17 @@ export class PopupSampleAccessionConfirmationComponent {
   sampleTypeApiResponse: SampleTypeResponse[] = [];
   patientInfoResponse!: PatientInfoResponse;
   sampleAccessionTestResponse: SampleAccessionTestResponse[] = [];
+  acceptSampleRequest:AcceptSampleRequest={
+    woeDate: new Date(),
+    barcode: '',
+    patientSpecimenId: 0,
+    patientCode: '',
+    specimenType: '',
+    createdBy: '',
+    partnerId: '',
+    visitId: 0
+  }
+  sampleAccessionResponse: AcceptSampleResponse | null = null;
 
 
  constructor(
@@ -338,4 +351,48 @@ printBarcodeBySampleType(): void {
       }
     });
 }
+
+acceptSampleByBarcode():void{
+  this.acceptSampleRequest.barcode = this.accessionConfirmationForm.get('barcode')?.value;
+  this.acceptSampleRequest.patientSpecimenId = this.accessionConfirmationForm.get('hdnPatientSpecimenId')?.value;
+  this.acceptSampleRequest.patientCode = this.accessionConfirmationForm.get('patientCode')?.value;
+  this.acceptSampleRequest.specimenType = this.accessionConfirmationForm.get('vialType')?.value;
+  this.acceptSampleRequest.createdBy = this.loggedInUserId;
+  this.acceptSampleRequest.partnerId = this.partnerId;
+  this.acceptSampleRequest.visitId = this.visitId;
+
+this.sampleAccessionService.acceptSampleByBarcode(this.acceptSampleRequest)
+      .subscribe({
+        next: (res) => {
+          // Ensure we only assign when data is an object matching AcceptSampleResponse
+          if (res.status) {
+            if (res.data && typeof res.data === 'object') {
+              this.sampleAccessionResponse = res.data as AcceptSampleResponse;
+              this.toasterService.showToast('Sample accepted successfully!', 'success');
+              if(this.sampleType!='') {
+                this.ngOnInit();
+                this.getSampleTypeById();
+                this.getTestDetailsByVisitId(this.sampleType, this.acceptSampleRequest.barcode);
+              }
+              else{
+                this.dialogRef.close();
+              }
+            } else if (res.data === true) {
+              // API returned a boolean success without payload; clear or handle accordingly
+              this.sampleAccessionResponse = null;
+            } else {
+              this.toasterService.showToast('Unexpected response from acceptSampleByBarcode', 'error');
+            }
+          } else {
+            this.toasterService.showToast('Unexpected response from acceptSampleByBarcode', 'error');
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.toasterService.showToast('Something went wrong while accepting sample', 'error');
+        }
+      });
 }
+
+}
+
