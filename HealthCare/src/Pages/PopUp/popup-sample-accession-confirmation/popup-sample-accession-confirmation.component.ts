@@ -1,26 +1,39 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+  AfterViewInit
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
+import {
+  BehaviorSubject,
+  debounceTime,
+  distinctUntilChanged,
+  finalize,
+  Observable
+} from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 import { ToastComponent } from '../../Toaster/toast/toast.component';
 import { LoaderComponent } from '../../loader/loader.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, finalize, Observable } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 import { ToastService } from '../../../auth/Toaster/toast.service';
 import { LoaderService } from '../../../Interfaces/loader.service';
-import { Router } from '@angular/router';
 import { SampleaccessionService } from '../../../auth/SampleAceession/sampleaccession.service';
+
 import { SampleTypeResponse } from '../../../Interfaces/SampleAccession/sample-type-response';
 import { PatientInfoResponse } from '../../../Interfaces/SampleAccession/patient-info-response';
 import { SampleAccessionTestResponse } from '../../../Interfaces/SampleAccession/sample-accession-test-response';
 import { AcceptSampleRequest } from '../../../Interfaces/accept-sample-request';
-import { AcceptSampleResponse } from '../../../Interfaces/accept-sample-response';
 
 @Component({
   selector: 'app-popup-sample-accession-confirmation',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush, // 🔥 ADD THIS
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -32,28 +45,28 @@ import { AcceptSampleResponse } from '../../../Interfaces/accept-sample-response
   templateUrl: './popup-sample-accession-confirmation.component.html',
   styleUrl: './popup-sample-accession-confirmation.component.css'
 })
+export class PopupSampleAccessionConfirmationComponent
+  implements OnInit, AfterViewInit {
 
-export class PopupSampleAccessionConfirmationComponent {
-
+  // ---------------- STATE ----------------
   loading$!: Observable<boolean>;
   accessionConfirmationForm!: FormGroup;
 
-  showGotoAccession = false;
-  displayAccessionDate = '';
-
-  // ✅ ALERT STATE (ASYNC – NO NG0100)
   showSampleAlert$ = new BehaviorSubject<boolean>(false);
 
   partnerId!: string | null;
   loggedInUserId!: string | null;
-  patientId!: string | null;
   visitId!: number | null;
-  sampleType!: string | null;
+
+  displayAccessionDate = '';
 
   sampleTypeApiResponse: SampleTypeResponse[] = [];
   patientInfoResponse!: PatientInfoResponse;
   sampleAccessionTestResponse: SampleAccessionTestResponse[] = [];
-  acceptSampleRequest:AcceptSampleRequest={
+
+  currentSampleIndex = 0;
+
+  acceptSampleRequest: AcceptSampleRequest = {
     woeDate: new Date(),
     barcode: '',
     patientSpecimenId: 0,
@@ -62,219 +75,121 @@ export class PopupSampleAccessionConfirmationComponent {
     createdBy: '',
     partnerId: '',
     visitId: 0
+  };
+
+  constructor(
+    public dialogRef: MatDialogRef<PopupSampleAccessionConfirmationComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder,
+    private toast: ToastService,
+    private loader: LoaderService,
+    private sampleService: SampleaccessionService
+  ) {
+    this.partnerId = localStorage.getItem('partnerId');
+    this.loggedInUserId = localStorage.getItem('userId');
+    this.visitId = data?.visitId ?? null;
+
+    // ✅ CREATE FORM ONCE
+    this.accessionConfirmationForm = this.fb.group({
+      accessionDate: [new Date()],
+      lastImportedRef: [''],
+      barcode: [''],
+      vialType: [''],
+      patientCode: [''],
+      patientName: [''],
+      referredBy: [''],
+      hdnPatientSpecimenId: ['']
+    });
   }
-  sampleAccessionResponse: AcceptSampleResponse | null = null;
-
-
- constructor(
-  public dialogRef: MatDialogRef<PopupSampleAccessionConfirmationComponent>,
-  @Inject(MAT_DIALOG_DATA) public data: any,
-  private formBuilder: FormBuilder,
-  private toasterService: ToastService,
-  private loaderService: LoaderService,
-  public dialog: MatDialog,
-  private router: Router,
-  private sampleAccessionService: SampleaccessionService
-) {
-
-  this.partnerId = localStorage.getItem('partnerId');
-  this.loggedInUserId = localStorage.getItem('userId');
-  this.patientId = data?.patientId ?? null;
-  this.visitId = data?.visitId ?? null;
-
-  // 🔥 CREATE FORM HERE (CRITICAL FIX)
-  this.accessionConfirmationForm = this.formBuilder.group({
-    accessionDate: [new Date()],
-    lastImportedRef: [''],
-    barcode: [''],
-    vialType: [''],
-    patientCode: [''],
-    patientName: [''],
-    referredBy: [''],
-    hdnPatientSpecimenId: ['']
-  });
-}
-
 
   // ---------------- INIT ----------------
-ngOnInit(): void {
-  this.loading$ = this.loaderService.loading$;
-   const date: Date =
-    this.accessionConfirmationForm.get('accessionDate')?.value;
-    this.sampleType = this.accessionConfirmationForm.get('vialType')?.value;
+  ngOnInit(): void {
+    this.loading$ = this.loader.loading$;
 
+    // accession date display
+    const date = this.accessionConfirmationForm.get('accessionDate')?.value;
     this.displayAccessionDate = this.formatDate(date);
 
-  if (this.visitId) {
-    this.getLastImported();
-  }
-
     this.accessionConfirmationForm
-    .get('barcode')
-    ?.valueChanges
-    .pipe(
-      debounceTime(400),          // avoids API call on every key press
-      distinctUntilChanged()
-    )
-    .subscribe(barcode => {
+      .get('accessionDate')
+      ?.valueChanges
+      .subscribe(d => this.displayAccessionDate = this.formatDate(d));
 
-      if (!barcode) {
-        return;
-      }
+    // barcode listener
+    this.accessionConfirmationForm
+      .get('barcode')
+      ?.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe(barcode => {
+        const vialType =
+          this.accessionConfirmationForm.get('vialType')?.value;
 
-
-      this.getTestDetailsByVisitId(this.sampleType, barcode);
-    });
-
-}
-
-  // ✅ CALL ONLY ONCE (IMPORTANT)
-ngAfterViewInit(): void {
-  if (this.visitId || this.patientId) {
-    Promise.resolve().then(() => {
-      this.getSampleTypeById();
-    });
-  }
-}
-
-formatDate(date: Date): string {
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = date.toLocaleString('en-US', { month: 'short' });
-  const year = date.getFullYear();
-  return `${day} ${month} ${year}`;
-}
-
-
-  // ---------------- CLOSE ----------------
-  close(): void {
-    this.dialogRef.close();
-    window.location.reload();
-  }
-
-  // ---------------- LAST IMPORTED ----------------
-  getLastImported(): void {
-
-    this.sampleAccessionService
-      .getLastImported({
-        woeDate: this.accessionConfirmationForm.get('accessionDate')?.value,
-        partnerId: this.partnerId
-      })
-      .pipe(finalize(() => this.loaderService.hide()))
-      .subscribe({
-        next: (response: any) => {
-
-          const lastImported =
-            response?.status && response?.statusCode === 200
-              ? response?.data?.lastImportedRef ?? response?.data ?? 0
-              : 0;
-
-          this.accessionConfirmationForm.patchValue({
-            lastImportedRef: lastImported
-          });
-        },
-        error: () => {
-          this.accessionConfirmationForm.patchValue({
-            lastImportedRef: 0
-          });
+        if (barcode && vialType) {
+          this.getTestDetailsByVisitId(vialType, barcode);
         }
       });
+  }
+
+  // ---------------- LOAD SAMPLE TYPES ONCE ----------------
+  ngAfterViewInit(): void {
+    if (this.visitId) {
+      this.getSampleTypeById();
+    }
+  }
+
+  // ---------------- DATE FORMAT ----------------
+  formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
   }
 
   // ---------------- SAMPLE TYPES ----------------
   getSampleTypeById(): void {
 
-    this.loaderService.show();
+    this.loader.show();
 
-    this.sampleAccessionService
+    this.sampleService
       .getSampleTypeByVisitId(this.visitId, this.partnerId)
-      .pipe(finalize(() => this.loaderService.hide()))
+      .pipe(finalize(() => this.loader.hide()))
       .subscribe({
-        next: (response: any) => {
+        next: (res: any) => {
+          if (res?.status && res?.statusCode === 200) {
 
-          if (response?.status && response?.statusCode === 200) {
-              debugger;
-            this.sampleTypeApiResponse = response.data || [];
+            this.sampleTypeApiResponse = res.data || [];
+            this.currentSampleIndex = 0;
 
-            const sampleTypes = this.sampleTypeApiResponse.map(
-              (x: any) => x.sampleType
-            );
+            if (!this.sampleTypeApiResponse.length) return;
 
-            const count = sampleTypes.length;
+            const firstSample =
+              this.sampleTypeApiResponse[0].sampleType;
 
-            // CASE 1: Exactly 2
-            if (count === 2) {
+            this.accessionConfirmationForm.patchValue({
+              vialType: firstSample
+            });
 
-              const selectedType = sampleTypes[1];
-
-              this.accessionConfirmationForm.patchValue({
-                vialType: selectedType
-              });
-              this.getPatientInfoByVisitId(selectedType);
-
-              this.showSampleAlert$.next(true);
-            }
-
-            // CASE 2: More than 2
-            else if (count > 2) {
-
-              const selectedType = sampleTypes[1];
-
-              this.accessionConfirmationForm.patchValue({
-                vialType: selectedType
-              });
-
-              this.getPatientInfoByVisitId(selectedType);
-
-              // ✅ SAFE ASYNC ALERT
-              this.showSampleAlert$.next(true);
-            }
-
-            // CASE 3: Only 1 
-            else if (count === 1) {
-
-            //  this.showSampleAlert$.next(true);
-
-             const selectedType = sampleTypes[0];
-
-              this.accessionConfirmationForm.patchValue({
-                vialType: selectedType
-              });
-
-              this.getPatientInfoByVisitId(selectedType);
-
-              setTimeout(() => {
-                // this.close();
-              }, 1000);
-            }
-          }
-          else {
-            this.sampleTypeApiResponse = [];
+            this.getPatientInfoByVisitId(firstSample);
+            this.showSampleAlert$.next(true);
           }
         },
         error: () => {
           this.sampleTypeApiResponse = [];
-          this.showSampleAlert$.next(false);
         }
       });
   }
 
- getPatientInfoByVisitId(sampleType:any): void {
-  debugger;
-  this.sampleAccessionService
-    .GetPatientInfoByVisitId(this.visitId,sampleType, this.partnerId)
-    .pipe(
-      finalize(() => {
-        // ✅ Always hide loader
-        this.loaderService.hide();
-      })
-    )
-    .subscribe({
-      next: (response: any) => {
-        debugger;
+  // ---------------- PATIENT INFO ----------------
+  getPatientInfoByVisitId(sampleType: string): void {
 
-        if (response?.status && response?.statusCode === 200) {
-          debugger;
-          this.patientInfoResponse = response.data;
+    this.sampleService
+      .GetPatientInfoByVisitId(this.visitId, sampleType, this.partnerId)
+      .pipe(finalize(() => this.loader.hide()))
+      .subscribe({
+        next: (res: any) => {
+          if (res?.status && res?.statusCode === 200) {
+
+            this.patientInfoResponse = res.data;
 
             this.accessionConfirmationForm.patchValue({
               barcode: this.patientInfoResponse?.barcode ?? '',
@@ -284,115 +199,129 @@ formatDate(date: Date): string {
               hdnPatientSpecimenId: this.patientInfoResponse?.sampleId ?? ''
             });
 
-           // this.getTestDetailsByVisitId(sampleType, this.patientInfoResponse?.barcode);
-
-         // console.log(this.PendingAccessionApiResponse);
-        } else {
-          this.patientInfoResponse = {} as PatientInfoResponse;
-          this.toasterService.showToast('No Record Found!', 'error');
-        }
-      },
-      error: (err) => {
-        this.patientInfoResponse = {} as PatientInfoResponse;
-        this.toasterService.showToast(
-          'Error while fetching pending collections!',
-          'error'
-        );
-        console.error('Search error:', err);
-      }
-    });
-}  
-
-getTestDetailsByVisitId(sampleType: any, barcode: any): void {
-  this.sampleAccessionService
-    .GetTestDetailsByVisitId(barcode, sampleType, this.partnerId)
-    .pipe(
-      finalize(() => {
-        // ✅ Always hide loader
-        this.loaderService.hide();
-      })
-    )
-    .subscribe({
-      next: (response: any) => {
-        if (response?.status && response?.statusCode === 200) {
-          this.sampleAccessionTestResponse = response.data || [];
-        } else {
-          this.sampleAccessionTestResponse = [];
-        }
-      },
-      error: (err) => {
-        this.sampleAccessionTestResponse = [];
-        console.error('Search error:', err);
-      }
-    });
-}
-
-onSpecimenChange(event: Event) {
-  debugger;
-  const specimen = (event.target as HTMLSelectElement).value;
-  this.getLastImported();
-  this.getPatientInfoByVisitId(specimen);
-}
-
-printBarcodeBySampleType(): void {
-  debugger;
-  const visitId = this.visitId;
-  this.sampleType = this.accessionConfirmationForm.get('vialType')?.value;
-  const partnerId = this.partnerId;
-
-  this.sampleAccessionService.printBarcode(visitId, this.sampleType, partnerId)
-    .subscribe({
-      next: (response: Blob) => {
-        const fileURL = URL.createObjectURL(response);
-        window.open(fileURL, '_blank');
-      },
-      error: (err) => {
-        console.error('Error printing barcode:', err);
-      }
-    });
-}
-
-acceptSampleByBarcode():void{
-  this.acceptSampleRequest.barcode = this.accessionConfirmationForm.get('barcode')?.value;
-  this.acceptSampleRequest.patientSpecimenId = this.accessionConfirmationForm.get('hdnPatientSpecimenId')?.value;
-  this.acceptSampleRequest.patientCode = this.accessionConfirmationForm.get('patientCode')?.value;
-  this.acceptSampleRequest.specimenType = this.accessionConfirmationForm.get('vialType')?.value;
-  this.acceptSampleRequest.createdBy = this.loggedInUserId;
-  this.acceptSampleRequest.partnerId = this.partnerId;
-  this.acceptSampleRequest.visitId = this.visitId;
-
-this.sampleAccessionService.acceptSampleByBarcode(this.acceptSampleRequest)
-      .subscribe({
-        next: (res) => {
-          // Ensure we only assign when data is an object matching AcceptSampleResponse
-          if (res.status) {
-            if (res.data && typeof res.data === 'object') {
-              this.sampleAccessionResponse = res.data as AcceptSampleResponse;
-              this.toasterService.showToast('Sample accepted successfully!', 'success');
-              if(this.sampleType!='') {
-                this.ngOnInit();
-                this.getSampleTypeById();
-                this.getTestDetailsByVisitId(this.sampleType, this.acceptSampleRequest.barcode);
-              }
-              else{
-                this.dialogRef.close();
-              }
-            } else if (res.data === true) {
-              // API returned a boolean success without payload; clear or handle accordingly
-              this.sampleAccessionResponse = null;
-            } else {
-              this.toasterService.showToast('Unexpected response from acceptSampleByBarcode', 'error');
-            }
           } else {
-            this.toasterService.showToast('Unexpected response from acceptSampleByBarcode', 'error');
+            this.toast.showToast('No record found', 'error');
           }
-        },
-        error: (err) => {
-          console.error(err);
-          this.toasterService.showToast('Something went wrong while accepting sample', 'error');
         }
       });
-}
+  }
 
-}
+  // ---------------- TEST DETAILS ----------------
+  getTestDetailsByVisitId(sampleType: string, barcode: string): void {
 
+    this.sampleService
+      .GetTestDetailsByVisitId(barcode, sampleType, this.partnerId)
+      .pipe(finalize(() => this.loader.hide()))
+      .subscribe({
+        next: (res: any) => {
+          this.sampleAccessionTestResponse =
+            res?.status && res?.statusCode === 200 ? res.data : [];
+        },
+        error: () => {
+          this.sampleAccessionTestResponse = [];
+        }
+      });
+  }
+
+  // ---------------- DROPDOWN CHANGE ----------------
+  onSpecimenChange(event: Event): void {
+
+    const specimen = (event.target as HTMLSelectElement).value;
+    if (!specimen) return;
+
+    this.currentSampleIndex =
+      this.sampleTypeApiResponse.findIndex(x => x.sampleType === specimen);
+
+    this.getPatientInfoByVisitId(specimen);
+  }
+
+  // ---------------- PRINT BARCODE ----------------
+  printBarcodeBySampleType(): void {
+
+    const visitId = this.visitId;
+    const sampleType =
+      this.accessionConfirmationForm.get('vialType')?.value;
+    const partnerId = this.partnerId;
+
+    if (!visitId || !sampleType || !partnerId) {
+      this.toast.showToast('Sample type not selected', 'error');
+      return;
+    }
+
+    this.sampleService.printBarcode(visitId, sampleType, partnerId)
+      .subscribe({
+        next: (blob: Blob) => {
+          const fileURL = URL.createObjectURL(blob);
+          window.open(fileURL, '_blank');
+        },
+        error: () => {
+          this.toast.showToast('Error printing barcode', 'error');
+        }
+      });
+  }
+
+  // ---------------- ACCEPT SAMPLE ----------------
+  acceptSampleByBarcode(): void {
+
+    this.acceptSampleRequest = {
+      ...this.acceptSampleRequest,
+      barcode: this.accessionConfirmationForm.get('barcode')?.value,
+      patientSpecimenId: this.accessionConfirmationForm.get('hdnPatientSpecimenId')?.value,
+      patientCode: this.accessionConfirmationForm.get('patientCode')?.value,
+      specimenType: this.accessionConfirmationForm.get('vialType')?.value,
+      createdBy: this.loggedInUserId,
+      partnerId: this.partnerId,
+      visitId: this.visitId
+    };
+
+    this.sampleService.acceptSampleByBarcode(this.acceptSampleRequest)
+      .subscribe({
+        next: (res: any) => {
+
+          if (!res?.status) {
+            this.toast.showToast('Unexpected response', 'error');
+            return;
+          }
+
+          this.toast.showToast('Sample accepted successfully!', 'success');
+
+          const total = this.sampleTypeApiResponse.length;
+
+          // ✅ Only one sample
+          if (total === 1) {
+            this.dialogRef.close(true);
+            return;
+          }
+
+          // ✅ Move to next
+          this.currentSampleIndex++;
+
+          if (this.currentSampleIndex < total) {
+
+            const nextSample =
+              this.sampleTypeApiResponse[this.currentSampleIndex].sampleType;
+
+            Promise.resolve().then(() => {
+              this.accessionConfirmationForm.patchValue({
+                vialType: nextSample
+              });
+            });
+
+            this.getPatientInfoByVisitId(nextSample);
+            this.showSampleAlert$.next(true);
+
+          } else {
+            this.dialogRef.close(true);
+          }
+        },
+        error: () => {
+          this.toast.showToast('Error while accepting sample', 'error');
+        }
+      });
+  }
+
+  // ---------------- CLOSE ----------------
+  close(): void {
+    this.dialogRef.close();
+  }
+}
