@@ -76,13 +76,19 @@
         </div>
         <div class="col-md-3">
         <label>Result Entry Stage</label>
-        <select class="form-control"  formControlName="ddlStage">
-           <option value="">~Please Choose~</option>
-           <option value="Entry">Pending for Entry</option>
-           <option value="Authorize">Pending for Authorize</option>
-           <option value="Approve">Pending for Approve</option>
-           <option value="Reported">Already Reported</option>
-        </select>
+       <ng-select
+        formControlName="ddlStage"
+        placeholder="~Please Choose~"
+        [clearable]="false"
+        [searchable]="true">
+
+        <ng-option value="Entry">Pending for Entry</ng-option>
+        <ng-option value="Authorize">Pending for Authorize</ng-option>
+        <ng-option value="Approve">Pending for Approve</ng-option>
+        <ng-option value="Reported">Already Reported</ng-option>
+
+        </ng-select>
+
         </div>
          <div class="col-md-3">
             <div class="div-button">

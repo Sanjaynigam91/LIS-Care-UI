@@ -196,7 +196,7 @@ export class ReportsentryComponent {
           Barcode: [''],
           ddlCenter: [null],          // ✅ FIX HERE
           ddlDepartment: [null],
-          ddlStage:[''],
+          ddlStage:[null],
           filterSampleAccession: [''],
         });
 
