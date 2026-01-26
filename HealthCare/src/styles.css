@@ -9,3 +9,26 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* Hover effect with teal gradient */
+.ng-dropdown-panel .ng-option:hover,
+.ng-dropdown-panel .ng-option.ng-option-marked {
+  background: linear-gradient(
+    90deg,
+    #0b5ed7 0%,
+    #0b5ed7 50%,
+    #0b5ed7 100%
+  ) !important;
+  color: #ffffff !important;
+}
+
+/* Selected option */
+.ng-dropdown-panel .ng-option.ng-option-selected {
+  background: linear-gradient(
+    90deg,
+    #0b5ed7 0%,
+    #0b5ed7 50%,
+    #0b5ed7 100%
+  ) !important;
+  color: #ffffff !important;
+}
+

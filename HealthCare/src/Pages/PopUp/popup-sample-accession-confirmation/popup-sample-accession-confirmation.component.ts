@@ -29,6 +29,7 @@ import { SampleTypeResponse } from '../../../Interfaces/SampleAccession/sample-t
 import { PatientInfoResponse } from '../../../Interfaces/SampleAccession/patient-info-response';
 import { SampleAccessionTestResponse } from '../../../Interfaces/SampleAccession/sample-accession-test-response';
 import { AcceptSampleRequest } from '../../../Interfaces/accept-sample-request';
+import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
 
 @Component({
   selector: 'app-popup-sample-accession-confirmation',
@@ -83,7 +84,8 @@ export class PopupSampleAccessionConfirmationComponent
     private fb: FormBuilder,
     private toast: ToastService,
     private loader: LoaderService,
-    private sampleService: SampleaccessionService
+    private sampleService: SampleaccessionService,
+    private refPageService:RefreshPageService
   ) {
     this.partnerId = localStorage.getItem('partnerId');
     this.loggedInUserId = localStorage.getItem('userId');
@@ -283,7 +285,7 @@ export class PopupSampleAccessionConfirmationComponent
             return;
           }
 
-          this.toast.showToast('Sample accepted successfully!', 'success');
+        
 
           const total = this.sampleTypeApiResponse.length;
 
@@ -306,12 +308,14 @@ export class PopupSampleAccessionConfirmationComponent
                 vialType: nextSample
               });
             });
-
-            this.getPatientInfoByVisitId(nextSample);
-            this.showSampleAlert$.next(true);
-
+            this.ngOnInit();
+             this.showSampleAlert$.next(false);
+            // this.showSampleAlert$.next(true);
+            // this.refPageService.notifyRefresh(); // used to refresh the main list page
+            this.toast.showToast('Sample accepted successfully!', 'success');
           } else {
             this.dialogRef.close(true);
+            window.location.reload();
           }
         },
         error: () => {
