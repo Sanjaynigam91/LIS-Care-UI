@@ -58,7 +58,7 @@
   </mat-menu>
 
   <!-- Menu 3 -->
-  <button [disabled]="isSampleMenuDisabled" mat-button [matMenuTriggerFor]="menu3">Sample Management</button>
+  <button [disabled]="isSampleMenuDisabled" mat-button [matMenuTriggerFor]="menu3">Samples</button>
   <mat-menu #menu3="matMenu">
     <div class="main-menu">
              <!-- ✅ For Center Admin (roleId = 13) -->
@@ -87,7 +87,7 @@
   </mat-menu>
 
   <!-- Menu 4 -->
-  <button [disabled]="isReportsMenuDisabled" mat-button [matMenuTriggerFor]="menu4">Reporting Management</button>
+  <button [disabled]="isReportsMenuDisabled" mat-button [matMenuTriggerFor]="menu4">Reporting</button>
   <mat-menu #menu4="matMenu">
     <div class="main-menu">
           <!-- ✅ For Center Admin (roleId = 13) -->
@@ -190,7 +190,7 @@
 
  <!-- ✅ Account Management Menu -->
 <button [disabled]="isAccountMenuDisabled" mat-button [matMenuTriggerFor]="accountMenu">
-  Account Management
+  Accounts
 </button>
 <mat-menu #accountMenu="matMenu">
   <div class="main-menu">
