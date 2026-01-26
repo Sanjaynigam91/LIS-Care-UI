@@ -92,7 +92,7 @@
         </div>
          <div class="col-md-3">
             <div class="div-button">
-            <button mat-flat-button class="search-pending-entries-btn"><mat-icon class="search-mat-icon">schedule</mat-icon>Search Pending Entries</button>
+            <button mat-flat-button class="search-pending-entries-btn" (click)="getPendingPatients()"><mat-icon class="search-mat-icon">schedule</mat-icon>Search Pending Entries</button>
           </div>
         </div>
     </div>
@@ -120,18 +120,18 @@
   <table class="table table-bordered table-hover">
     <thead>
       <tr class="cell-top nowrap text-left">
-        <th>Reg. Date</th>
-        <th>Center Name</th>
-        <th>Patient Name & Ref.By</th>
+        <th>WO Date</th>
+        <th>Partner Name</th>
         <th>Barcode</th>
-        <th>Test Name</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th>Sample Type</th>
+        <th>Patient Name</th>
+        <th>Departments(Pending)</th>
+        <th>Tests(Pending)</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let item of PendingAccessionApiResponse 
+      <tr *ngFor="let item of pendingPatientApiResponse 
         | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
 
         <!-- Date -->
@@ -145,24 +145,17 @@
         <div class="sub_text pointer">{{ item.centerCode }}</div>
         </td>
 
+        <td class="cell-top">{{ item.barcodeIds || '-' }}</td>
+
+        <td class="cell-top">{{ item.sampleType }}</td>
+
         <!-- Patient Name-->
         <td class="cell-top">
         <div class="nowrap">{{ item.patientName }}</div>
          <div class="sub_text pointer">{{ item.referredBy }}</div>
         </td>
-
-        <td class="cell-top">{{ item.barcode || '-' }}</td>
-
-        <td class="cell-top">{{ item.testRequested }}</td>
-        <td class="cell-top nowrap">{{ item.sampleStatus }}</td>
-        <td>
-            <button
-              type="button"
-              class="action-btn assignment-button"
-              matTooltip="Accept Sample">
-              <mat-icon>hourglass_empty</mat-icon>
-            </button>
-            </td>
+        <td class="cell-top">{{ item.departments }}</td>
+        <td class="cell-top nowrap">{{ item.testProfiles }}</td>
       </tr>
     </tbody>
   </table>

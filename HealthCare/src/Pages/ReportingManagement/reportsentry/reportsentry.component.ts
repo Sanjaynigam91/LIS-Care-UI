@@ -30,6 +30,8 @@ import { PendingAccessionResponse } from '../../../Interfaces/SampleAccession/pe
 import { TestService } from '../../../auth/TestMasterService/test.service';
 import { testDepartmentResponse } from '../../../Interfaces/TestMaster/testDepartmentResponse';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ReportingService } from '../../../auth/Reporting/reporting.service';
+import { PendingPatientResponse } from '../../../Interfaces/Reporting/pending-patient-response';
 
 @Component({
   selector: 'app-reportsentry',
@@ -94,10 +96,11 @@ export class ReportsentryComponent {
      pendingEntryForm!:FormGroup
      centerApiResponse:Observable<CenterResponse>| any;
      testDeptApiResponse: Observable<testDepartmentResponse>| any;
-     PendingAccessionApiResponse:Observable<PendingAccessionResponse>| any;
+     pendingPatientApiResponse:Observable<PendingPatientResponse>| any;
      filteredData: any[] = []; // Data array for the table
      centerStatus:string|any;
      SeachByNameOrCode:string|any;
+     reportStatus:string|any;
 
    constructor(
          private formBuilder: FormBuilder,
@@ -106,7 +109,8 @@ export class ReportsentryComponent {
          private toasterService: ToastService,
          private centerService:CenterServiceService,
          private refPageService:RefreshPageService,
-         private testService:TestService
+         private testService:TestService,
+         private reportingService:ReportingService
          )
          {
            this.loading$ = this.loaderService.loading$;
@@ -201,9 +205,9 @@ export class ReportsentryComponent {
         });
 
      
-   this.loadAllCenterRecords();
-   this.GetTestDeptData();
-   //  this.getAllPendingSampleForAccession();
+      this.loadAllCenterRecords();
+      this.GetTestDeptData();
+      this.getPendingPatients();
 
        // ✅ Subscribe after form initialized
     //  this.pendingAccessionForm.get('filterSampleAccession')?.valueChanges.subscribe(value => {
@@ -272,5 +276,55 @@ export class ReportsentryComponent {
      console.log(response);
     }) 
    }
+
+    getPendingPatients() {
+        debugger;
+        this.loaderService.show();
+         const dateRange = this.pendingEntryForm.get('DateRange')?.value;
+
+        this.startDate = dateRange.startDate;
+        this.endDate = dateRange.endDate;
+        
+        const barcode = this.pendingEntryForm.get('Barcode')?.value;
+        const department = this.pendingEntryForm.get('ddlDepartment')?.value;
+        const patientName = this.pendingEntryForm.get('PatientName')?.value;
+        const centerCode = this.pendingEntryForm.get('ddlCenter')?.value;
+        this.reportStatus = this.pendingEntryForm.get('ddlStage')?.value;
+        if(this.reportStatus==null || this.reportStatus==''){
+          this.reportStatus='Entry';
+        }
+        this.reportingService.RetrievePendingPatients(this.partnerId, this.startDate, this.endDate, barcode, department, patientName, centerCode, this.reportStatus)
+          .pipe(
+            finalize(() => {
+              // ✅ Always hides the loader no matter what happens (success or error)
+              this.loaderService.hide();
+            })
+          )
+          .subscribe({
+            next: (response: any) => {
+              debugger;
+              if (response?.status && response?.statusCode === 200) {            
+                  this.pendingPatientApiResponse = response.data;
+                  this.filteredData = response.data;
+                  this.totalItems = this.filteredData.length;
+                  this.IsRecordFound=true;
+                  this.IsNoRecordFound=false;
+                }
+                else {
+                  this.pendingPatientApiResponse = [];
+                  this.filteredData = []; 
+                  this.totalItems = 0;
+                  this.IsRecordFound=false;
+                  this.IsNoRecordFound=true;
+                }
+
+            },
+            error: (err) => {
+               this.toasterService.showToast('Error while fetching centers!', 'error');
+              console.error('Error while fetching centers:', err);
+            }
+          });
+  } 
+  
     
 }
