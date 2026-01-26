@@ -1,32 +1,50 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { importProvidersFrom } from '@angular/core';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+
 import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
+
 import { NgxDaterangepickerMd, LocaleService } from 'ngx-daterangepicker-material';
 import { provideRouter, withRouterConfig, RouteReuseStrategy } from '@angular/router';
 import { routes } from './app/app.routes';
 import { NoReuseRouteStrategy } from './app/no-reuse.strategy';
+
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth/authorize.interceptor';
 
 bootstrapApplication(AppComponent, {
   ...appConfig,
   providers: [
     ...(appConfig.providers ?? []),
 
-    // ✅ Router reload config
-    provideRouter(
-      routes,
-      withRouterConfig({
-        onSameUrlNavigation: 'reload'
-      })
+    // ✅ Enable HttpClient + DI-based interceptors
+    provideHttpClient(
+      withInterceptorsFromDi()
     ),
 
-    // ✅ Angular 18–approved reuse strategy
+    // ✅ Register class-based interceptor
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+
+    // Router
+    provideRouter(
+      routes,
+      withRouterConfig({ onSameUrlNavigation: 'reload' })
+    ),
+
     {
       provide: RouteReuseStrategy,
       useClass: NoReuseRouteStrategy
     },
 
-    // ngx daterangepicker
     importProvidersFrom(
       NgxDaterangepickerMd.forRoot({
         applyLabel: 'Apply',
