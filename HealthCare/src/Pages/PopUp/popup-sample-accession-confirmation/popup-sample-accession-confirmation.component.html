@@ -146,10 +146,15 @@
             <td><input type="text" class="form-control"></td>
             <td><input type="text" class="form-control" readonly></td>
             <td class="text-center">
-              <button class="btn btn-reject">
+              <button class="btn btn-reject" *ngIf="isRejectTestVisible" (click)="onReject()">
                <span class="reject-icon">
                    x
                 </span>Reject Test
+            </button>
+            <button class="btn btn-reject" *ngIf="isCancelRejectionVisible" (click)="onCancelRejection()">
+               <span class="reject-icon">
+                   x
+                </span>Cancel Rejection
             </button>
             </td>
           </tr>
