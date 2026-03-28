@@ -78,6 +78,10 @@ export class PopupSampleAccessionConfirmationComponent
     visitId: 0
   };
 
+  isRejectTestVisible: boolean = true; // hides the button
+  isCancelRejectionVisible: boolean = true; // hides the span
+
+
   constructor(
     public dialogRef: MatDialogRef<PopupSampleAccessionConfirmationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -108,6 +112,7 @@ export class PopupSampleAccessionConfirmationComponent
   ngOnInit(): void {
     this.loading$ = this.loader.loading$;
 
+    this.isCancelRejectionVisible = false; // show by default
     // accession date display
     const date = this.accessionConfirmationForm.get('accessionDate')?.value;
     this.displayAccessionDate = this.formatDate(date);
@@ -328,4 +333,16 @@ export class PopupSampleAccessionConfirmationComponent
   close(): void {
     this.dialogRef.close();
   }
+
+  // Call this when Reject is clicked
+onReject() {
+  this.isCancelRejectionVisible = true;
+  this.isRejectTestVisible = false; // hide the reject button
+}
+
+// Optional: hide again
+onCancelRejection() {
+  this.isCancelRejectionVisible = false;
+  this.isRejectTestVisible = true; // show the reject button again
+}
 }
