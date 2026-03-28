@@ -23,22 +23,27 @@ export class SampleRejectionService {
      }
 
   /// used to update Sample Rejection details
-  updateSampleRejectionDetails(data: any) {
-    debugger;
-        console.log("Payload before sending:", data);
+updateSampleRejectionDetails(data: any) {
+  debugger;
+  const token = localStorage.getItem('token');
 
-        const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
 
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        });
+  const params = {
+    patientSpecimenId: data.patientSpecimenId,
+    testCode: data.testCode,
+    rejectionReason: data.rejectionReason,
+    rejectedBy: data.rejectedBy,
+    partnerId: data.partnerId
+  };
 
-        return this.httpClient.put(
-          `${this.baseUrl}/RejectTestBeforeAccession`,
-          data,
-          { headers: headers }
-        ).pipe(delay(1000));
-  }     
+  return this.httpClient.put(
+    `${this.baseUrl}/RejectTestBeforeAccession`,
+    null,   // ❗ NO BODY
+    { headers, params }
+  );
+}    
 
 }

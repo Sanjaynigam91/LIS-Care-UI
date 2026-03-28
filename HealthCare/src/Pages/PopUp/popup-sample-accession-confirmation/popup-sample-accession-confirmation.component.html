@@ -140,24 +140,44 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of sampleAccessionTestResponse">
-            <td>{{ item.testCode }}</td>
-            <td>{{ item.testName }}</td>
-            <td><input type="text" class="form-control"></td>
-            <td><input type="text" class="form-control" readonly></td>
-            <td class="text-center">
-              <button class="btn btn-reject" *ngIf="isRejectTestVisible" (click)="onReject()">
-               <span class="reject-icon">
-                   x
-                </span>Reject Test
+          <tr *ngFor="let item of sampleAccessionTestResponse; let i = index">
+          <td>{{ item.testCode }}</td>
+          <td>{{ item.testName }}</td>
+
+          <!-- 👇 Bind input -->
+          <td>
+            <input type="text"
+                  class="form-control"
+                  [(ngModel)]="item.rejectionRemarks">
+          </td>
+
+          <td>
+            <input type="text"
+                  class="form-control"
+                  [(ngModel)]="item.cancelRejectionRemark"
+                  readonly>
+          </td>
+
+          <td class="text-center">
+
+            <!-- Reject -->
+            <button class="btn btn-reject"
+                    *ngIf="!item.isRejected"
+                    (click)="onReject(item)">
+              <span class="reject-icon">x</span>
+              Reject Test
             </button>
-            <button class="btn btn-reject" *ngIf="isCancelRejectionVisible" (click)="onCancelRejection()">
-               <span class="reject-icon">
-                   x
-                </span>Cancel Rejection
+
+            <!-- Cancel -->
+            <button class="btn btn-reject"
+                    *ngIf="item.isRejected"
+                    (click)="onCancelRejection()">
+              <span class="reject-icon">x</span>
+              Cancel Rejection
             </button>
-            </td>
-          </tr>
+
+          </td>
+</tr>
         </tbody>
       </table>
     </div>
