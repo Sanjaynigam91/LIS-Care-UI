@@ -6,7 +6,7 @@ import {
   OnInit,
   AfterViewInit
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import {
   BehaviorSubject,
@@ -30,6 +30,7 @@ import { PatientInfoResponse } from '../../../Interfaces/SampleAccession/patient
 import { SampleAccessionTestResponse } from '../../../Interfaces/SampleAccession/sample-accession-test-response';
 import { AcceptSampleRequest } from '../../../Interfaces/accept-sample-request';
 import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
+import { SampleRejectionService } from '../../../auth/Rejection/sample-rejection.service';
 
 @Component({
   selector: 'app-popup-sample-accession-confirmation',
@@ -41,7 +42,8 @@ import { RefreshPageService } from '../../../auth/Shared/refresh-page.service';
     MatIcon,
     ToastComponent,
     LoaderComponent,
-    NgxDaterangepickerMd
+    NgxDaterangepickerMd,
+    FormsModule
   ],
   templateUrl: './popup-sample-accession-confirmation.component.html',
   styleUrl: './popup-sample-accession-confirmation.component.css'
@@ -89,7 +91,8 @@ export class PopupSampleAccessionConfirmationComponent
     private toast: ToastService,
     private loader: LoaderService,
     private sampleService: SampleaccessionService,
-    private refPageService:RefreshPageService
+    private refPageService:RefreshPageService,
+    private sampleRejectionService: SampleRejectionService
   ) {
     this.partnerId = localStorage.getItem('partnerId');
     this.loggedInUserId = localStorage.getItem('userId');
@@ -335,9 +338,41 @@ export class PopupSampleAccessionConfirmationComponent
   }
 
   // Call this when Reject is clicked
-onReject() {
-  this.isCancelRejectionVisible = true;
-  this.isRejectTestVisible = false; // hide the reject button
+// onReject() {
+//   this.isCancelRejectionVisible = true;
+//   this.isRejectTestVisible = false; // hide the reject button
+// }
+
+onReject(item: any) {
+
+  if (!item.rejectionRemarks || item.rejectionRemarks.trim() === '') {
+    alert('Please enter rejection reason');
+    return;
+  }
+
+  const payload = {
+    patientSpecimenId: item.sampleId,  // ✅ must exist
+    testCode: item.testCode,                    // ✅ must exist
+    rejectionReason: item.rejectionRemarks,      // ✅ must NOT be empty
+    rejectedBy: this.loggedInUserId,                   // ✅ must exist
+    partnerId: this.partnerId,                     // ✅ must exist
+  };
+
+  console.log('Payload:', payload); // 👈 CHECK THIS
+
+  this.sampleRejectionService.updateSampleRejectionDetails(payload).subscribe({
+    next: (res: any) => {
+      console.log('Success:', res);
+      item.isRejected = true;
+        this.toast.showToast('Test rejected successfully!', 'success');
+        this.isRejectTestVisible = false; // hide the reject button
+        this.isCancelRejectionVisible = true; // show the cancel button
+    },
+    error: (err) => {
+      console.error('Full Error:', err);
+      console.error('Error Body:', err.error); // 👈 VERY IMPORTANT
+    }
+  });
 }
 
 // Optional: hide again
