@@ -17,7 +17,7 @@ import { LoaderComponent } from '../../loader/loader.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { RouterModule } from '@angular/router';
-import { finalize, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, Observable } from 'rxjs';
 import { CenterResponse } from '../../../Interfaces/CenterMaster/CenterResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { LoaderService } from '../../../Interfaces/loader.service';
@@ -97,6 +97,7 @@ export class ReportsentryComponent {
      centerApiResponse:Observable<CenterResponse>| any;
      testDeptApiResponse: Observable<testDepartmentResponse>| any;
      pendingPatientApiResponse:Observable<PendingPatientResponse>| any;
+     allPendingPatientApiResponse:Observable<PendingPatientResponse>| any;
      filteredData: any[] = []; // Data array for the table
      centerStatus:string|any;
      SeachByNameOrCode:string|any;
@@ -178,43 +179,56 @@ export class ReportsentryComponent {
         ]
     };
      
-    onDateApply(event: any) {
-   debugger;
-    this.startDate = event.startDate.format('YYYY-MM-DD');
-    this.endDate = event.endDate.format('YYYY-MM-DD');
-     
-    console.log('Start Date:', this.startDate);
-    console.log('End Date:',  this.endDate);
-     
-    } 
+   onDateApply(event: any) {
 
-   ngOnInit(): void {
-      debugger;
-      this.IsNoRecordFound=true;
-      this.IsRecordFound=false;
-        this.pendingEntryForm = this.formBuilder.group({
-          DateRange: [{ startDate: moment(), endDate: moment() }],
-          startDate: [''],
-          endDate: [''],
-          PatientName: [''],
-          Barcode: [''],
-          ddlCenter: [null],          // ✅ FIX HERE
-          ddlDepartment: [null],
-          ddlStage:[null],
-          filterSampleAccession: [''],
-        });
+  this.pendingEntryForm.patchValue({
+    DateRange: {
+      startDate: event.startDate,
+      endDate: event.endDate
+    }
+  });
 
-     
-      this.loadAllCenterRecords();
-      this.GetTestDeptData();
-      this.getPendingPatients();
+  this.startDate = event.startDate.format('YYYY-MM-DD');
+  this.endDate = event.endDate.format('YYYY-MM-DD');
 
-       // ✅ Subscribe after form initialized
-    //  this.pendingAccessionForm.get('filterSampleAccession')?.valueChanges.subscribe(value => {
-    //    this.filterSamplesForAccession(value);
-    //   });
+ console.log('Selected Start:', event.startDate.format('DD-MMM-YYYY'));
+ console.log('Selected End:', event.endDate.format('DD-MMM-YYYY'));
+}
 
-  } 
+ngOnInit(): void {
+
+  this.IsNoRecordFound = true;
+  this.IsRecordFound = false;
+
+  this.pendingEntryForm = this.formBuilder.group({
+   DateRange: [{
+    startDate: moment(),
+    endDate: moment()
+    }],
+    startDate: [''],
+    endDate: [''],
+    PatientName: [''],
+    Barcode: [''],
+    ddlCenter: [null],
+    ddlDepartment: [null],
+    ddlStage: [null],
+    filterPendingEntries: [''],
+  });
+
+  this.loadAllCenterRecords();
+  this.GetTestDeptData();
+  this.getPendingPatients();
+
+  // Search
+  this.pendingEntryForm.get('filterPendingEntries')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    )
+    .subscribe(value => {
+      this.filterPendingEntries(value || '');
+    });
+}
 
  /// Load All Center Records
   loadAllCenterRecords() {
@@ -280,10 +294,13 @@ export class ReportsentryComponent {
     getPendingPatients() {
         debugger;
         this.loaderService.show();
-         const dateRange = this.pendingEntryForm.get('DateRange')?.value;
+        const dateRange = this.pendingEntryForm.get('DateRange')!.value;
 
-        this.startDate = dateRange.startDate;
-        this.endDate = dateRange.endDate;
+        const apiStart = dateRange.startDate.format('YYYY-MM-DD') + ' 00:00:00';
+        const apiEnd = dateRange.endDate.format('YYYY-MM-DD') + ' 23:59:59';
+
+        console.log(apiStart);
+        console.log(apiEnd);
         
         const barcode = this.pendingEntryForm.get('Barcode')?.value;
         const department = this.pendingEntryForm.get('ddlDepartment')?.value;
@@ -293,7 +310,7 @@ export class ReportsentryComponent {
         if(this.reportStatus==null || this.reportStatus==''){
           this.reportStatus='Entry';
         }
-        this.reportingService.RetrievePendingPatients(this.partnerId, this.startDate, this.endDate, barcode, department, patientName, centerCode, this.reportStatus)
+        this.reportingService.RetrievePendingPatients(this.partnerId, apiStart, apiEnd, barcode, department, patientName, centerCode, this.reportStatus)
           .pipe(
             finalize(() => {
               // ✅ Always hides the loader no matter what happens (success or error)
@@ -302,29 +319,75 @@ export class ReportsentryComponent {
           )
           .subscribe({
             next: (response: any) => {
-              debugger;
-              if (response?.status && response?.statusCode === 200) {            
-                  this.pendingPatientApiResponse = response.data;
-                  this.filteredData = response.data;
-                  this.totalItems = this.filteredData.length;
-                  this.IsRecordFound=true;
-                  this.IsNoRecordFound=false;
-                }
-                else {
-                  this.pendingPatientApiResponse = [];
-                  this.filteredData = []; 
-                  this.totalItems = 0;
-                  this.IsRecordFound=false;
-                  this.IsNoRecordFound=true;
-                }
+              if (response?.status && response?.statusCode === 200) {
+                // Table data
+                this.pendingPatientApiResponse = [...response.data];
 
+                this.filteredData = [...response.data];
+
+                this.totalItems = this.pendingPatientApiResponse.length;
+
+                this.pendingEntryForm.get('filterPendingEntries')
+                    ?.setValue('', { emitEvent: false });
+
+                this.IsRecordFound = true;
+                this.IsNoRecordFound = false;
+
+              } else {
+                  debugger;
+                this.pendingPatientApiResponse = [];
+                this.filteredData = [];
+                this.totalItems = 0;
+
+                this.IsRecordFound = false;
+                this.IsNoRecordFound = true;
+              }
             },
             error: (err) => {
                this.toasterService.showToast('Error while fetching centers!', 'error');
               console.error('Error while fetching centers:', err);
+              this.IsRecordFound = false;
+              this.IsNoRecordFound = true;
             }
           });
   } 
   
+  onDepartmentClick(item: any) {
+  console.log('Department clicked', item);
+  // Open popup or navigate
+}
+
+onTestClick(item: any) {
+  console.log('Test clicked', item);
+  // Open popup or navigate
+}
+
+///used to filter the data from grid/table
+filterPendingEntries(searchTerm: string) {
+
+  searchTerm = searchTerm.trim().toLowerCase();
+
+  if (!searchTerm) {
+    this.pendingPatientApiResponse = [...this.pendingPatientApiResponse];
+    return;
+  }
+
+  this.pendingPatientApiResponse = this.pendingPatientApiResponse.filter((item: any) =>
+
+    (item.workOrderDate ?? '').toString().toLowerCase().includes(searchTerm) ||
+    (item.centerName ?? '').toLowerCase().includes(searchTerm) ||
+    (item.centerCode ?? '').toLowerCase().includes(searchTerm) ||
+    (item.patientName ?? '').toLowerCase().includes(searchTerm) ||
+    (item.referredBy ?? '').toLowerCase().includes(searchTerm) ||
+    (item.barcodeIds ?? '').toLowerCase().includes(searchTerm) ||
+    (item.sampleType ?? '').toLowerCase().includes(searchTerm) ||
+    (item.departments ?? '').toLowerCase().includes(searchTerm) ||
+    (item.testProfiles ?? '').toLowerCase().includes(searchTerm)
+
+  );
+  if (!searchTerm) {
+      this.getPendingPatients();
+  }
+}
     
 }

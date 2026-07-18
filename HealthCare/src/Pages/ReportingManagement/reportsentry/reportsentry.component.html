@@ -103,7 +103,12 @@
     <div class="col-md-3"></div>
     <div class="col-md-3">
       <div class="form-group">
-        <input class="form-control" formControlName="filterSampleAccession" placeholder="Search..." />
+       <input
+        class="form-control"
+        type="text"
+        placeholder="Search..."
+        formControlName="filterPendingEntries"
+        (input)="filterPendingEntries($any($event.target).value)" />
       </div>
     </div>
     </div> 
@@ -131,8 +136,8 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let item of pendingPatientApiResponse 
-        | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+      <tr *ngFor="let item of pendingPatientApiResponse
+      | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
 
         <!-- Date -->
         <td class="cell-top nowrap">
@@ -154,8 +159,21 @@
         <div class="nowrap">{{ item.patientName }}</div>
          <div class="sub_text pointer">{{ item.referredBy }}</div>
         </td>
-        <td class="cell-top">{{ item.departments }}</td>
-        <td class="cell-top nowrap">{{ item.testProfiles }}</td>
+        <td class="cell-top">
+        <a href="javascript:void(0)"
+          class="text-primary text-decoration-none"
+          (click)="onDepartmentClick(item)">
+          {{ item.departments }}
+        </a>
+      </td>
+
+      <td class="cell-top nowrap">
+        <a href="javascript:void(0)"
+          class="text-primary text-decoration-none"
+          (click)="onTestClick(item)">
+          {{ item.testProfiles }}
+        </a>
+      </td>
       </tr>
     </tbody>
   </table>
