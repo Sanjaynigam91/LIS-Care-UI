@@ -97,7 +97,6 @@ export class ReportsentryComponent {
      centerApiResponse:Observable<CenterResponse>| any;
      testDeptApiResponse: Observable<testDepartmentResponse>| any;
      pendingPatientApiResponse:Observable<PendingPatientResponse>| any;
-     allPendingPatientApiResponse:Observable<PendingPatientResponse>| any;
      filteredData: any[] = []; // Data array for the table
      centerStatus:string|any;
      SeachByNameOrCode:string|any;
@@ -367,12 +366,13 @@ filterPendingEntries(searchTerm: string) {
 
   searchTerm = searchTerm.trim().toLowerCase();
 
+  // If search box is empty, restore original data
   if (!searchTerm) {
-    this.pendingPatientApiResponse = [...this.pendingPatientApiResponse];
+    this.pendingPatientApiResponse = [...this.filteredData];
     return;
   }
 
-  this.pendingPatientApiResponse = this.pendingPatientApiResponse.filter((item: any) =>
+  this.pendingPatientApiResponse = this.filteredData.filter((item: any) =>
 
     (item.workOrderDate ?? '').toString().toLowerCase().includes(searchTerm) ||
     (item.centerName ?? '').toLowerCase().includes(searchTerm) ||
@@ -385,9 +385,6 @@ filterPendingEntries(searchTerm: string) {
     (item.testProfiles ?? '').toLowerCase().includes(searchTerm)
 
   );
-  if (!searchTerm) {
-      this.getPendingPatients();
-  }
 }
     
-}
+} 
