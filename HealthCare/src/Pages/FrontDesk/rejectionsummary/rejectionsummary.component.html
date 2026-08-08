@@ -1,1 +1,135 @@
-<p>rejectionsummary works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<div class="container mt-3" [formGroup]="rejectionSummaryForm">
+   <div class="row">
+    <div class="col-md-3">
+    <label>Rejection Date Range</label>
+   <input
+  type="text"
+  class="form-control"
+  ngxDaterangepickerMd
+  formControlName="DateRange"
+  [ranges]="ranges"
+  [alwaysShowCalendars]="true"
+  [showCustomRangeLabel]="true"
+  [linkedCalendars]="false"
+  [showClearButton]="true"
+  [autoApply]="false"
+  [timePicker]="false"
+  [timePickerSeconds]="false"
+  [timePicker24Hour]="false"
+  [locale]="{ format: 'DD-MMM-YYYY', applyLabel: 'Apply', clearLabel: 'Clear' }"
+  placeholder="Select date range"
+  (apply)="onDateApply($event)"
+/>
+</div>
+<div class="col-md-3">
+    <label>Barcode</label>
+    <input class="form-control" type="text" name="Barcode" placeholder="Search by sample barcode" formControlName="Barcode"/>
+</div>
+    <div class="col-md-3">
+    <label>Patient Name / Code</label>
+    <input class="form-control" type="text" name="PatientName" placeholder="Search by patient name / code" formControlName="PatientNameOrCode"/>
+    </div>
+    <div class="col-md-3">
+    <label>Center</label>
+        <select class="form-control"  formControlName="ddlCenter" [disabled]="loggedInAsCenterUser">
+            <option value="">~Please Choose~</option>
+            <option *ngFor="let item of centerApiResponse" [value]="item.centerCode">{{item.centerName}}</option>
+        </select>
+    </div>
+   </div>
+   <br/>
+    <div class="row">
+         <div class="col-md-4">
+            <div class="div-button">
+            <button mat-flat-button class="search-rejection-button" (click)="loadRejectionSummary()"><mat-icon>search</mat-icon>Search Rejections</button>
+          </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row" *ngIf="IsRecordFound">
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <input class="form-control" formControlName="filterPatientSummary" placeholder="Search..." />
+      </div>
+    </div>
+    </div> 
+    <br/>
+<div *ngIf="IsNoRecordFound" class="row tbl-div">
+    <div class="form-group form-control NoRecord-Found marquee">
+        <span>🚫 No rejection details found!</span>
+    </div>
+    <br />
+</div>
+<br />
+<div class="table-responsive patient-grid" *ngIf="IsRecordFound">
+
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr class="cell-top nowrap text-left">
+        <th>RejectionDate</th>
+        <th>Patient Code</th>
+        <th>Patient Name</th>
+        <th>Center Name</th>
+        <th>Ref By</th>
+        <th>Tests</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of rejectionSummaryResponse 
+        | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+
+        <!-- Date -->
+        <td class="cell-top nowrap">
+        <span>{{ formatRejectedDate(item.rejectedDate) }}</span>
+        </td>
+
+         <!-- Patient Code (reference column) -->
+        <td class="cell-top">
+          <div>{{ item.patientCode }}</div>
+        </td>
+
+        <!-- Patient name (reference column) -->
+        <td class="cell-top">
+          <div>{{ item.patientName }}</div>
+        </td>
+
+        <!-- Center Name -->
+        <td class="cell-top">
+        <div class="nowrap">{{ item.centerName }}</div>
+        <div class="sub_text pointer">{{ item.centerCode }}</div>
+        </td>
+
+        <!-- Referred By -->
+        <td class="cell-top">
+        <div class="nowrap">{{ item.referredDoctor }}</div>
+        </td>
+
+     <!-- Tests -->
+        <td class="cell-top">
+          <div>{{ item.testName }}</div>
+        </td>
+        <!-- Reason -->
+        <td class="cell-top">   
+          <div>{{ item.rejectionReasons }}</div>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<pagination-controls *ngIf="IsRecordFound" (pageChange)="p = $event"></pagination-controls>
+</div>
+<app-loader *ngIf="loading$ | async"></app-loader>
+
+
