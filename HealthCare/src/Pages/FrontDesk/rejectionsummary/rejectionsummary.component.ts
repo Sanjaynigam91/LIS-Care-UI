@@ -123,7 +123,7 @@ router  =  inject(Router);
           DateRange: [{ startDate: moment(), endDate: moment() }],
           startDate: [''],
           endDate: [''],
-          PatientName: [''],  
+          PatientNameOrCode: [''],  
           PatientCode: [''],
           ddlCenter: [''],
           ddlStatus: [''],
@@ -313,7 +313,7 @@ pickLatestDate() {
 
         const endDate = this.end;
          
-        this.patientNameOrCode = this.rejectionSummaryForm.get('patientNameOrCode')?.value || null;
+        this.patientNameOrCode = this.rejectionSummaryForm.get('PatientNameOrCode')?.value || null;
         if(this.loggedInAsCenterUser)
         {
           this.centerCode=this.loggedInAsCenterUser;
@@ -381,11 +381,12 @@ formatRejectedDate(date: string): string {
     debugger;
       this.filteredData = this.rejectionSummaryResponse.filter((item: 
       { 
-        rejectedDate: any; patientCode: any; patientName: any; referredBy: any;
+        rejectedDate: any; patientCode: any; patientName: any; barcode: any;
         centerName: any; centerCode: any; referredDoctor: any; testName: any; rejectionReasons: any;  }) =>
       (item.rejectedDate ?? '').toString().toLowerCase().includes(searchTerm) ||
       (item.patientCode ?? '').toLowerCase().includes(searchTerm) ||
       (item.patientName ?? '').toLowerCase().includes(searchTerm) ||
+      (item.barcode ?? '').toLowerCase().includes(searchTerm) ||
       (item.centerName ?? '').toLowerCase().includes(searchTerm) ||
       (item.centerCode ?? '').toString().includes(searchTerm) ||
       (item.referredDoctor ?? '').toLowerCase().includes(searchTerm) ||
@@ -398,76 +399,4 @@ formatRejectedDate(date: string): string {
       this.ngOnInit();
     }
   }    
-
- downloadPatientReceipt(patientId: any): void {
-    debugger;
-    this.patientService.getPatientReceipt(patientId,this.partnerId).subscribe({
-      next: (blob) => {
-        const fileURL = window.URL.createObjectURL(blob);
-
-        // const a = document.createElement('a');
-        // a.href = fileURL;
-        // a.download = 'PatientReceipt.pdf'; // backend name will override if provided
-        // a.click();
-
-        // window.URL.revokeObjectURL(fileURL);
-        window.open(fileURL, 'PatientReceipt.pdf');
-      },
-      error: (err) => {
-        console.error('PDF download failed', err);
-      }
-    });
-  }
-
-  formatTests(tests: string): string {
-  if (!tests) return '';
-
-  const testArray = tests.split(',');
-
-  let result = '';
-  for (let i = 0; i < testArray.length; i++) {
-    result += testArray[i].trim();
-    if ((i + 1) % 2 === 0) {
-      result += '<br>';   // break line after 2 tests
-    } else {
-      result += ', ';
-    }
-  }
-  return result;
-}
-
-
- patientDeleteConfirmationDialog(patientId:any): void {
-      debugger;
-      const dialogRef = this.dialog.open(ConfirmationDialogComponentComponent, {
-         width: 'auto',
-         disableClose: true,  
-        data: { message: 'Are you sure you want to delete this patient details?',patientId: patientId }
-      });
-  
-      dialogRef.afterClosed().subscribe(result => {
-        debugger;
-        if (result.success) {
-          debugger;
-          this.patientService.deletePatientRegisteredPatient(patientId,this.loggedInUserId).subscribe((response:any)=>{
-            debugger;
-           if(response.status && response.statusCode==200){
-            this.toasterService.showToast(response.responseMessage, 'success');
-            this.ngOnInit();
-           }
-           else{
-            this.toasterService.showToast(response.responseMessage, 'error');
-           }
-           console.log(response);
-          }) 
-          console.log('Returned User ID:', result.userId);
-          console.log('User confirmed the action.');
-        } else {
-          debugger;
-          // User clicked 'Cancel'
-          console.log('User canceled the action.');
-        }
-      });
-    }
-
 }

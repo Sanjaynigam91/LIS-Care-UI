@@ -10,4 +10,5 @@ rejectedDate: string;
   rejectionReasons: string;
   referredLab: string;
   testCode: string;
+  barcode:string;
 }

@@ -79,7 +79,7 @@ getRejectionSummary(
   }
 
   if (patientNameOrCode) {
-    params = params.set('patientCode', patientNameOrCode);
+    params = params.set('patientNameOrCode', patientNameOrCode);
   }
 
   if (centerCode) {
