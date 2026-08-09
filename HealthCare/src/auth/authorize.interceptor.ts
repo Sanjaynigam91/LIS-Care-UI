@@ -1,23 +1,39 @@
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  const authService = inject(AuthService);
 
-    const token = localStorage.getItem('token'); // or sessionStorage
+  const token = authService.getToken();
 
-    if (token) {
-      const authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      return next.handle(authReq);
-    }
+  let authReq = req;
 
-    return next.handle(req);
+  // Add JWT token to API request
+  if (token) {
+    authReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
-}
+
+  return next(authReq).pipe(
+
+    catchError(error => {
+
+      // JWT expired / invalid
+      if (error.status === 401) {
+
+        console.log('401 Unauthorized - Session expired');
+
+        authService.logout();
+      }
+
+      return throwError(() => error);
+    })
+
+  );
+};
