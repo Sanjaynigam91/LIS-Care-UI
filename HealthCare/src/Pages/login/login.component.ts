@@ -68,7 +68,9 @@ UserLogin() {
         localStorage.setItem('userLogo', response.data.userLogo);
         localStorage.setItem('roleId', response.data.roleId);
         localStorage.setItem('centerCode', response.data.centerCode);
-        
+
+        // Start JWT expiration timer
+        this.authService.startTokenExpirationTimer();
 
         // Update user info
         this.currentUserSubject.next(response.data.fullName);
@@ -88,7 +90,7 @@ UserLogin() {
         // ❌ Failed login
         this.message = response.responseMessage || 'Invalid username or password!';
         this.alertType = 'danger';
-        this.toasterService.showToast(this.message, 'error');
+       // this.toasterService.showToast(this.message, 'error');
       }
 
       console.log('Response:', response);
