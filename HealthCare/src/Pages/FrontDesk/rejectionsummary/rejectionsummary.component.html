@@ -76,6 +76,7 @@
         <th>RejectionDate</th>
         <th>Patient Code</th>
         <th>Patient Name</th>
+        <th>Barcode</th>
         <th>Center Name</th>
         <th>Ref By</th>
         <th>Tests</th>
@@ -100,6 +101,11 @@
         <!-- Patient name (reference column) -->
         <td class="cell-top">
           <div>{{ item.patientName }}</div>
+        </td>
+
+        <!-- Barcode -->
+        <td class="cell-top">
+          <div>{{ item.barcode }}</div>
         </td>
 
         <!-- Center Name -->
